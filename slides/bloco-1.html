@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bloco 1 · Ambientes</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="1">
+    <div class="janela">
+      <main class="palco" aria-label="Bloco 1: ambientes e primeiro contato com a Todo List">
+        <!-- 1 -->
+        <section class="slide" data-n="1" data-tipo="abertura" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Onde a Todo List vai chegar — e o que fazemos hoje</h2>
+          </header>
+          <div class="slide-corpo grade-1-2">
+            <div class="pilha">
+              <p class="lead">
+                Ao final do módulo você executa, recupera e explica o ambiente de uma aplicação
+                Vue. Hoje o objetivo é menor e concreto:
+              </p>
+              <ul class="objetivos">
+                <li>alterar uma tarefa numa página e ver a mudança</li>
+                <li>dizer <strong>onde</strong> a mudança existe (arquivo, aba, internet?)</li>
+                <li>separar editar, executar, observar e publicar</li>
+              </ul>
+              <p class="caixa pequeno">
+                Reconhecer a aplicação completa não é o mesmo que dominar seus conceitos. Pinia,
+                rotas, API e testes aparecem agora só como destino.
+              </p>
+            </div>
+            <figure class="captura">
+              <img
+                src="capturas/telas/ref-lista.png"
+                alt="Todo List completa: resumo com total, concluídas, pendentes e progresso; formulário; filtros; seis tarefas com categorias e botões Editar e Excluir"
+                class="recorte"
+                style="max-height: 15.5em"
+              />
+              <figcaption>
+                Projeto de referência em execução (<code>npm run dev:all</code>), capturado em
+                21/10/2026. Pasta <code>projeto/</code>.
+              </figcaption>
+            </figure>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>
+              Mostre a aplicação completa ao vivo (projeto/ → <code>npm run dev:all</code>): criar,
+              editar, concluir, excluir, filtrar e abrir o perfil. Depois feche e diga: “hoje
+              voltamos ao ponto de partida — uma página com quatro tarefas”.
+            </p>
+            <h3>Fundamento</h3>
+            <p>
+              O módulo trata da <strong>infraestrutura</strong>: editor, navegador, runtime,
+              gerenciador de pacotes, scripts, servidor de desenvolvimento e build. A aplicação
+              completa motiva as atividades; seus recursos avançados têm etapas próprias
+              (etapas 06–10).
+            </p>
+            <h3>Pergunta para registrar</h3>
+            <p>“O que você precisaria ter no computador para rodar essa aplicação?” Guarde as respostas: voltam no slide 10.</p>
+          </aside>
+        </section>
+
+        <!-- 2 -->
+        <section class="slide" data-n="2" data-tipo="previsao" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Antes de editar: o que acontece ao recarregar?</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <p class="lead">
+                O professor abre a página da etapa 01 e altera o título no editor
+                <strong>sem salvar</strong>. Depois recarrega a aba.
+              </p>
+              <div class="pergunta">
+                <strong>Registre sua previsão (sem IA)</strong>
+                O título muda na aba? Por quê? E se salvar e não recarregar?
+              </div>
+              <ol class="passos pequeno">
+                <li>Escreva a previsão em uma linha.</li>
+                <li>Observe a execução ao vivo.</li>
+                <li>Compare: o que confirmou, o que contrariou sua explicação?</li>
+              </ol>
+            </div>
+            <figure class="captura">
+              <img
+                src="capturas/telas/b1-inicial.png"
+                alt="Cartão Minhas tarefas com resumo 4 tarefas, 1 concluídas e quatro tarefas, a primeira riscada"
+              />
+              <figcaption>
+                <strong>Estado inicial</strong> — <code>etapas/01-pagina-estatica/index.html</code>
+                aberto do disco. Compare depois: título, resumo e quantidade de tarefas.
+              </figcaption>
+            </figure>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>
+              Faça três execuções curtas: (1) alterar sem salvar e recarregar; (2) salvar sem
+              recarregar; (3) salvar e recarregar. Peça mãos levantadas antes de cada uma.
+            </p>
+            <h3>Explicação esperada</h3>
+            <p>
+              A aba mostra o que o navegador <strong>leu</strong> do arquivo na última carga. O
+              editor guarda alterações não salvas na memória dele; o navegador só vê o arquivo no
+              disco, e só quando o lê de novo.
+            </p>
+            <h3>Base pedagógica</h3>
+            <p>Previsão antes da execução (PRIMM: Predict, Run). A comparação previsão × resultado é o que se registra.</p>
+          </aside>
+        </section>
+
+        <!-- 3 -->
+        <section class="slide" data-n="3" data-tipo="pratica" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Abra a pasta e identifique HTML, CSS e JavaScript</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>10 min, individual</dd>
+                <dt>Pré-requisitos</dt><dd>Editor instalado; pasta <code>etapas/01-pagina-estatica</code></dd>
+                <dt>Resultado esperado</dt><dd>Tabela preenchida: arquivo → papel → evidência</dd>
+              </dl>
+              <ol class="passos">
+                <li>No editor: <strong>Arquivo › Abrir pasta</strong> (a pasta, não um arquivo isolado).</li>
+                <li>Abra <code>index.html</code> no navegador.</li>
+                <li>Para cada arquivo, diga o papel e uma <em>evidência</em> que você vê na tela.</li>
+              </ol>
+              <table class="tabela">
+                <thead><tr><th>Arquivo</th><th>Papel</th><th>Evidência na tela</th></tr></thead>
+                <tbody>
+                  <tr><td><code>index.html</code></td><td>…</td><td>…</td></tr>
+                  <tr><td><code>estilos.css</code></td><td>…</td><td>…</td></tr>
+                  <tr><td><code>app.js</code></td><td>…</td><td>…</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="dicas">
+              <details class="dica">
+                <summary>Dica 1</summary>
+                <p>Procure no HTML as linhas <code>&lt;link rel="stylesheet"&gt;</code> e <code>&lt;script src&gt;</code>: elas dizem quais arquivos a página pede.</p>
+              </details>
+              <details class="dica">
+                <summary>Dica 2</summary>
+                <p>Qual texto da tela não está escrito no HTML? Quem o produz?</p>
+              </details>
+              <details class="solucao">
+                <summary>Mostrar solução (após a tentativa)</summary>
+                <p>
+                  <code>index.html</code>: estrutura e conteúdo (título, tarefas).
+                  <code>estilos.css</code>: aparência (cartão, cores, risco).
+                  <code>app.js</code>: comportamento — o resumo “4 tarefas · 1 concluídas” não
+                  está no HTML (lá há “Carregando resumo…”); é escrito pelo script.
+                </p>
+              </details>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              O navegador recebe um documento HTML e, a partir dele, pede outros recursos (CSS,
+              JavaScript, imagens). HTML descreve estrutura e conteúdo, CSS descreve apresentação e
+              JavaScript acrescenta comportamento. Não exigir escrever os arquivos do zero.
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>Se apagarmos a linha do <code>&lt;link&gt;</code>, o que some e o que continua funcionando?</p>
+            <h3>Referência</h3>
+            <ul class="referencias">
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works">MDN — How the web works</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 4 -->
+        <section class="slide" data-n="4" data-tipo="explicacao" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Editor, arquivo e navegador: quem faz o quê</h2>
+          </header>
+          <div class="slide-corpo pilha">
+            <svg viewBox="0 0 1400 260" role="img" aria-labelledby="fluxo-b1" style="width: 100%; max-height: 8.5em">
+              <title id="fluxo-b1">Fluxo: editor grava o arquivo no disco; navegador lê o arquivo, monta o DOM e desenha a tela</title>
+              <defs>
+                <marker id="seta-b1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                  <path d="M0 0 10 5 0 10z" fill="currentColor" />
+                </marker>
+              </defs>
+              <g font-family="system-ui, sans-serif" font-size="30" fill="currentColor" style="color: var(--texto)">
+                <rect x="10" y="60" width="250" height="130" rx="14" fill="var(--superficie)" stroke="var(--borda)" stroke-width="3" />
+                <text x="135" y="118" text-anchor="middle" font-weight="700">Editor</text>
+                <text x="135" y="158" text-anchor="middle" font-size="24" fill="var(--texto-suave)">altera e salva</text>
+                <rect x="380" y="60" width="270" height="130" rx="14" fill="var(--superficie)" stroke="var(--borda)" stroke-width="3" />
+                <text x="515" y="118" text-anchor="middle" font-weight="700">Arquivo no disco</text>
+                <text x="515" y="158" text-anchor="middle" font-size="24" fill="var(--texto-suave)">index.html, .css, .js</text>
+                <rect x="770" y="60" width="270" height="130" rx="14" fill="var(--superficie)" stroke="var(--borda)" stroke-width="3" />
+                <text x="905" y="118" text-anchor="middle" font-weight="700">Navegador</text>
+                <text x="905" y="158" text-anchor="middle" font-size="24" fill="var(--texto-suave)">lê e monta o DOM</text>
+                <rect x="1160" y="60" width="230" height="130" rx="14" fill="var(--primaria-suave)" stroke="var(--primaria)" stroke-width="3" />
+                <text x="1275" y="118" text-anchor="middle" font-weight="700">Tela</text>
+                <text x="1275" y="158" text-anchor="middle" font-size="24" fill="var(--texto-suave)">o que você vê</text>
+                <g stroke="currentColor" stroke-width="4" fill="none" marker-end="url(#seta-b1)">
+                  <path d="M262 125H372" /><path d="M652 125H762" /><path d="M1042 125H1152" />
+                </g>
+                <text x="317" y="40" text-anchor="middle" font-size="22" fill="var(--texto-suave)">Salvar</text>
+                <text x="707" y="40" text-anchor="middle" font-size="22" fill="var(--texto-suave)">Recarregar</text>
+                <text x="1097" y="40" text-anchor="middle" font-size="22" fill="var(--texto-suave)">Desenhar</text>
+              </g>
+            </svg>
+            <div class="grade-3">
+              <div class="caixa"><h3>Editor</h3><p class="pequeno">Ajuda a escrever e grava arquivos. Não executa a página.</p></div>
+              <div class="caixa"><h3>Navegador</h3><p class="pequeno">Lê os arquivos, monta o <strong>DOM</strong> (a representação da página carregada) e executa o JavaScript dela.</p></div>
+              <div class="caixa"><h3>Aba</h3><p class="pequeno">Mostra a última versão lida. Mudou o arquivo? Precisa ler de novo.</p></div>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              <strong>Para que serve:</strong> localizar onde agir quando algo “não muda”.
+              <strong>Mecanismo:</strong> o arquivo-fonte é texto no disco; o navegador o lê e
+              cria o DOM, uma estrutura em memória que representa o documento carregado. Mudanças
+              no DOM (por script ou DevTools) não voltam para o arquivo.
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>Duas abas abrem o mesmo arquivo. Você salva uma alteração e recarrega só uma delas. O que cada aba mostra?</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction">MDN — Introduction to the DOM</a></li>
+              <li><a href="https://code.visualstudio.com/docs">Documentação do VS Code</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 5 -->
+        <section class="slide" data-n="5" data-tipo="demonstracao" data-tempo="15 min">
+          <header class="slide-topo">
+            <h2>Alterar o título e uma tarefa — ao vivo, depois você</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração">
+                <button role="tab" id="s5-t1" aria-controls="s5-p1" aria-selected="true">1 · Inicial</button>
+                <button role="tab" id="s5-t2" aria-controls="s5-p2" aria-selected="false">2 · Alteração</button>
+                <button role="tab" id="s5-t3" aria-controls="s5-p3" aria-selected="false">3 · Resultado</button>
+              </div>
+              <div role="tabpanel" id="s5-p1" aria-labelledby="s5-t1">
+                <img src="capturas/telas/b1-inicial.png" alt="Página inicial com o título Minhas tarefas" />
+                <p class="legenda"><strong>Compare:</strong> título “Minhas tarefas” e 3ª tarefa “Alterar o texto de uma tarefa”.</p>
+              </div>
+              <div role="tabpanel" id="s5-p2" aria-labelledby="s5-t2" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Diferença salva em index.html</span></div>
+                  <pre><code>-      &lt;h1&gt;Minhas tarefas&lt;/h1&gt;
++      &lt;h1&gt;Tarefas da semana&lt;/h1&gt;
+…
+-  &lt;label&gt;&lt;input type="checkbox" /&gt; Alterar o texto de uma tarefa&lt;/label&gt;
++  &lt;label&gt;&lt;input type="checkbox" /&gt; Alterar o texto desta tarefa no editor&lt;/label&gt;</code></pre>
+                </div>
+                <p class="legenda">Duas linhas mudaram. Arquivo completo da diferença: <a href="capturas/codigo/b1-alteracao-index.diff">b1-alteracao-index.diff</a>.</p>
+              </div>
+              <div role="tabpanel" id="s5-p3" aria-labelledby="s5-t3" hidden>
+                <img src="capturas/telas/b1-alterada.png" alt="Página com o título Tarefas da semana e a terceira tarefa alterada" />
+                <p class="legenda"><strong>Compare:</strong> novo título e nova 3ª tarefa, depois de salvar <em>e</em> recarregar. <strong>Aceitável:</strong> fonte diferente no seu sistema.</p>
+              </div>
+            </figure>
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>5 min demonstração + 10 min reprodução</dd>
+                <dt>Pré-requisitos</dt><dd>Slide 3 concluído; pasta aberta no editor</dd>
+                <dt>Resultado esperado</dt><dd>Seu título e sua tarefa aparecem após salvar e recarregar</dd>
+              </dl>
+              <ol class="passos">
+                <li>Troque o texto do <code>&lt;h1&gt;</code> e de uma tarefa.</li>
+                <li>Salve: <kbd>Ctrl</kbd>+<kbd>S</kbd> (<kbd>Cmd</kbd>+<kbd>S</kbd> no macOS).</li>
+                <li>Recarregue a aba: <kbd>F5</kbd> (<kbd>Cmd</kbd>+<kbd>R</kbd>).</li>
+                <li>Marque uma caixa e veja o resumo mudar <em>sem</em> recarregar.</li>
+              </ol>
+              <p class="pergunta pequeno"><strong>Explique</strong>Por que o resumo mudou sem recarregar, e o título só depois de recarregar?</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Roteiro da demonstração</h3>
+            <ol>
+              <li>Objetivo e estado inicial (aba 1).</li>
+              <li>Fundamento: a aba mostra a última leitura do arquivo.</li>
+              <li>Peça a previsão.</li>
+              <li>Altere uma linha, salve, recarregue (abas 2 e 3).</li>
+              <li>Pausa para a turma alcançar o mesmo estado; depois, uma variação individual.</li>
+            </ol>
+            <h3>Explicação esperada</h3>
+            <p>
+              O resumo é recalculado por <code>app.js</code> quando a caixa muda: o script altera o
+              DOM já carregado. O título está no arquivo e só aparece quando o navegador lê o
+              arquivo de novo. Captura extra: <a href="capturas/telas/b1-caixa-marcada.png">resumo após marcar a 2ª tarefa</a>.
+            </p>
+            <h3>Erro provável</h3>
+            <p>Editar e não salvar; editar a cópia em <code>versao-antiga/</code>. Leve ao slide 6.</p>
+          </aside>
+        </section>
+
+        <!-- 6 -->
+        <section class="slide" data-n="6" data-tipo="investigacao" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>“Editei e não mudou”: teste uma hipótese por vez</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <table class="tabela">
+              <thead><tr><th>Hipótese</th><th>Evidência</th><th>Teste</th></tr></thead>
+              <tbody>
+                <tr><td>Não salvei</td><td>Marca de alteração na aba do editor (ponto/círculo)</td><td>Salvar e recarregar</td></tr>
+                <tr><td>Arquivo errado</td><td>O caminho na barra de endereço não é o arquivo editado</td><td>Comparar o endereço com o caminho no editor</td></tr>
+                <tr><td>Não recarreguei</td><td>Texto antigo até recarregar</td><td>Recarregar a aba</td></tr>
+              </tbody>
+            </table>
+            <div class="pilha">
+              <figure class="sequencia">
+                <div role="tablist" aria-label="Estados da investigação">
+                  <button role="tab" id="s6-t1" aria-controls="s6-p1" aria-selected="true">1 · Aba aberta</button>
+                  <button role="tab" id="s6-t2" aria-controls="s6-p2" aria-selected="false">2 · Arquivo editado</button>
+                  <button role="tab" id="s6-t3" aria-controls="s6-p3" aria-selected="false">3 · Arquivo certo</button>
+                </div>
+                <div role="tabpanel" id="s6-p1" aria-labelledby="s6-t1">
+                  <img src="capturas/telas/b1-inicial.png" alt="Página original, sem a alteração" />
+                  <p class="legenda">A aba mostra <code>01-pagina-estatica/index.html</code>: nada mudou depois de “editar e recarregar”.</p>
+                </div>
+                <div role="tabpanel" id="s6-p2" aria-labelledby="s6-t2" hidden>
+                  <img src="capturas/telas/b1-versao-antiga.png" alt="Página Minhas tarefas (cópia antiga) com uma única tarefa" />
+                  <p class="legenda">O arquivo editado era <code>versao-antiga/index.html</code> — outra página. <strong>Evidência:</strong> o caminho na barra de endereço.</p>
+                </div>
+                <div role="tabpanel" id="s6-p3" aria-labelledby="s6-t3" hidden>
+                  <img src="capturas/telas/b1-alterada.png" alt="Página com o título Tarefas da semana" />
+                  <p class="legenda">Editando o arquivo que a aba carrega, salvando e recarregando, a mudança aparece.</p>
+                </div>
+              </figure>
+              <p class="pergunta pequeno"><strong>Investigue</strong>Qual informação da tela prova qual arquivo a aba carregou?</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>
+              Provoque o erro: edite <code>versao-antiga/index.html</code> e recarregue a aba do
+              arquivo principal. Peça que a turma diga qual evidência olhar <em>antes</em> de
+              tentar outra edição. Registre: hipótese → evidência → teste → resultado.
+            </p>
+            <h3>Por que isso importa</h3>
+            <p>Repetir comandos sem hipótese é a principal perda de tempo nos próximos blocos (pasta errada, script inexistente, porta ocupada).</p>
+            <h3>Limite</h3>
+            <p>Navegadores podem guardar cópias em cache; aqui, abrindo do disco, recarregar basta. Cache aparece no bloco 2 com o painel Network.</p>
+          </aside>
+        </section>
+
+        <!-- 7 -->
+        <section class="slide" data-n="7" data-tipo="ia" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Peça uma pista, não a resposta</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <div class="prompt-ia">
+                <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+                <p class="prompt-texto">
+                  Estou aprendendo ambientes de desenvolvimento com uma Todo List em HTML. Meu
+                  objetivo é <mark>[o que eu queria ver na tela]</mark>. Tentei
+                  <mark>[o que editei e em qual arquivo]</mark> e observei
+                  <mark>[o que a aba mostra e o endereço dela]</mark>. Minha hipótese é
+                  <mark>[não salvei / arquivo errado / não recarreguei]</mark>. Faça uma pergunta de
+                  diagnóstico por vez e dê uma pista antes de propor qualquer código. Não entregue a
+                  atividade inteira. No final, peça que eu explique a causa e sugira um teste para
+                  verificar minha compreensão.
+                </p>
+              </div>
+              <p class="pequeno suave">Sem acesso à IA? O professor entrega o cartão de pistas equivalente (as dicas do slide 6).</p>
+            </div>
+            <div class="pilha">
+              <div class="caixa">
+                <h3>Registro curto</h3>
+                <ol class="passos pequeno">
+                  <li>Objetivo</li>
+                  <li>Minha tentativa</li>
+                  <li>Pergunta feita</li>
+                  <li>Sugestão aceita ou rejeitada — por quê</li>
+                  <li>Teste realizado e evidência</li>
+                  <li>Explicação final, sem IA</li>
+                </ol>
+              </div>
+              <p class="caixa caixa-destaque pequeno">A atividade só termina quando você <strong>demonstra</strong> o resultado e explica a relação entre a pista e a evidência.</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Papel da IA neste plano</h3>
+            <p>
+              Tutora de pistas e interlocutora: prever → tentar → pedir pista → conferir → aplicar
+              e observar → explicar sem IA. É uma escolha didática do plano, não uma alegação de
+              eficácia comprovada de IA generativa.
+            </p>
+            <h3>Cuidados</h3>
+            <p>Não enviar credenciais, arquivos <code>.env</code> ou dados pessoais; só dados fictícios de tarefas. Se a IA errar, o erro vira material de discussão.</p>
+            <h3>O que avaliar</h3>
+            <p>O raciocínio e o resultado, não a quantidade de mensagens ou o acabamento do texto gerado.</p>
+          </aside>
+        </section>
+
+        <!-- 8 -->
+        <section class="slide" data-n="8" data-tipo="explicacao" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Desenvolvimento, execução e produção</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <p class="pequeno">
+                <strong>Ambiente</strong> = ferramentas + runtime + dependências + configurações em
+                que o código é escrito ou executado.
+              </p>
+              <table class="tabela">
+                <thead><tr><th>Ambiente</th><th>Onde roda</th><th>Quem acessa</th></tr></thead>
+                <tbody>
+                  <tr><td>Desenvolvimento</td><td>Seu computador: editor, navegador, servidor local</td><td>Você (<code>localhost</code>)</td></tr>
+                  <tr><td>Produção</td><td>Hospedagem: artefatos publicados</td><td>Usuários pela internet</td></tr>
+                </tbody>
+              </table>
+              <p class="pequeno">
+                <code>localhost</code> é a própria máquina. A <strong>porta</strong> (<code>:8089</code>)
+                identifica qual serviço atende o pedido.
+              </p>
+              <p class="pergunta pequeno"><strong>Pergunta</strong>O que ainda faltaria para outra pessoa ver a sua alteração?</p>
+            </div>
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Da página no disco à página servida">
+                <button role="tab" id="s8-t1" aria-controls="s8-p1" aria-selected="true">1 · Do disco</button>
+                <button role="tab" id="s8-t2" aria-controls="s8-p2" aria-selected="false">2 · Servidor local</button>
+                <button role="tab" id="s8-t3" aria-controls="s8-p3" aria-selected="false">3 · Via HTTP</button>
+              </div>
+              <div role="tabpanel" id="s8-p1" aria-labelledby="s8-t1">
+                <figure class="saida-real">
+                  <pre><code># Aberta do disco (file://)
+GET file://~/modulo-2/etapas/01-pagina-estatica/index.html → 200 OK · text/html
+GET file://~/modulo-2/etapas/01-pagina-estatica/estilos.css → 200 OK · text/css
+GET file://~/modulo-2/etapas/01-pagina-estatica/app.js → 200 OK · text/javascript</code></pre>
+                  <figcaption>Pedidos registrados pelo Chrome ao abrir o arquivo do disco · <a href="capturas/navegador/b1-rede-arquivo-vs-servidor.txt">registro</a></figcaption>
+                </figure>
+                <p class="legenda">Não há servidor: o navegador lê os arquivos direto da pasta.</p>
+              </div>
+              <div role="tabpanel" id="s8-p2" aria-labelledby="s8-t2" hidden>
+                <figure class="saida-real">
+                  <pre><code><span class="cmd">~/modulo-2/etapas/01-pagina-estatica $ PORTA=8089 node ../ferramentas/servidor-local.mjs</span>
+Servindo ~/modulo-2/etapas/01-pagina-estatica
+Abra http://localhost:8089/ no navegador. Ctrl+C encerra o servidor.
+200 GET /
+200 GET /app.js
+200 GET /estilos.css</code></pre>
+                  <figcaption>Saída real do terminal · Node 24.19.0 · <a href="capturas/terminal/b1-servidor-local.txt">arquivo</a></figcaption>
+                </figure>
+                <p class="legenda">Um <strong>processo</strong> passa a atender pedidos na porta 8089. A ordem das linhas pode variar.</p>
+              </div>
+              <div role="tabpanel" id="s8-p3" aria-labelledby="s8-t3" hidden>
+                <img src="capturas/telas/b1-servida-http.png" alt="A mesma página da Todo List, agora servida por http://localhost:8089" />
+                <figure class="saida-real">
+                  <pre><code>GET http://localhost:8089/ → 200 OK · text/html; charset=utf-8
+GET http://localhost:8089/estilos.css → 200 OK · text/css; charset=utf-8</code></pre>
+                  <figcaption>Mesma página, agora pedida por HTTP (trecho) · <a href="capturas/navegador/b1-rede-arquivo-vs-servidor.txt">registro</a></figcaption>
+                </figure>
+              </div>
+            </figure>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              Distinga <strong>código-fonte</strong> (arquivos que você edita), <strong>processo em
+              execução</strong> (o servidor local, o navegador) e <strong>artefato entregue</strong>
+              (arquivos publicados numa hospedagem). Separar desenvolvimento e produção permite
+              testar sem afetar usuários. Servidor local ≠ backend de negócio: este só entrega
+              arquivos.
+            </p>
+            <h3>Demonstração</h3>
+            <p>
+              Na pasta da etapa 01: <code>node ../ferramentas/servidor-local.mjs</code> (porta 8088
+              por padrão). Abra o endereço, mostre o log de requisições no terminal. O comando
+              <code>node</code> é explicado no bloco 3.
+            </p>
+            <h3>Perguntas de compreensão</h3>
+            <p>Por que dois processos não podem usar livremente o mesmo endereço e porta? (Resposta real no bloco 2: “A porta 8088 já está em uso…”.)</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview">MDN — An overview of HTTP</a></li>
+              <li><a href="https://vite.dev/guide/">Vite — guia</a> (servidor de desenvolvimento × build)</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 9 -->
+        <section class="slide" data-n="9" data-tipo="pratica" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Classifique as ações no ciclo de desenvolvimento</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>8 min, em dupla</dd>
+                <dt>Resultado esperado</dt><dd>Cada ação em uma coluna, com uma justificativa curta</dd>
+              </dl>
+              <table class="tabela">
+                <thead><tr><th>Editar</th><th>Executar / testar</th><th>Gerar arquivos</th><th>Publicar</th></tr></thead>
+                <tbody><tr><td>…</td><td>…</td><td>…</td><td>…</td></tr></tbody>
+              </table>
+              <ol class="passos pequeno">
+                <li>Salvar <code>index.html</code></li>
+                <li>Recarregar a aba e marcar uma tarefa</li>
+                <li>Iniciar o servidor local na porta 8089</li>
+                <li>Gerar a pasta <code>dist/</code> com o build (bloco 5)</li>
+                <li>Enviar <code>dist/</code> para uma hospedagem</li>
+                <li>Corrigir um erro apontado pelo Console (bloco 2)</li>
+              </ol>
+            </div>
+            <div class="dicas">
+              <details class="dica"><summary>Dica</summary><p>Pergunte: quem consegue ver o resultado desta ação — só você ou qualquer pessoa?</p></details>
+              <details class="solucao">
+                <summary>Mostrar solução (após a tentativa)</summary>
+                <p>Editar: 1, 6. Executar/testar: 2, 3. Gerar arquivos: 4. Publicar: 5. A ação 6 também envolve testar: aceite a justificativa.</p>
+              </details>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>Peça justificativas, não só posições. Ações intermediárias (como 6) são boas para discutir que o ciclo se repete.</p>
+            <h3>Origem</h3>
+            <p>Aula 1 (PPTX) apresenta o ciclo planejamento → requisitos → design → implementação e testes → implantação → operação. Aqui ele vira ações observáveis.</p>
+          </aside>
+        </section>
+
+        <!-- 10 -->
+        <section class="slide" data-n="10" data-tipo="integracao" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Mapa mínimo da futura Todo List</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <table class="tabela">
+              <thead><tr><th>Parte</th><th>Ferramenta</th><th>Quando</th></tr></thead>
+              <tbody>
+                <tr><td>Interface</td><td>HTML, CSS, JS no navegador</td><td>Bloco 1</td></tr>
+                <tr><td>Inspeção</td><td>Editor e DevTools</td><td>Bloco 2</td></tr>
+                <tr><td>Execução fora do navegador</td><td>Node.js e terminal</td><td>Bloco 3</td></tr>
+                <tr><td>Dependências e scripts</td><td>npm, <code>package.json</code>, lockfile</td><td>Bloco 4</td></tr>
+                <tr><td>Projeto Vue e build</td><td>create-vue, Vite</td><td>Bloco 5</td></tr>
+                <tr><td>Estado, rotas, API, testes</td><td>Pinia, Router, json-server, Vitest</td><td>Etapas 06–10</td></tr>
+              </tbody>
+            </table>
+            <figure class="captura">
+              <img src="capturas/telas/ref-perfil.png" alt="Página de perfil com estatísticas e tabela por categoria" class="recorte" style="max-height: 14em" />
+              <figcaption>Perfil da aplicação completa: depende de rotas, estado compartilhado e API — nada disso é implementado hoje.</figcaption>
+            </figure>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>Retome as respostas do slide 1 (“o que precisaria ter no computador?”) e encaixe cada uma numa linha da tabela.</p>
+            <h3>Limite</h3>
+            <p>Não implementar a API agora. O objetivo é saber onde cada peça entra, não montá-la.</p>
+          </aside>
+        </section>
+
+        <!-- 11 -->
+        <section class="slide" data-n="11" data-tipo="ia" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Revisão com IA: explique o caminho arquivo → tela</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="prompt-ia">
+              <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+              <p class="prompt-texto">
+                Vou explicar com minhas palavras como uma alteração em um arquivo HTML chega à tela
+                do navegador: <mark>[sua explicação em 3 a 5 frases]</mark>. Não corrija tudo de uma
+                vez. Faça uma pergunta por vez que revele uma lacuna da minha explicação. Diferencie
+                o que é limitação técnica do que é apenas convenção. No fim, proponha um pequeno
+                experimento que eu possa executar para confirmar ou refutar minha explicação e
+                indique uma fonte oficial verificável (sem inventar referências).
+              </p>
+            </div>
+            <div class="pilha">
+              <div class="caixa pequeno">
+                <h3>Em dupla</h3>
+                <p>Um conversa com a IA; o outro verifica cada afirmação na página real e na documentação.</p>
+              </div>
+              <div class="caixa pequeno">
+                <h3>Critério</h3>
+                <p>A explicação final menciona: arquivo salvo, leitura pelo navegador, DOM, e o fato de nada ter sido publicado.</p>
+              </div>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Quando a IA errar</h3>
+            <p>Peça à dupla que mostre a evidência que contradiz a resposta. Exemplo comum: dizer que o DevTools “salva” mudanças no arquivo — o bloco 2 testa isso.</p>
+            <h3>Referência</h3>
+            <ul class="referencias">
+              <li><a href="https://www.nationalacademies.org/read/24783/chapter/7">How People Learn II (2018)</a> — comparar previsão e resultado e registrar o que mudou na explicação</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 12 -->
+        <section class="slide" data-n="12" data-tipo="verificacao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Verificação individual, sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="pergunta">
+                <strong>Responda em até 3 frases</strong>
+                Por que editar o arquivo no seu computador não publica o site?
+              </div>
+              <div class="atividade">
+                <dl>
+                  <dt>Variação</dt><dd>Acrescente uma 5ª tarefa no HTML. Antes de recarregar, escreva o novo resumo previsto.</dd>
+                  <dt>Evidência</dt><dd>Resumo “5 tarefas · …” na tela e a sua previsão ao lado</dd>
+                  <dt>Consulta</dt><dd>Permitido usar o próprio registro; não usar IA</dd>
+                </dl>
+              </div>
+            </div>
+            <table class="tabela">
+              <thead><tr><th>Critério (0–2)</th><th>2 pontos quando…</th></tr></thead>
+              <tbody>
+                <tr><td>Ambiente funcional</td><td>Abre a pasta certa e a página correta</td></tr>
+                <tr><td>Interpretação</td><td>Explica arquivo salvo × aba recarregada × publicação</td></tr>
+                <tr><td>Diagnóstico</td><td>Cita uma evidência para a hipótese</td></tr>
+                <tr><td>Variação</td><td>Previsão do resumo coincide ou a diferença é explicada</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <aside class="notas">
+            <h3>Resposta esperada</h3>
+            <p>
+              A alteração existe no arquivo do disco e na aba que o leu. Publicar exige enviar os
+              arquivos para uma hospedagem acessível por outras pessoas; nada disso foi feito.
+            </p>
+            <h3>Rubrica do módulo</h3>
+            <p>0 = não demonstrou; 1 = executou com ajuda e explica parcialmente; 2 = executa e explica, inclusive uma variação.</p>
+            <h3>Ponto de retomada para o bloco 2</h3>
+            <p>Pasta <code>etapas/02-erros-controlados</code>: mesma tela, agora com defeitos.</p>
+          </aside>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

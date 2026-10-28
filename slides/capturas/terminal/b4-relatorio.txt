@@ -1,0 +1,8 @@
+~/modulo-2/etapas/04-dependencias-scripts $ node relatorio.js
+Relatório da Todo List
+[x] Criar o package.json
+[x] Instalar uma dependência
+[ ] Comparar manifesto e lockfile
+[ ] Criar scripts no package.json
+[ ] Restaurar o ambiente com npm ci
+2 de 5 concluídas

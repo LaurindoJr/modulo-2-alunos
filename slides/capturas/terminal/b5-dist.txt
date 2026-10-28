@@ -1,0 +1,19 @@
+~/modulo-2/etapas/todo-list $ find dist -type f | sort && head -c 600 dist/index.html
+dist/assets/index-CsxmxGsD.js
+dist/assets/index-DPF0c5U5.css
+dist/favicon.ico
+dist/index.html
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <script type="module" crossorigin src="/assets/index-CsxmxGsD.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DPF0c5U5.css">
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>

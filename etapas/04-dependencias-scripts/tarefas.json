@@ -1,0 +1,7 @@
+[
+  { "titulo": "Criar o package.json", "concluida": true },
+  { "titulo": "Instalar uma dependência", "concluida": true },
+  { "titulo": "Comparar manifesto e lockfile", "concluida": false },
+  { "titulo": "Criar scripts no package.json", "concluida": false },
+  { "titulo": "Restaurar o ambiente com npm ci", "concluida": false }
+]

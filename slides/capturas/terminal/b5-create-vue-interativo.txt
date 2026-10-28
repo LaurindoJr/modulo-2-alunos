@@ -1,0 +1,128 @@
+===== antes de responder: Project name
+
+> npx
+> 'create-vue'
+
+┌  Vue.js - The Progressive JavaScript Framework
+│
+◆  Project name (target directory):
+│  vue-project
+└
+
+===== antes de responder: TypeScript
+
+> npx
+> 'create-vue'
+
+┌  Vue.js - The Progressive JavaScript Framework
+│
+◇  Project name (target directory):
+│  todo-list
+│
+◆  Use TypeScript?
+│  ● Yes / ○ No
+└
+
+===== antes de responder: Select features
+
+> npx
+> 'create-vue'
+
+┌  Vue.js - The Progressive JavaScript Framework
+│
+◇  Project name (target directory):
+│  todo-list
+│
+◇  Use TypeScript?
+│  No
+│
+◆  Select features to include in your project: (↑/↓ to navigate, space to select, a to toggle all, enter to confirm)
+│  ◻ JSX Support
+│  ◻ Router (SPA development)
+│  ◻ Pinia (state management)
+│  ◻ Vitest (unit testing)
+│  ◻ End-to-End Testing
+│  ◻ Linter (error prevention)
+│  ◻ Prettier (code formatting)
+│  ↑/↓ to navigate • Space: select • Enter: confirm
+└
+
+===== antes de responder: experimental
+
+> npx
+> 'create-vue'
+
+┌  Vue.js - The Progressive JavaScript Framework
+│
+◇  Project name (target directory):
+│  todo-list
+│
+◇  Use TypeScript?
+│  No
+│
+◇  Select features to include in your project: (↑/↓ to navigate, space to select, a to toggle all, enter to confirm)
+│  Linter (error prevention), Prettier (code formatting)
+│
+◆  Select experimental features to include in your project: (↑/↓ to navigate, space to select, a to toggle all, enter to confirm)
+│  ◻ Replace Prettier with Oxfmt
+│  ◻ Vue 3.6 (Release Candidate)
+│  ↑/↓ to navigate • Space: select • Enter: confirm
+└
+
+===== antes de responder: example code
+
+> npx
+> 'create-vue'
+
+┌  Vue.js - The Progressive JavaScript Framework
+│
+◇  Project name (target directory):
+│  todo-list
+│
+◇  Use TypeScript?
+│  No
+│
+◇  Select features to include in your project: (↑/↓ to navigate, space to select, a to toggle all, enter to confirm)
+│  Linter (error prevention), Prettier (code formatting)
+│
+◇  Select experimental features to include in your project: (↑/↓ to navigate, space to select, a to toggle all, enter to confirm)
+│  none
+│
+◆  Skip all example code and start with a blank Vue project?
+│  ○ Yes / ● No
+└
+
+===== tela final
+
+> npx
+> 'create-vue'
+
+┌  Vue.js - The Progressive JavaScript Framework
+│
+◇  Project name (target directory):
+│  todo-list
+│
+◇  Use TypeScript?
+│  No
+│
+◇  Select features to include in your project: (↑/↓ to navigate, space to select, a to toggle all, enter to confirm)
+│  Linter (error prevention), Prettier (code formatting)
+│
+◇  Select experimental features to include in your project: (↑/↓ to navigate, space to select, a to toggle all, enter to confirm)
+│  none
+│
+◇  Skip all example code and start with a blank Vue project?
+│  Yes
+
+Scaffolding project in ~/modulo-2/etapas/todo-list...
+│
+└  Done. Now run:
+
+   cd todo-list
+   npm install
+   npm run format
+   npm run dev
+
+| Optional: Initialize Git in your project directory with:
+
+   git init && git add -A && git commit -m "initial commit"

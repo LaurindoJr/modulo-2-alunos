@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bloco 2 · Editor e DevTools</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="2">
+    <div class="janela">
+      <main class="palco" aria-label="Bloco 2: editor, navegador e investigação de erros">
+        <!-- 13 -->
+        <section class="slide" data-n="13" data-tipo="previsao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Uma tarefa desapareceu — e a página perdeu o estilo</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <p class="lead">
+                Mesma Todo List, nova pasta: <code>etapas/02-erros-controlados</code>. Há
+                <strong>defeitos colocados de propósito</strong>.
+              </p>
+              <div class="pergunta">
+                <strong>Hipótese inicial (sem IA, sem DevTools)</strong>
+                Olhando só a tela: quantos problemas você vê? Qual seria a causa de cada um?
+              </div>
+              <ul class="objetivos pequeno">
+                <li>usar a ferramenta certa para cada sintoma</li>
+                <li>registrar evidência antes e depois de corrigir</li>
+                <li>corrigir um defeito por vez</li>
+              </ul>
+            </div>
+            <figure class="captura">
+              <img src="capturas/telas/b2-defeituosa.png" alt="Página sem estilo: título Minhas tarefas, texto Carregando resumo e apenas três tarefas em lista simples" />
+              <figcaption>
+                Etapa 02 servida em <code>localhost:8088</code>. <strong>Observe:</strong> sem
+                cartão nem cores; “Carregando resumo…” não muda; 3 tarefas (o código tem 4).
+              </figcaption>
+            </figure>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>
+              Abra a etapa com o servidor local (<code>node ../ferramentas/servidor-local.mjs</code>)
+              e deixe a turma descrever sintomas antes de falar de ferramentas. Escreva as hipóteses
+              no quadro; elas serão confirmadas ou refutadas nos slides 18–23.
+            </p>
+            <h3>Gabarito (não mostrar agora)</h3>
+            <p>A: <code>estilo.css</code> (404) em vez de <code>estilos.css</code>. B: <code>#resumo</code> não existe (id é <code>contador</code>) → TypeError. C: laço <code>i &lt; lista.length - 1</code> pula a última tarefa. Detalhes no README da etapa 02.</p>
+          </aside>
+        </section>
+
+        <!-- 14 -->
+        <section class="slide" data-n="14" data-tipo="pratica" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Abra a pasta, não um arquivo isolado</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>7 min</dd>
+                <dt>Pré-requisitos</dt><dd>VS Code (ou outro editor) instalado</dd>
+                <dt>Resultado esperado</dt><dd>Explorador lateral mostra <code>index.html</code>, <code>app.js</code>, <code>estilos.css</code> e <code>corrigido/</code></dd>
+              </dl>
+              <ol class="passos">
+                <li><strong>File › Open Folder…</strong> (Arquivo › Abrir pasta) → <code>02-erros-controlados</code>.</li>
+                <li>Abra <code>app.js</code> pelo explorador.</li>
+                <li>Abra o terminal integrado: <kbd>Ctrl</kbd>+<kbd>`</kbd>. Em que pasta ele começou?</li>
+              </ol>
+              <p class="pergunta pequeno"><strong>Compare</strong>Abrir só <code>app.js</code> (arrastando o arquivo) mostra o explorador? O terminal começa na mesma pasta?</p>
+            </div>
+            <figure class="captura">
+              <img src="capturas/telas/b2-vscode-pasta-aberta.png" alt="VS Code com a pasta 02-erros-controlados aberta" data-pendente="VS Code com a pasta 02-erros-controlados aberta: explorador lateral com index.html, app.js, estilos.css e corrigido/, app.js aberto no editor e terminal integrado mostrando a pasta atual." />
+            </figure>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              A <strong>pasta de trabalho</strong> define o que o editor indexa (busca, explorador,
+              extensões) e onde o terminal integrado começa. Abrir um arquivo isolado funciona para
+              ler, mas as ferramentas perdem o contexto do projeto. Isso volta no bloco 3 (pasta
+              atual do terminal) e no bloco 5 (<code>npm</code> procura <code>package.json</code> na pasta atual).
+            </p>
+            <h3>Alternativa</h3>
+            <p>Qualquer editor serve; o VS Code é a escolha da disciplina por ser gratuito, multiplataforma e ter suporte oficial ao Vue.</p>
+            <h3>Referência</h3>
+            <ul class="referencias"><li><a href="https://code.visualstudio.com/docs">VS Code — documentação</a></li></ul>
+          </aside>
+        </section>
+
+        <!-- 15 -->
+        <section class="slide" data-n="15" data-tipo="explicacao" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Editor, terminal integrado e extensões</h2>
+          </header>
+          <div class="slide-corpo pilha">
+            <div class="grade-3">
+              <div class="caixa"><h3>Editor</h3><p class="pequeno">Edita texto e oferece assistência de linguagem (cores, sugestões, erros de sintaxe).</p></div>
+              <div class="caixa"><h3>Terminal integrado</h3><p class="pequeno">Um shell comum (zsh, bash, PowerShell) dentro da janela do editor. Os comandos são os mesmos do terminal do sistema.</p></div>
+              <div class="caixa"><h3>Extensão</h3><p class="pequeno">Acrescenta recursos <strong>ao editor</strong> na sua máquina. Não muda o projeto nem vai para outras máquinas.</p></div>
+            </div>
+            <table class="tabela">
+              <thead><tr><th>Nome parecido</th><th>Onde fica</th><th>O que faz</th></tr></thead>
+              <tbody>
+                <tr><td>Extensão <strong>ESLint</strong> do VS Code</td><td>No editor</td><td>Mostra os avisos do ESLint enquanto você digita</td></tr>
+                <tr><td>Pacote <code>eslint</code></td><td>No projeto (<code>devDependencies</code>)</td><td>Analisa o código; roda em <code>npm run lint</code> (bloco 5)</td></tr>
+                <tr><td>Vue DevTools</td><td>No navegador / plugin do Vite</td><td>Inspeciona componentes de uma aplicação Vue em execução</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              Extensão do editor ≠ pacote instalado no projeto ≠ extensão do navegador. A extensão
+              ESLint <em>exibe</em> resultados; quem define regras é a configuração do projeto
+              (<code>eslint.config.js</code>, gerada pelo create-vue no bloco 5).
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>Instalar a extensão ESLint basta para configurar o projeto? (Não: sem o pacote e a configuração no projeto, não há regras para aplicar.)</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://eslint.org/docs/latest/">ESLint — documentação</a></li>
+              <li><a href="https://vuejs.org/guide/scaling-up/tooling.html">Vue — Tooling</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 16 -->
+        <section class="slide" data-n="16" data-tipo="pratica" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Confira a extensão Vue - Official; reconheça ESLint e Prettier</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>5 min</dd>
+                <dt>Resultado esperado</dt><dd>Extensões identificadas pelo nome e pelo publicador</dd>
+              </dl>
+              <ol class="passos">
+                <li>Painel <strong>Extensions</strong>: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> (<kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>).</li>
+                <li>Procure <strong>Vue - Official</strong> (antigo “Volar”). Instale se faltar.</li>
+                <li>Localize <strong>ESLint</strong> e <strong>Prettier</strong>. <em>Não</em> configure nada ainda.</li>
+              </ol>
+              <p class="caixa pequeno">Temas e ícones são opcionais. Configurar ferramentas de projeto antes de existir projeto gera arquivos sem uso.</p>
+            </div>
+            <figure class="captura">
+              <img src="capturas/telas/b2-vscode-extensoes.png" alt="Painel de extensões do VS Code" data-pendente="Painel Extensions do VS Code com a busca 'Vue - Official' e as extensões ESLint e Prettier visíveis, mostrando nome e publicador." />
+            </figure>
+          </div>
+          <aside class="notas">
+            <h3>Correção dos materiais</h3>
+            <p>
+              O exercício prático 1 pedia um <code>.eslintrc.js</code> com parser e plugins sem
+              instalá-los. No bloco 5 usamos a configuração gerada pelo create-vue (formato
+              <em>flat config</em>, <code>eslint.config.js</code>). O exercício teórico 4 citava
+              “Volar”: o nome atual é <strong>Vue - Official</strong>, como já aparece nas imagens da Aula 2.
+            </p>
+            <h3>Recomendação do próprio projeto</h3>
+            <p>Projetos criados com create-vue trazem <code>.vscode/extensions.json</code>; o VS Code sugere as extensões ao abrir a pasta (veja <code>etapas/05-vue-inicial/.vscode/extensions.json</code>).</p>
+            <h3>Referência</h3>
+            <ul class="referencias"><li><a href="https://eslint.org/docs/latest/use/configure/migration-guide">ESLint — migração para flat config</a></li></ul>
+          </aside>
+        </section>
+
+        <!-- 17 -->
+        <section class="slide" data-n="17" data-tipo="explicacao" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Formatação, análise estática e depuração resolvem problemas diferentes</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <table class="tabela">
+              <thead><tr><th>Ferramenta</th><th>Pergunta que responde</th><th>Exemplo</th></tr></thead>
+              <tbody>
+                <tr><td>Formatador (Prettier)</td><td>O código está com aparência padronizada?</td><td>Recuo, aspas, quebras de linha</td></tr>
+                <tr><td>Análise estática (ESLint)</td><td>Há padrões suspeitos sem executar?</td><td>Variável não usada, sintaxe proibida</td></tr>
+                <tr><td>Depuração (DevTools)</td><td>O que acontece durante a execução?</td><td>Valor de <code>i</code> em cada volta do laço</td></tr>
+              </tbody>
+            </table>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>etapas/02-erros-controlados/app.js · linhas 24–29</span></div>
+                <pre><code>function desenharLista(lista) {
+  const elementoLista = document.querySelector('#lista')
+  for (let i = 0; i &lt; lista.length - 1; i++) {
+    elementoLista.append(criarItem(lista[i]))
+  }
+}</code></pre>
+              </div>
+              <p class="pergunta pequeno"><strong>Pergunta</strong>Este trecho está bem formatado e não gera erro. Ele está correto?</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              Formatação muda aparência, não comportamento. Análise estática encontra padrões
+              conhecidos sem executar; não sabe a <em>intenção</em> (desenhar todas as tarefas).
+              Depuração observa o estado real. O defeito C passa pelas duas primeiras: só a
+              execução revela.
+            </p>
+            <h3>Demonstração opcional</h3>
+            <p>Desformate o trecho e formate de novo (<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>F</kbd>): a aparência volta, a tarefa continua faltando.</p>
+          </aside>
+        </section>
+
+        <!-- 18 -->
+        <section class="slide" data-n="18" data-tipo="demonstracao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Elements: alterar o documento carregado não altera o arquivo</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração no Elements">
+                <button role="tab" id="s18-t1" aria-controls="s18-p1" aria-selected="true">1 · Antes</button>
+                <button role="tab" id="s18-t2" aria-controls="s18-p2" aria-selected="false">2 · Alterado</button>
+                <button role="tab" id="s18-t3" aria-controls="s18-p3" aria-selected="false">3 · Recarregado</button>
+              </div>
+              <div role="tabpanel" id="s18-p1" aria-labelledby="s18-t1">
+                <img src="capturas/telas/b2-corrigida.png" alt="Página corrigida com o título Minhas tarefas" />
+                <p class="legenda">Versão corrigida (<code>corrigido/index.html</code>). <strong>Compare</strong> o título.</p>
+              </div>
+              <div role="tabpanel" id="s18-p2" aria-labelledby="s18-t2" hidden>
+                <img src="capturas/telas/b2-elements-alterado.png" alt="Título trocado para Título alterado no documento carregado, em vermelho" />
+                <p class="legenda">Título e cor alterados no documento carregado. Registro automatizado: a mudança foi feita por script no DOM, o mesmo efeito de editar no Elements.</p>
+              </div>
+              <div role="tabpanel" id="s18-p3" aria-labelledby="s18-t3" hidden>
+                <img src="capturas/telas/b2-elements-recarregado.png" alt="Após recarregar, o título original voltou" />
+                <p class="legenda">Após recarregar: o navegador leu o arquivo de novo e a alteração sumiu.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <ol class="passos">
+                <li>Abra o DevTools: <kbd>F12</kbd> (<kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>I</kbd>).</li>
+                <li>Elements: dê duplo clique no texto do <code>&lt;h1&gt;</code> e troque-o.</li>
+                <li>Styles: mude a cor do título.</li>
+                <li>Recarregue. O que voltou? O arquivo mudou?</li>
+              </ol>
+              <img src="capturas/telas/b2-devtools-elements.png" alt="Painel Elements do Chrome DevTools" data-pendente="DevTools › Elements com o <h1> selecionado e a propriedade color alterada no painel Styles." />
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              O painel Elements mostra e edita o <strong>DOM</strong>: o documento já carregado na
+              aba. Recarregar reconstrói o DOM a partir dos recursos. Para persistir, edite o
+              arquivo-fonte — ou configure mecanismos específicos (Workspaces/Local Overrides do
+              Chrome). Não ensine que o DevTools “nunca” persiste; ensine que, por padrão, não.
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>Por que uma mudança temporária não altera automaticamente o arquivo?</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Tools_and_setup/What_are_browser_developer_tools">MDN — What are browser developer tools?</a></li>
+              <li><a href="https://developer.chrome.com/docs/devtools">Chrome DevTools — documentação</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 19 -->
+        <section class="slide" data-n="19" data-tipo="pratica" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Console: ache o arquivo e a linha do erro</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre><code><span class="erro">Failed to load resource: the server responded with a status of 404 (Not Found)</span>   estilo.css:1
+<span class="erro">Uncaught TypeError: Cannot set properties of null (setting 'textContent')</span>
+    at atualizarResumo (http://localhost:8088/app.js:34:22)</code></pre>
+                <figcaption>Mensagens reais do Chrome 155 ao carregar a etapa 02 · <a href="capturas/navegador/b2-console.txt">registro</a></figcaption>
+              </figure>
+              <div class="atividade">
+                <dl>
+                  <dt>Resultado esperado</dt><dd>Arquivo, linha e coluna anotados; tradução da mensagem com suas palavras</dd>
+                </dl>
+                <ol class="passos pequeno">
+                  <li>Aba <strong>Console</strong>. Leia a mensagem <em>inteira</em> antes de clicar.</li>
+                  <li>Clique em <code>app.js:34</code>. Qual linha abre?</li>
+                  <li>O que é <code>null</code> ali? De onde ele veio?</li>
+                </ol>
+              </div>
+            </div>
+            <div class="pilha">
+              <div class="dicas">
+                <details class="dica"><summary>Dica 1</summary><p>“Cannot set properties of null”: o código tentou escrever numa variável que vale <code>null</code>.</p></details>
+                <details class="dica"><summary>Dica 2</summary><p>Na linha anterior, <code>querySelector</code> devolve <code>null</code> quando não encontra o seletor. Procure o id no HTML.</p></details>
+                <details class="solucao"><summary>Mostrar solução (após a tentativa)</summary><p>O HTML tem <code>id="contador"</code>; o script procura <code>#resumo</code>. Corrija um dos lados (só um).</p></details>
+              </div>
+              <img src="capturas/telas/b2-devtools-console.png" alt="Console do Chrome DevTools com o erro" data-pendente="DevTools › Console mostrando o 404 de estilo.css e o TypeError com o link app.js:34." />
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              O Console é um contexto de execução JavaScript ligado à página <em>e</em> o lugar onde
+              o navegador relata erros e mensagens de <code>console.log</code>. Não confundir com
+              o terminal do sistema (bloco 3). A pilha (<code>at atualizarResumo …:34:22</code>)
+              aponta função, arquivo, linha e coluna.
+            </p>
+            <h3>Observação</h3>
+            <p>No registro automatizado, a mensagem do 404 aparece com o prefixo de recurso; no painel ela vem com o link <code>estilo.css:1</code>. A linha 34 foi confirmada no arquivo.</p>
+          </aside>
+        </section>
+
+        <!-- 20 -->
+        <section class="slide" data-n="20" data-tipo="ia" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>IA: explicar a mensagem sem entregar a correção</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <div class="prompt-ia">
+                <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+                <p class="prompt-texto">
+                  Recebi <mark>[mensagem completa do Console]</mark>. Este é o trecho relevante:
+                  <mark>[linhas 31 a 35 de app.js e a linha do HTML com o id]</mark>. Explique os
+                  termos e sugira a primeira verificação. Não reescreva o arquivo inteiro. Como posso
+                  provar que a hipótese está correta?
+                </p>
+              </div>
+              <p class="pequeno suave">Envie só o trecho mínimo. Nada de credenciais, <code>.env</code> ou dados pessoais.</p>
+            </div>
+            <div class="caixa pequeno">
+              <h3>Confira antes de aceitar</h3>
+              <ul>
+                <li>A explicação cita <code>null</code> e <code>querySelector</code>?</li>
+                <li>A verificação sugerida pode ser feita no Console? (ex.: digitar <code>document.querySelector('#resumo')</code>)</li>
+                <li>Se a IA sugeriu reescrever tudo, rejeite e registre por quê.</li>
+              </ul>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Experimento de verificação</h3>
+            <p>No Console da página: <code>document.querySelector('#resumo')</code> → <code>null</code>; <code>document.querySelector('#contador')</code> → o parágrafo. Essa é a prova, independentemente do que a IA disse.</p>
+            <h3>Discussão</h3>
+            <p>Respostas fluentes podem estar erradas. Se a IA apontar outra causa, peça à turma a evidência que a confirmaria e teste.</p>
+          </aside>
+        </section>
+
+        <!-- 21 -->
+        <section class="slide" data-n="21" data-tipo="explicacao" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Breakpoint: pausar e observar o valor de <code>i</code></h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <p class="pequeno">
+                Um <strong>breakpoint</strong> pausa a execução numa linha para inspecionar variáveis.
+                Use-o no defeito que <em>não</em> gera mensagem: a tarefa que sumiu.
+              </p>
+              <ol class="passos pequeno">
+                <li>Sources › <code>app.js</code> → clique no número <strong>27</strong>.</li>
+                <li>Recarregue. A execução para; veja <code>i</code> em <em>Scope</em>.</li>
+                <li>Continue (<kbd>F8</kbd>) e anote <code>i</code> a cada pausa.</li>
+              </ol>
+              <figure class="saida-real">
+                <pre><code>pausa em app.js:27 → i = 0; lista.length = 4; (i &lt; lista.length - 1) = true
+pausa em app.js:27 → i = 1; lista.length = 4; (i &lt; lista.length - 1) = true
+pausa em app.js:27 → i = 2; lista.length = 4; (i &lt; lista.length - 1) = true</code></pre>
+                <figcaption>Valores reais lidos no breakpoint pelo protocolo de depuração do Chrome · <a href="capturas/navegador/b2-breakpoint.txt">registro</a></figcaption>
+              </figure>
+            </div>
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre><code>&lt;ul id="lista"&gt; contém 3 &lt;li&gt;:
+  &lt;li&gt; Instalar o Node.js
+  &lt;li&gt; Abrir a pasta do projeto no editor
+  &lt;li&gt; Inspecionar a página no DevTools</code></pre>
+                <figcaption>Itens presentes no DOM (Elements) · <a href="capturas/navegador/b2-elements-lista.txt">registro</a></figcaption>
+              </figure>
+              <p class="pergunta pequeno"><strong>Explique</strong>Por que não houve pausa com <code>i = 3</code>? Qual tarefa ficou de fora?</p>
+              <img src="capturas/telas/b2-devtools-sources-breakpoint.png" alt="Painel Sources com breakpoint" data-pendente="DevTools › Sources com breakpoint na linha 27 de app.js pausado e a variável i = 2 visível em Scope." />
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              Com <code>i = 3</code>, a condição <code>3 &lt; 3</code> é falsa e o laço termina: o
+              índice 3 (“Encontrar a tarefa que sumiu”) nunca é desenhado. Breakpoint transforma
+              uma suspeita em observação.
+            </p>
+            <h3>Alternativas</h3>
+            <p><code>console.log(i)</code> dentro do laço também mostra os valores, mas exige editar e recarregar; a instrução <code>debugger;</code> pausa como um breakpoint. Todas são válidas; o breakpoint não altera o arquivo.</p>
+          </aside>
+        </section>
+
+        <!-- 22 -->
+        <section class="slide" data-n="22" data-tipo="pratica" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Network: o que foi pedido, o que voltou</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre><code>GET http://localhost:8088/ → 200 OK · text/html; charset=utf-8
+<span class="erro">GET http://localhost:8088/estilo.css → 404 Not Found · text/plain; charset=utf-8</span>
+GET http://localhost:8088/app.js → 200 OK · text/javascript; charset=utf-8</code></pre>
+                <figcaption>Requisições observadas pelo Chrome (trecho) · <a href="capturas/navegador/b2-network.txt">registro completo</a></figcaption>
+              </figure>
+              <figure class="saida-real">
+                <pre><code><span class="cmd">~/modulo-2/etapas/02-erros-controlados $ PORTA=8088 node ../ferramentas/servidor-local.mjs</span>
+Servindo ~/modulo-2/etapas/02-erros-controlados
+Abra http://localhost:8088/ no navegador. Ctrl+C encerra o servidor.
+200 GET /
+404 GET /estilo.css
+200 GET /app.js</code></pre>
+                <figcaption>O mesmo pedido visto pelo servidor, no terminal (trecho) · <a href="capturas/terminal/b2-servidor-local.txt">arquivo</a></figcaption>
+              </figure>
+            </div>
+            <div class="pilha">
+              <ol class="passos pequeno">
+                <li>Aba <strong>Network</strong> aberta; recarregue a página.</li>
+                <li>Qual linha está em vermelho? Qual o status?</li>
+                <li>Compare o nome pedido com o nome do arquivo na pasta.</li>
+              </ol>
+              <p class="pergunta pequeno"><strong>Pergunta</strong>O servidor de desenvolvimento é o backend de negócio da aplicação?</p>
+              <img src="capturas/telas/b2-devtools-network.png" alt="Painel Network do Chrome DevTools" data-pendente="DevTools › Network após recarregar: estilo.css em vermelho com status 404 e app.js com 200." />
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              O navegador (cliente) envia requisições HTTP; o servidor responde com status e
+              conteúdo. 200 = encontrado; 404 = não encontrado. O servidor local só entrega
+              arquivos: não tem regras de negócio. Aberta direto do disco, a falha aparece como
+              <code>net::ERR_FILE_NOT_FOUND</code>, sem status HTTP.
+            </p>
+            <h3>Observação sobre o registro</h3>
+            <p>O registro completo traz também <code>estilo.css → falhou: net::ERR_ABORTED</code>: o Chrome descarta a resposta 404 porque ela não é CSS.</p>
+            <h3>Referência</h3>
+            <ul class="referencias"><li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview">MDN — An overview of HTTP</a></li></ul>
+          </aside>
+        </section>
+
+        <!-- 23 -->
+        <section class="slide" data-n="23" data-tipo="pratica" data-tempo="17 min">
+          <header class="slide-topo">
+            <h2>Corrija um defeito por vez, com evidência antes e depois</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados após cada correção">
+                <button role="tab" id="s23-t1" aria-controls="s23-p1" aria-selected="true">1 · Após A (CSS)</button>
+                <button role="tab" id="s23-t2" aria-controls="s23-p2" aria-selected="false">2 · Após B (resumo)</button>
+                <button role="tab" id="s23-t3" aria-controls="s23-p3" aria-selected="false">3 · Após C (laço)</button>
+              </div>
+              <div role="tabpanel" id="s23-p1" aria-labelledby="s23-t1">
+                <img src="capturas/telas/b2-correcao-1-css.png" alt="Página com estilo, ainda Carregando resumo e três tarefas" />
+                <p class="legenda"><strong>Compare:</strong> o estilo voltou; resumo ainda parado; 3 tarefas.</p>
+              </div>
+              <div role="tabpanel" id="s23-p2" aria-labelledby="s23-t2" hidden>
+                <img src="capturas/telas/b2-correcao-2-resumo.png" alt="Página com estilo e resumo 4 tarefas, 2 concluídas, mas três itens" />
+                <p class="legenda"><strong>Compare:</strong> resumo diz 4 tarefas; a lista mostra 3. O dado e a tela discordam.</p>
+              </div>
+              <div role="tabpanel" id="s23-p3" aria-labelledby="s23-t3" hidden>
+                <img src="capturas/telas/b2-corrigida.png" alt="Página corrigida com quatro tarefas e resumo" />
+                <p class="legenda"><strong>Compare:</strong> 4 tarefas, resumo e Console sem erro. Igual a <code>corrigido/</code>.</p>
+              </div>
+            </figure>
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>17 min, individual</dd>
+                <dt>Resultado esperado</dt><dd>Três registros e a página igual à aba 3</dd>
+              </dl>
+              <table class="tabela">
+                <thead><tr><th>#</th><th>Hipótese</th><th>Evidência antes</th><th>Mudança</th><th>Evidência depois</th></tr></thead>
+                <tbody>
+                  <tr><td>A</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+                  <tr><td>B</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+                  <tr><td>C</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+                </tbody>
+              </table>
+              <p class="pequeno">Teste a hipótese que a IA sugeriu no slide 20 <strong>como hipótese</strong>: aceite só com evidência.</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>
+              Exija recarregar entre correções. A aba 2 é o momento mais rico: “o resumo diz 4, a
+              tela mostra 3” — o dado está certo e o desenho está errado, o que aponta para o laço.
+            </p>
+            <h3>Gabarito</h3>
+            <p>A: <code>href="estilos.css"</code>. B: <code>querySelector('#contador')</code>. C: <code>i &lt; lista.length</code>. Arquivos em <code>etapas/02-erros-controlados/corrigido/</code>.</p>
+          </aside>
+        </section>
+
+        <!-- 24 -->
+        <section class="slide" data-n="24" data-tipo="verificacao" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA: qual ferramenta para cada sintoma?</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Sintoma</th><th>Ferramenta</th><th>Por quê</th></tr></thead>
+                <tbody>
+                  <tr><td>Uma imagem não aparece e a página está lenta</td><td>…</td><td>…</td></tr>
+                  <tr><td>Um botão não faz nada ao clicar</td><td>…</td><td>…</td></tr>
+                  <tr><td>Um texto está com a cor errada e você quer testar outra</td><td>…</td><td>…</td></tr>
+                </tbody>
+              </table>
+              <div class="pergunta pequeno"><strong>Extra</strong>Classifique: extensão do editor, pacote do projeto ou extensão do navegador? — Vue - Official · <code>eslint</code> · Vue DevTools</div>
+            </div>
+            <div class="dicas">
+              <details class="solucao">
+                <summary>Mostrar respostas esperadas (após a entrega)</summary>
+                <p>Imagem: <strong>Network</strong> (status e tempo do pedido). Botão: <strong>Console</strong> (erro?) e, se não houver erro, breakpoint no tratador. Cor: <strong>Elements/Styles</strong> (teste temporário; depois edite o CSS). Vue - Official: editor; <code>eslint</code>: projeto; Vue DevTools: navegador.</p>
+              </details>
+              <div class="caixa pequeno">
+                <h3>Ponto de retomada</h3>
+                <p>Bloco 3 executa JavaScript <em>fora</em> do navegador: pasta <code>etapas/03-node-tarefas</code>. Confirme antes da aula: <code>node --version</code>.</p>
+              </div>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Avaliação</h3>
+            <p>Use a rubrica do módulo (0–2) no critério “interpretação das ferramentas”. Duas ferramentas podem servir para o mesmo sintoma: aceite justificativas com evidência.</p>
+            <h3>Exercício teórico 4 (revisado)</h3>
+            <p>Peça três extensões úteis para Vue <em>e</em> o papel de cada uma, distinguindo-as de pacotes do projeto. Aceite Vue - Official, ESLint, Prettier; “Volar” é o nome antigo.</p>
+          </aside>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

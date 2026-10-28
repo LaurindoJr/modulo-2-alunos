@@ -1,0 +1,8 @@
+~/modulo-2/etapas/todo-list $ npm install
+
+added 224 packages, and audited 225 packages in 12s
+
+59 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities

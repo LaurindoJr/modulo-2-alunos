@@ -1,0 +1,2 @@
+~/modulo-2/etapas/03-node-tarefas/modulos/commonjs $ node resumo.cjs
+[CommonJS] 1 de 2 tarefas concluídas

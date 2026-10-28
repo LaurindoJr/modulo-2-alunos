@@ -1,0 +1,2 @@
+~/modulo-2/etapas/todo-list $ grep -o 'src="[^"]*"' dist/index.html
+src="/assets/index-CsxmxGsD.js"

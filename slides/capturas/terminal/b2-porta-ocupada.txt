@@ -1,0 +1,3 @@
+~/modulo-2/etapas/02-erros-controlados $ node ../ferramentas/servidor-local.mjs
+A porta 8088 já está em uso por outro processo.
+Encerre o outro servidor (Ctrl+C no terminal dele) ou escolha outra porta, por exemplo PORTA=8089

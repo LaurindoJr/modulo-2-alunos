@@ -1,0 +1,5 @@
+~/modulo-2/etapas/04-dependencias-scripts $ npm install picocolors
+
+added 1 package, and audited 2 packages in 703ms
+
+found 0 vulnerabilities

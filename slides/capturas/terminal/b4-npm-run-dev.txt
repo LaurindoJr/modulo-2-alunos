@@ -1,0 +1,29 @@
+~/modulo-2/etapas/04-dependencias-scripts $ npm run dev
+
+> 04-dependencias-scripts@1.0.0 dev
+> nodemon relatorio.js
+
+[nodemon] 3.1.14
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,cjs,json
+[nodemon] starting `node relatorio.js`
+Relatório da Todo List
+[x] Criar o package.json
+[x] Instalar uma dependência
+[ ] Comparar manifesto e lockfile
+[ ] Criar scripts no package.json
+[ ] Restaurar o ambiente com npm ci
+2 de 5 concluídas
+[nodemon] clean exit - waiting for changes before restart
+[nodemon] restarting due to changes...
+[nodemon] starting `node relatorio.js`
+Relatório da Todo List
+[x] Criar o package.json
+[x] Instalar uma dependência
+[ ] Comparar manifesto e lockfile
+[ ] Criar scripts no package.json
+[ ] Restaurar o ambiente com npm ci
+2 de 5 concluídas
+[nodemon] clean exit - waiting for changes before restart
+^C

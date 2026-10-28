@@ -1,0 +1,20 @@
+--- index.html (antes)
++++ index.html (depois)
+@@ -9,7 +9,7 @@
+   </head>
+   <body>
+     <main class="cartao">
+-      <h1>Minhas tarefas</h1>
++      <h1>Tarefas da semana</h1>
+       <p id="resumo" class="resumo">Carregando resumo…</p>
+ 
+       <ul class="lista">
+@@ -20,7 +20,7 @@
+           <label><input type="checkbox" /> Abrir a pasta do projeto no editor</label>
+         </li>
+         <li>
+-          <label><input type="checkbox" /> Alterar o texto de uma tarefa</label>
++          <label><input type="checkbox" /> Alterar o texto desta tarefa no editor</label>
+         </li>
+         <li>
+           <label><input type="checkbox" /> Explicar onde a alteração existe</label>

@@ -1,0 +1,3 @@
+~/modulo-2/etapas/03-node-tarefas $ command -v node && echo $PATH | tr ':' '\n' | grep -n node
+~/.nvm/versions/node/v24.19.0/bin/node
+4:~/.nvm/versions/node/v24.19.0/bin

@@ -1,0 +1,5 @@
+~/modulo-2/etapas/03-node-tarefas $ node tarefas.js
+Total: 5
+Concluídas: 3
+Pendentes: 2
+Progresso: 60%

@@ -1,0 +1,6 @@
+~/modulo-2/etapas/04-dependencias-scripts $ npm pkg set scripts.start="node relatorio.js" scripts.dev="nodemon relatorio.js" scripts.dev:nativo="node --watch relatorio.js" && npm pkg delete scripts.test && npm pkg get scripts
+{
+  "start": "node relatorio.js",
+  "dev": "nodemon relatorio.js",
+  "dev:nativo": "node --watch relatorio.js"
+}

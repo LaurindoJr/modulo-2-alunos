@@ -1,0 +1,4 @@
+GET http://localhost:8088/ → 200 OK · text/html; charset=utf-8
+GET http://localhost:8088/estilo.css → 404 Not Found · text/plain; charset=utf-8
+GET http://localhost:8088/estilo.css → falhou: net::ERR_ABORTED
+GET http://localhost:8088/app.js → 200 OK · text/javascript; charset=utf-8

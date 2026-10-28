@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bloco 5 · Vue e build</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="5">
+    <div class="janela">
+      <main class="palco" aria-label="Bloco 5: ambiente Vue e revisão por desafios">
+        <!-- 49 -->
+        <section class="slide" data-n="49" data-tipo="abertura" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Desafio: preparar o ambiente da Todo List em Vue</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">
+                Hoje você cria o projeto, encontra os arquivos de entrada, altera o componente raiz,
+                gera o build — e explica cada passo com evidências.
+              </p>
+              <table class="tabela">
+                <thead><tr><th>Critério de conclusão</th><th>Evidência observável</th></tr></thead>
+                <tbody>
+                  <tr><td>Projeto criado sem instalação global</td><td>Pasta <code>todo-list</code> com <code>package.json</code></td></tr>
+                  <tr><td>Dependências instaladas</td><td><code>node_modules/</code> e <code>package-lock.json</code>; terminal sem erro</td></tr>
+                  <tr><td>Servidor de desenvolvimento ativo</td><td>Endereço da linha <code>Local:</code> aberto no navegador</td></tr>
+                  <tr><td>Componente raiz alterado</td><td>Título e lista estática de tarefas na tela</td></tr>
+                  <tr><td>Build gerado e explicado</td><td>Pasta <code>dist/</code> e o papel de cada arquivo</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pilha">
+              <div class="pergunta">
+                <strong>Previsão (sem IA)</strong>
+                Quais destes passos precisam de internet? Qual deles publica o site?
+              </div>
+              <p class="caixa pequeno">
+                Ponto de retomada: <code>etapas/05-vue-inicial</code> é o estado final esperado
+                deste bloco (<code>npm ci</code> e <code>npm run dev</code>).
+              </p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>
+              Apresente os cinco critérios como o “contrato” do encontro e deixe-os visíveis.
+              Recolha as previsões: a maioria costuma achar que <code>npm run dev</code> publica o
+              site. Retome no slide 56.
+            </p>
+            <h3>Resposta esperada</h3>
+            <p>
+              Precisam de internet: baixar o gerador (<code>npm create vue@latest</code>) e as
+              dependências (<code>npm install</code>). Nenhum passo de hoje publica: publicar
+              exige enviar <code>dist/</code> a uma hospedagem.
+            </p>
+            <h3>Base</h3>
+            <p>Aula 5 (PPTX) transformada em desafio; prático 3 corrigido (sem <code>npm install -g create-vite</code>); etapas 1, 2 e 4 do Projeto Final.</p>
+          </aside>
+        </section>
+
+        <!-- 50 -->
+        <section class="slide" data-n="50" data-tipo="explicacao" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>create-vue, Vue e Vite: três responsabilidades</h2>
+          </header>
+          <div class="slide-corpo pilha">
+            <div class="grade-3">
+              <div class="caixa">
+                <h3>create-vue · gerador</h3>
+                <p class="pequeno">Pergunta opções e escreve os arquivos iniciais. Roda uma vez, na criação.</p>
+              </div>
+              <div class="caixa">
+                <h3>Vue · framework</h3>
+                <p class="pequeno">Biblioteca usada pelo seu código: componentes, template, reatividade. Vai para o navegador.</p>
+              </div>
+              <div class="caixa">
+                <h3>Vite · ferramenta</h3>
+                <p class="pequeno">Serve os fontes no desenvolvimento e gera o build. Roda no Node, no seu computador.</p>
+              </div>
+            </div>
+            <div class="grade-2">
+              <div class="caixa pequeno">
+                <h3>Por que este caminho?</h3>
+                <p>
+                  <code>npm create vue@latest</code> é o fluxo indicado pelo guia oficial e gera um
+                  projeto baseado em Vite. Nada é instalado globalmente: o npm baixa o gerador sob
+                  demanda.
+                </p>
+              </div>
+              <div class="caixa pequeno">
+                <h3>Alternativas e limites</h3>
+                <p>
+                  Vue funciona <strong>sem</strong> Vite em outros cenários (script direto na página,
+                  sem build). <code>npm create vite@latest</code> também cria projetos Vue. O Vue CLI
+                  está em manutenção: não é o caminho para projetos novos.
+                </p>
+              </div>
+            </div>
+            <p class="pergunta pequeno"><strong>Pergunta</strong>Vue exige Vite em qualquer cenário? Qual das três peças aparece em <code>dependencies</code>?</p>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              <strong>Gerador</strong> (create-vue) cria a estrutura; <strong>framework</strong>
+              (Vue) define como escrever componentes e reage a mudanças de estado; <strong>ferramenta
+              de desenvolvimento</strong> (Vite) transforma arquivos <code>.vue</code> e módulos para
+              o navegador, com servidor de desenvolvimento e build de produção. Confundir as três é
+              a origem de perguntas como “instalo o Vite ou o Vue?”.
+            </p>
+            <h3>Distinção</h3>
+            <p>
+              Usar Vite aqui é <strong>alternativa escolhida</strong> para o percurso, não condição
+              universal. Instalar o gerador globalmente é <strong>possível</strong>, mas cria
+              diferenças entre máquinas e versões; <code>npm create</code> evita isso.
+            </p>
+            <h3>Resposta esperada</h3>
+            <p>No <code>package.json</code> gerado, só <code>vue</code> está em <code>dependencies</code>; <code>vite</code> está em <code>devDependencies</code>; create-vue não aparece.</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://vuejs.org/guide/quick-start.html">Vue — Quick Start</a></li>
+              <li><a href="https://vuejs.org/guide/scaling-up/tooling.html">Vue — Tooling</a></li>
+              <li><a href="https://vite.dev/guide/">Vite — Getting Started</a></li>
+              <li><a href="https://cli.vuejs.org/migrations/migrate-from-v3">Vue CLI — aviso de manutenção</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 51 -->
+        <section class="slide" data-n="51" data-tipo="pratica" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Criar o projeto: cada pergunta é uma decisão</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Terminal · na pasta onde o projeto vai morar</span><button type="button" class="copiar">Copiar</button></div>
+                <pre><code>npm create vue@latest</code></pre>
+              </div>
+              <table class="tabela">
+                <thead><tr><th>Pergunta</th><th>Resposta</th><th>Por quê</th></tr></thead>
+                <tbody>
+                  <tr><td>Project name</td><td><code>todo-list</code></td><td>Nome da pasta e do pacote</td></tr>
+                  <tr><td>Use TypeScript?</td><td><strong>No</strong></td><td>O padrão é <em>Yes</em>; TypeScript chega na etapa 07</td></tr>
+                  <tr><td>Select features</td><td>Linter, Prettier</td><td>Qualidade configurada pelo gerador</td></tr>
+                  <tr><td>Experimental features</td><td>nenhuma</td><td>Evita recursos instáveis</td></tr>
+                  <tr><td>Skip example code?</td><td><strong>Yes</strong></td><td>Projeto em branco, fácil de ler</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <figure class="saida-real">
+              <pre style="max-height: none"><code><span class="cmd">&gt; npx
+&gt; 'create-vue'</span>
+
+┌  Vue.js - The Progressive JavaScript Framework
+│
+◇  Project name (target directory):
+│  todo-list
+│
+◆  Use TypeScript?
+│  ● Yes / ○ No
+└</code></pre>
+              <figcaption>Tela real da 2ª pergunta: o padrão marcado é <strong>Yes</strong> · create-vue 3.24.0 (versão de <code>@latest</code> em 21/10/2026) · macOS · <a href="capturas/terminal/b5-create-vue-interativo.txt">todas as telas</a></figcaption>
+            </figure>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>
+              Crie ao vivo, lendo cada pergunta em voz alta antes de responder. Navegação:
+              <kbd>↑</kbd>/<kbd>↓</kbd>, <kbd>Espaço</kbd> marca, <kbd>Enter</kbd> confirma. Pare
+              na pergunta do TypeScript: quem apertar Enter direto ficará com TypeScript (o
+              roteiro passa a usar <code>main.ts</code>). Pausa para todos chegarem à tela final.
+            </p>
+            <h3>Fundamento</h3>
+            <p>
+              <code>npm create vue@latest</code> equivale a executar o pacote <code>create-vue</code>
+              na versão mais recente, baixado sob demanda (na primeira vez o npm avisa que vai
+              instalá-lo temporariamente). As respostas definem arquivos e dependências do
+              projeto; a opção “Linter” inclui ESLint (configuração <em>flat</em>) e oxlint.
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>Se você marcar “Router” por engano, o que muda? (Arquivos <code>src/router/</code> e dependência <code>vue-router</code>.) Dá para corrigir depois? (Sim, instalando e configurando — etapa 09.)</p>
+            <h3>Origem</h3>
+            <p>Corrige os exercícios práticos 2 e 3, que misturavam Vue CLI global e <code>npm install -g create-vite</code>.</p>
+          </aside>
+        </section>
+
+        <!-- 52 -->
+        <section class="slide" data-n="52" data-tipo="demonstracao" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Instalar e iniciar o servidor de desenvolvimento</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da criação do projeto">
+                <button role="tab" id="s52-t1" aria-controls="s52-p1" aria-selected="true">1 · Gerado</button>
+                <button role="tab" id="s52-t2" aria-controls="s52-p2" aria-selected="false">2 · Instalar e iniciar</button>
+                <button role="tab" id="s52-t3" aria-controls="s52-p3" aria-selected="false">3 · Navegador</button>
+              </div>
+              <div role="tabpanel" id="s52-p1" aria-labelledby="s52-t1">
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code>◇  Skip all example code and start with a blank Vue project?
+│  Yes
+
+Scaffolding project in ~/modulo-2/etapas/todo-list...
+│
+└  Done. Now run:
+
+   cd todo-list
+   npm install
+   npm run format
+   npm run dev</code></pre>
+                  <figcaption>Fim da criação (trecho) · create-vue 3.24.0 · registrado na pasta <code>etapas/todo-list</code>, depois renomeada para <code>etapas/05-vue-inicial</code> · <a href="capturas/terminal/b5-create-vue-interativo.txt">arquivo</a></figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s52-p2" aria-labelledby="s52-t2" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">~/modulo-2/etapas/todo-list $ npm install</span>
+added 224 packages, and audited 225 packages in 12s
+found 0 vulnerabilities
+<span class="cmd">~/modulo-2/etapas/todo-list $ npm run dev</span>
+&gt; todo-list@0.0.0 dev
+&gt; vite
+
+Port 5173 is in use, trying another one...
+
+  VITE v8.3.5  ready in 772 ms
+
+  ➜  Local:   http://localhost:5174/
+  ➜  Network: use --host to expose
+  ➜  Vue DevTools: Open http://localhost:5174/__devtools__/ as a separate window</code></pre>
+                  <figcaption>Saídas reais (trechos) · npm 11.17.0 · Vite 8.3.5 · Node 24.19.0 · 21/10/2026 · <a href="capturas/terminal/b5-npm-install.txt">install</a> · <a href="capturas/terminal/b5-npm-run-dev.txt">dev</a></figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s52-p3" aria-labelledby="s52-t3" hidden>
+                <img src="capturas/telas/b5-projeto-gerado.png" alt="Página branca com o título You did it! e o link vuejs.org; embaixo, o botão flutuante do Vue DevTools" class="recorte" />
+                <p class="legenda"><strong>Compare:</strong> título “You did it!” e o botão flutuante do Vue DevTools no rodapé. <strong>Aceitável:</strong> outra porta no endereço.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Terminal</span><button type="button" class="copiar">Copiar</button></div>
+                <pre><code>cd todo-list
+npm install
+npm run dev</code></pre>
+              </div>
+              <p class="caixa caixa-destaque pequeno">
+                <strong>“Port 5173 is in use” não é erro:</strong> outro processo usava a porta e o
+                Vite escolheu a próxima livre. Abra o endereço da linha <code>Local:</code>.
+              </p>
+              <p class="pergunta pequeno"><strong>Observe</strong>Por que o terminal fica “ocupado” depois de <code>npm run dev</code>?</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Roteiro da demonstração</h3>
+            <ol>
+              <li>Aba 1: a criação terminou e sugere os próximos comandos.</li>
+              <li>Aba 2: <code>npm install</code> baixa 224 pacotes (rede); <code>npm run dev</code> inicia o Vite.</li>
+              <li>Aba 3: abra o endereço informado. Pausa: todos com a página no ar.</li>
+            </ol>
+            <h3>Fundamento</h3>
+            <p>
+              <code>npm run dev</code> executa o script <code>dev</code> (<code>vite</code>): um
+              <strong>processo de longa duração</strong> que serve os fontes e transforma arquivos
+              sob demanda. Ele mantém o terminal ocupado até <kbd>Ctrl</kbd>+<kbd>C</kbd>.
+              <code>localhost:5174</code> só existe enquanto esse processo roda.
+            </p>
+            <h3>Vue DevTools</h3>
+            <p>
+              O botão flutuante e as linhas “Vue DevTools” vêm do plugin
+              <code>vite-plugin-vue-devtools</code>, incluído pelo gerador; ele é diferente da
+              extensão de navegador. A captura do PPTX da Aula 2 mostrava Vue 2.6.7 — substituir pela
+              tela deste projeto (Vue 3.5).
+            </p>
+            <h3>Registro</h3>
+            <p>Na máquina de registro, a 5173 estava ocupada por outro projeto; por isso 5174. A captura foi interrompida após 6 s (equivalente a Ctrl+C).</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://vite.dev/guide/">Vite — servidor de desenvolvimento</a></li>
+              <li><a href="https://devtools.vuejs.org/">Vue DevTools</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 53 -->
+        <section class="slide" data-n="53" data-tipo="explicacao" data-tempo="15 min">
+          <header class="slide-topo">
+            <h2>Do index.html ao App.vue: localize a entrada</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <svg viewBox="0 0 700 120" role="img" aria-labelledby="fluxo-b5" style="width: 100%; max-height: 3.6em">
+                <title id="fluxo-b5">index.html carrega src/main.js, que monta App.vue no elemento app</title>
+                <defs>
+                  <marker id="seta-b5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                    <path d="M0 0 10 5 0 10z" fill="currentColor" />
+                  </marker>
+                </defs>
+                <g font-family="ui-monospace, Menlo, monospace" font-size="24" fill="currentColor" style="color: var(--texto)">
+                  <rect x="4" y="25" width="180" height="70" rx="10" fill="var(--superficie)" stroke="var(--borda)" stroke-width="3" />
+                  <text x="94" y="68" text-anchor="middle">index.html</text>
+                  <rect x="260" y="25" width="180" height="70" rx="10" fill="var(--superficie)" stroke="var(--borda)" stroke-width="3" />
+                  <text x="350" y="68" text-anchor="middle">main.js</text>
+                  <rect x="516" y="25" width="180" height="70" rx="10" fill="var(--primaria-suave)" stroke="var(--primaria)" stroke-width="3" />
+                  <text x="606" y="68" text-anchor="middle">App.vue</text>
+                  <g stroke="currentColor" stroke-width="3" fill="none" marker-end="url(#seta-b5)">
+                    <path d="M186 60H252" /><path d="M442 60H508" />
+                  </g>
+                </g>
+              </svg>
+              <table class="tabela">
+                <thead><tr><th>Arquivo</th><th>Papel</th></tr></thead>
+                <tbody>
+                  <tr><td><code>index.html</code></td><td>Página recebida; tem <code>&lt;div id="app"&gt;</code> e carrega <code>/src/main.js</code></td></tr>
+                  <tr><td><code>src/main.js</code></td><td>Entrada do JS: <code>createApp(App).mount('#app')</code></td></tr>
+                  <tr><td><code>src/App.vue</code></td><td>Componente raiz: template, script e estilo</td></tr>
+                  <tr><td><code>public/</code></td><td>Copiado como está para o build (<code>favicon.ico</code>)</td></tr>
+                  <tr><td><code>vite.config.js</code></td><td>Plugins do Vite e atalho <code>@</code> → <code>src</code></td></tr>
+                </tbody>
+              </table>
+              <p class="pergunta pequeno"><strong>Prática (5 min)</strong>Abra os três arquivos do fluxo e aponte a linha que liga cada um ao próximo.</p>
+            </div>
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">~/modulo-2/etapas/todo-list $ find . -type f -not -path './node_modules/*' | sort</span>
+./.editorconfig
+./.gitattributes
+./.gitignore
+./.oxlintrc.json
+./.prettierrc.json
+./.vscode/extensions.json
+./.vscode/settings.json
+./README.md
+./eslint.config.js
+./index.html
+./jsconfig.json
+./package.json
+./public/favicon.ico
+./src/App.vue
+./src/main.js
+./vite.config.js</code></pre>
+                <figcaption>Árvore real do projeto gerado (sem <code>node_modules</code>) · <a href="capturas/terminal/b5-estrutura.txt">arquivo</a></figcaption>
+              </figure>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              Diferente da etapa 01, aqui o <code>index.html</code> quase não tem conteúdo: o Vue
+              cria a interface dentro de <code>#app</code>. O navegador pede
+              <code>/src/main.js</code>; o Vite transforma o <code>import App from './App.vue'</code>
+              em JavaScript que o navegador entende. Um arquivo <code>.vue</code> não roda
+              diretamente no navegador: precisa dessa transformação.
+            </p>
+            <h3>Perguntas de compreensão</h3>
+            <ul>
+              <li>Se trocar <code>#app</code> por <code>#raiz</code> só no <code>main.js</code>, o que acontece? (Nada é montado; aviso no Console.)</li>
+              <li>Por que <code>jsconfig.json</code> existe num projeto sem TypeScript? (Ajuda o editor a entender o atalho <code>@</code>.)</li>
+            </ul>
+            <h3>Condução</h3>
+            <p>Demonstre com o explorador do editor; depois os alunos repetem na própria pasta. Arquivos de configuração (<code>.oxlintrc.json</code>, <code>.prettierrc.json</code>) são só citados.</p>
+            <h3>Referência</h3>
+            <ul class="referencias">
+              <li><a href="https://vuejs.org/guide/quick-start.html">Vue — Quick Start</a> (estrutura do projeto)</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 54 -->
+        <section class="slide" data-n="54" data-tipo="demonstracao" data-tempo="12 min">
+          <header class="slide-topo">
+            <h2>Alterar o App.vue: título e lista estática</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da alteração do App.vue">
+                <button role="tab" id="s54-t1" aria-controls="s54-p1" aria-selected="true">1 · Inicial</button>
+                <button role="tab" id="s54-t2" aria-controls="s54-p2" aria-selected="false">2 · Alteração</button>
+                <button role="tab" id="s54-t3" aria-controls="s54-p3" aria-selected="false">3 · Resultado</button>
+              </div>
+              <div role="tabpanel" id="s54-p1" aria-labelledby="s54-t1">
+                <img src="capturas/telas/b5-projeto-gerado.png" alt="Página gerada com You did it!" class="recorte" />
+                <p class="legenda"><strong>Compare:</strong> o texto vem do template do <code>App.vue</code> gerado.</p>
+              </div>
+              <div role="tabpanel" id="s54-p2" aria-labelledby="s54-t2" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Diferença em src/App.vue (trecho)</span></div>
+                  <pre style="font-size: 0.62em"><code> &lt;template&gt;
+-  &lt;h1&gt;You did it!&lt;/h1&gt;
+-  &lt;p&gt;
+-    Visit &lt;a href="https://vuejs.org/" …&gt;vuejs.org&lt;/a&gt; to read the
+-    documentation
+-  &lt;/p&gt;
++  &lt;main class="cartao"&gt;
++    &lt;h1&gt;Minhas tarefas&lt;/h1&gt;
++    &lt;p class="resumo"&gt;Lista estática: os dados ainda estão escritos no template.&lt;/p&gt;
++    &lt;ul class="lista"&gt;
++      &lt;li class="concluida"&gt;Criar o projeto com npm create vue@latest&lt;/li&gt;
++      &lt;li class="concluida"&gt;Iniciar o servidor de desenvolvimento&lt;/li&gt;
++      &lt;li&gt;Localizar index.html, main.js e App.vue&lt;/li&gt;
++      &lt;li&gt;Gerar o build e inspecionar a pasta dist&lt;/li&gt;
++    &lt;/ul&gt;
++  &lt;/main&gt;
+ &lt;/template&gt;</code></pre>
+                </div>
+                <p class="legenda">O estilo (<code>&lt;style scoped&gt;</code>) também mudou · <a href="capturas/codigo/b5-alteracao-app.diff">diferença completa</a></p>
+              </div>
+              <div role="tabpanel" id="s54-p3" aria-labelledby="s54-t3" hidden>
+                <img src="capturas/telas/b5-app-alterado.png" alt="Cartão Minhas tarefas com quatro tarefas, duas riscadas" class="recorte" />
+                <p class="legenda"><strong>Compare:</strong> a tela mudou ao salvar, <em>sem</em> recarregar manualmente. <strong>Aceitável:</strong> fontes diferentes.</p>
+              </div>
+            </figure>
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>4 min demonstração + 8 min reprodução</dd>
+                <dt>Pré-requisitos</dt><dd><code>npm run dev</code> rodando; <code>App.vue</code> aberto</dd>
+                <dt>Resultado esperado</dt><dd>Seu título e 4 tarefas na tela, atualizados ao salvar</dd>
+              </dl>
+              <ol class="passos">
+                <li>Troque o conteúdo do <code>&lt;template&gt;</code> por um título e uma lista.</li>
+                <li>Salve e observe o navegador <strong>sem</strong> recarregar.</li>
+                <li>Mude <code>&lt;html lang=""&gt;</code> para <code>pt-BR</code> e o <code>&lt;title&gt;</code> em <code>index.html</code>.</li>
+              </ol>
+              <p class="pergunta pequeno"><strong>Explique</strong>Na etapa 01 era preciso recarregar. Quem atualizou a tela agora?</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              O servidor de desenvolvimento observa os arquivos; ao salvar, envia a mudança ao
+              navegador, que substitui o componente sem recarregar a página inteira (substituição
+              de módulos em tempo de execução, HMR). Isso é recurso do Vite com o plugin do Vue —
+              não do arquivo HTML.
+            </p>
+            <h3>Limite didático</h3>
+            <p>A lista está escrita no template: ainda não há dados nem reatividade (etapa 06). Não exigir <code>v-for</code> agora.</p>
+            <h3>Erro provável</h3>
+            <p>Apagar a tag <code>&lt;template&gt;</code> ou deixar duas raízes quebradas: o terminal e o navegador mostram o erro de compilação com arquivo e linha. Ler a mensagem antes de consultar a IA.</p>
+            <h3>Referência</h3>
+            <ul class="referencias">
+              <li><a href="https://vite.dev/guide/">Vite — Getting Started</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 55 -->
+        <section class="slide" data-n="55" data-tipo="ia" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>A IA confere sua explicação dos arquivos reais</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <div class="prompt-ia">
+                <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+                <p class="prompt-texto">
+                  Vou explicar a função de cada arquivo deste projeto Vue criado com create-vue:
+                  <mark>[sua explicação de index.html, src/main.js, src/App.vue, public/ e vite.config.js]</mark>.
+                  Esta é a árvore real de arquivos: <mark>[cole a saída do comando que lista os arquivos]</mark>.
+                  Compare minha explicação com a árvore que forneci, aponte uma confusão por vez e
+                  faça perguntas para eu corrigir. Não gere componentes, store ou rotas.
+                </p>
+              </div>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Listar arquivos (macOS/Linux; no Windows use o explorador do editor)</span><button type="button" class="copiar">Copiar</button></div>
+                <pre><code>find . -type f -not -path './node_modules/*' | sort</code></pre>
+              </div>
+            </div>
+            <div class="pilha">
+              <div class="caixa pequeno">
+                <h3>Não aceite</h3>
+                <ul>
+                  <li>arquivos que não estão na sua árvore (ex.: <code>src/components/HelloWorld.vue</code>);</li>
+                  <li>comandos de outro gerador (<code>npm run serve</code>).</li>
+                </ul>
+              </div>
+              <p class="caixa caixa-destaque pequeno">Confira cada afirmação abrindo o arquivo real. Registre: sugestão aceita ou rejeitada e a evidência.</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Por que a árvore real</h3>
+            <p>
+              Respostas de IA tendem a descrever o projeto “típico”, com código de exemplo
+              (<code>HelloWorld.vue</code>, <code>components/</code>), que não existe porque
+              escolhemos “Skip example code”. Pedir a comparação com a árvore real torna o erro
+              verificável — e vira material de discussão.
+            </p>
+            <h3>Sem IA</h3>
+            <p>Use o cartão de pistas: para cada arquivo, “quem o carrega?” e “o que ele carrega?”.</p>
+            <h3>Pergunta de compreensão</h3>
+            <p>Se a IA disser que <code>public/</code> é processado pelo Vite como <code>src/</code>, qual teste prova o contrário? (Comparar <code>public/favicon.ico</code> com <code>dist/favicon.ico</code> depois do build: mesmo nome, sem hash.)</p>
+          </aside>
+        </section>
+
+        <!-- 56 -->
+        <section class="slide" data-n="56" data-tipo="explicacao" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>dev, build, preview e publicação não são a mesma coisa</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <table class="tabela">
+              <thead><tr><th>Etapa</th><th>Comando</th><th>O que acontece</th><th>Quem vê</th></tr></thead>
+              <tbody>
+                <tr><td>Desenvolvimento</td><td><code>npm run dev</code></td><td>Serve os <strong>fontes</strong>, transforma sob demanda, atualiza ao salvar</td><td>Você, em <code>localhost</code></td></tr>
+                <tr><td>Build</td><td><code>npm run build</code></td><td>Gera <strong>artefatos</strong> otimizados em <code>dist/</code> e termina</td><td>Ninguém ainda</td></tr>
+                <tr><td>Preview</td><td><code>npm run preview</code></td><td>Serve <code>dist/</code> localmente para <strong>conferir</strong> o build</td><td>Você, em <code>localhost:4173</code></td></tr>
+                <tr><td>Publicação</td><td>(hospedagem)</td><td>Envia <code>dist/</code> para um servidor acessível</td><td>Qualquer pessoa</td></tr>
+              </tbody>
+            </table>
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre><code><span class="cmd">$ npm pkg get scripts</span>
+{
+  "dev": "vite",
+  "build": "vite build",
+  "preview": "vite preview",
+  "lint": "run-s \"lint:*\"",
+  …
+}</code></pre>
+                <figcaption>Scripts reais gerados (trecho) · <a href="capturas/terminal/b5-scripts-gerados.txt">arquivo</a></figcaption>
+              </figure>
+              <p class="pergunta pequeno"><strong>Pergunta</strong>Por que <code>npm run dev</code> não equivale a publicar? O que <code>preview</code> verifica?</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              Servir fontes durante o desenvolvimento, gerar artefatos e conferir o build são
+              etapas distintas. O build junta e reduz os módulos, gera nomes com hash para cache
+              e copia <code>public/</code>. <code>preview</code> confere o resultado do build
+              localmente; não é servidor de produção nem publicação. Publicar exige uma hospedagem
+              de arquivos estáticos (fora do escopo do módulo).
+            </p>
+            <h3>Convenção × regra</h3>
+            <p>Os nomes <code>dev</code>, <code>build</code> e <code>preview</code> são <strong>convenção</strong> do gerador; o que importa é o comando associado em <code>scripts</code>.</p>
+            <h3>Retomada</h3>
+            <p>Volte às previsões do slide 49: “qual passo publica?”.</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://vite.dev/guide/build.html">Vite — Building for Production</a></li>
+              <li><a href="https://vite.dev/guide/static-deploy.html">Vite — Deploying a Static Site</a> (inclui o papel do preview)</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 57 -->
+        <section class="slide" data-n="57" data-tipo="demonstracao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Gerar o build e inspecionar a pasta dist</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados do build">
+                <button role="tab" id="s57-t1" aria-controls="s57-p1" aria-selected="true">1 · Build</button>
+                <button role="tab" id="s57-t2" aria-controls="s57-p2" aria-selected="false">2 · dist aberto do disco</button>
+                <button role="tab" id="s57-t3" aria-controls="s57-p3" aria-selected="false">3 · preview</button>
+              </div>
+              <div role="tabpanel" id="s57-p1" aria-labelledby="s57-t1">
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">~/modulo-2/etapas/todo-list $ npm run build</span>
+&gt; todo-list@0.0.0 build
+&gt; vite build
+
+vite v8.3.5 building client environment for production...
+✓ 12 modules transformed.
+dist/index.html                  0.43 kB │ gzip:  0.29 kB
+dist/assets/index-DPF0c5U5.css   0.57 kB │ gzip:  0.33 kB
+dist/assets/index-CsxmxGsD.js   62.04 kB │ gzip: 24.52 kB
+
+✓ built in 378ms</code></pre>
+                  <figcaption>Saída real (trecho) · Vite 8.3.5 · <a href="capturas/terminal/b5-npm-run-build.txt">arquivo</a> · <a href="capturas/terminal/b5-dist.txt">conteúdo de dist</a></figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s57-p2" aria-labelledby="s57-t2" hidden>
+                <figure class="saida-real">
+                  <pre><code>GET file://~/modulo-2/etapas/05-vue-inicial/dist/index.html → 200 OK · text/html
+GET file:///assets/index-CsxmxGsD.js → falhou: net::ERR_FILE_NOT_FOUND
+GET file:///assets/index-DPF0c5U5.css → falhou: net::ERR_FILE_NOT_FOUND
+GET file:///favicon.ico → falhou: net::ERR_FILE_NOT_FOUND</code></pre>
+                  <figcaption>Requisições registradas pelo Chrome ao abrir <code>dist/index.html</code> com duplo clique · <a href="capturas/navegador/b5-dist-direto-do-disco.txt">registro</a> · <a href="capturas/telas/b5-dist-direto-do-disco.png">tela (em branco)</a></figcaption>
+                </figure>
+                <p class="legenda"><strong>Por quê:</strong> <code>/assets/…</code> começa na raiz. Do disco, a “raiz” é a do sistema de arquivos, não a pasta <code>dist</code>.</p>
+              </div>
+              <div role="tabpanel" id="s57-p3" aria-labelledby="s57-t3" hidden>
+                <img src="capturas/telas/b5-preview.png" alt="Build servido pelo preview: cartão Minhas tarefas com quatro tarefas" class="recorte" />
+                <p class="legenda"><strong>Compare:</strong> mesma tela do desenvolvimento, agora vinda de <code>dist/</code> em <code>http://localhost:4173</code> (<a href="capturas/terminal/b5-npm-run-preview.txt">saída do preview</a>).</p>
+              </div>
+            </figure>
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>3 min demonstração + 5 min reprodução</dd>
+                <dt>Pré-requisitos</dt><dd>Interrompa o <code>dev</code> (<kbd>Ctrl</kbd>+<kbd>C</kbd>) ou use outro terminal</dd>
+                <dt>Resultado esperado</dt><dd><code>dist/</code> com <code>index.html</code>, <code>assets/*.js</code>, <code>assets/*.css</code>, <code>favicon.ico</code></dd>
+              </dl>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Terminal</span><button type="button" class="copiar">Copiar</button></div>
+                <pre><code>npm run build
+npm run preview</code></pre>
+              </div>
+              <p class="pergunta pequeno"><strong>Descreva</strong>De onde veio cada arquivo de <code>dist/</code>? Por que os nomes têm letras “aleatórias”?</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Roteiro</h3>
+            <ol>
+              <li>Build: leia a saída — módulos transformados, arquivos e tamanhos.</li>
+              <li>Abra <code>dist/index.html</code> com duplo clique: página em branco. Peça hipóteses antes de abrir o Console.</li>
+              <li><code>npm run preview</code> e abra <code>localhost:4173</code>: funciona.</li>
+            </ol>
+            <h3>Fundamento</h3>
+            <p>
+              O hash no nome (<code>index-CsxmxGsD.js</code>) muda quando o conteúdo muda, o que
+              permite cache longo na hospedagem. <code>favicon.ico</code> vem de <code>public/</code>
+              sem hash. O build espera ser servido a partir da raiz de um servidor; a opção
+              <code>base</code> do Vite muda isso quando o site fica numa subpasta.
+            </p>
+            <h3>Distinção</h3>
+            <p>A página em branco não é defeito do build: é <strong>pré-requisito ausente</strong> (um servidor HTTP entregando a pasta).</p>
+            <h3>Referência</h3>
+            <ul class="referencias">
+              <li><a href="https://vite.dev/guide/build.html">Vite — Building for Production</a> (public base path)</li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 58 -->
+        <section class="slide" data-n="58" data-tipo="investigacao" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Desafio em dupla: pasta, script ou porta?</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <figure class="sequencia">
+                <div role="tablist" aria-label="Erros reais para diagnosticar">
+                  <button role="tab" id="s58-t1" aria-controls="s58-p1" aria-selected="true">Caso A</button>
+                  <button role="tab" id="s58-t2" aria-controls="s58-p2" aria-selected="false">Caso B</button>
+                  <button role="tab" id="s58-t3" aria-controls="s58-p3" aria-selected="false">Caso C</button>
+                </div>
+                <div role="tabpanel" id="s58-p1" aria-labelledby="s58-t1">
+                  <figure class="saida-real">
+                    <pre><code><span class="cmd">~/modulo-2/etapas $ npm run dev</span>
+<span class="erro">npm error code ENOENT
+npm error syscall open
+npm error path ~/modulo-2/etapas/package.json
+npm error errno -2
+npm error enoent Could not read package.json: Error: ENOENT: no such file or directory, open '~/modulo-2/etapas/package.json'</span></code></pre>
+                    <figcaption>Saída real (trecho) · <a href="capturas/terminal/b5-pasta-errada.txt">arquivo</a></figcaption>
+                  </figure>
+                </div>
+                <div role="tabpanel" id="s58-p2" aria-labelledby="s58-t2" hidden>
+                  <figure class="saida-real">
+                    <pre><code><span class="cmd">~/modulo-2/etapas/todo-list $ npm run serve</span>
+<span class="erro">npm error Missing script: "serve"</span>
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run</code></pre>
+                    <figcaption>Saída real (trecho) · <a href="capturas/terminal/b5-script-serve.txt">arquivo</a></figcaption>
+                  </figure>
+                </div>
+                <div role="tabpanel" id="s58-p3" aria-labelledby="s58-t3" hidden>
+                  <figure class="saida-real">
+                    <pre><code><span class="cmd">~/modulo-2/etapas/02-erros-controlados $ node ../ferramentas/servidor-local.mjs</span>
+<span class="erro">A porta 8088 já está em uso por outro processo.</span>
+Encerre o outro servidor (Ctrl+C no terminal dele) ou escolha outra porta, por exemplo PORTA=8089</code></pre>
+                    <figcaption>Saída real · servidor local do bloco 2 iniciado duas vezes · <a href="capturas/terminal/b2-porta-ocupada.txt">arquivo</a></figcaption>
+                  </figure>
+                </div>
+              </figure>
+              <p class="pequeno">Para cada caso: <strong>hipótese</strong> → <strong>evidência</strong> que a distingue → <strong>uma</strong> mudança → resultado.</p>
+            </div>
+            <div class="pilha">
+              <div class="prompt-ia">
+                <div class="bloco-codigo-topo"><span>Só depois da hipótese registrada</span><button type="button" class="copiar">Copiar</button></div>
+                <p class="prompt-texto">
+                  Executei <mark>[comando]</mark> na pasta <mark>[pasta atual]</mark> e recebi
+                  <mark>[primeiras linhas do erro]</mark>. Nossa hipótese é <mark>[hipótese]</mark>.
+                  Dê uma única pista ou pergunta de diagnóstico, sem a solução, e diga qual evidência
+                  confirmaria ou refutaria a hipótese.
+                </p>
+              </div>
+              <details class="dica"><summary>Dica</summary><p>Leia a primeira linha de erro: o problema é <em>encontrar um arquivo</em>, <em>encontrar um nome</em> ou <em>ocupar um recurso</em>?</p></details>
+              <details class="solucao">
+                <summary>Mostrar solução (após a tentativa)</summary>
+                <p>
+                  A: pasta errada — não há <code>package.json</code> ali (<strong>pré-requisito ausente</strong>); entre na pasta do projeto.
+                  B: <code>serve</code> é o nome do Vue CLI; aqui é <code>dev</code> (<strong>convenção</strong>; <code>npm run</code> lista os válidos).
+                  C: dois processos no mesmo endereço e porta (<strong>impossível</strong> naquele momento); encerre o outro ou escolha outra porta (<strong>alternativa válida</strong>).
+                </p>
+              </details>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>
+              Cada dupla escolhe um caso, registra a hipótese e só então pode usar o prompt.
+              Reproduza ao vivo pelo menos um: <code>cd ..</code> e <code>npm run dev</code> (caso A).
+              O caso B liga-se à questão teórica 5, cujo manifesto usava <code>vue-cli-service serve</code>.
+            </p>
+            <h3>Contraste importante</h3>
+            <p>
+              “Port 5173 is in use, trying another one...” (slide 52) <strong>não</strong> é erro:
+              o Vite escolheu outra porta e seguiu. No caso C o servidor não tem essa estratégia e
+              termina. Com <code>--strictPort</code>, o Vite também falharia em vez de trocar de porta.
+            </p>
+            <h3>Quatro situações</h3>
+            <p>Impossibilidade naquele ambiente · pré-requisito ausente · alternativa válida com outra configuração · convenção escolhida. Evita ensinar preferências como regras universais.</p>
+            <h3>Referência</h3>
+            <ul class="referencias">
+              <li><a href="https://docs.npmjs.com/cli/using-npm/scripts">npm — scripts</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 59 -->
+        <section class="slide" data-n="59" data-tipo="integracao" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>O ambiente está pronto: o que vem nas próximas partes</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <table class="tabela">
+              <thead><tr><th>Parte</th><th>Finalidade na Todo List</th><th>Etapa</th></tr></thead>
+              <tbody>
+                <tr><td>Componentes e reatividade</td><td>Criar, concluir e excluir tarefas em memória</td><td>06</td></tr>
+                <tr><td>TypeScript + Pinia</td><td>Modelo de tarefa tipado; estado central compartilhado</td><td>07</td></tr>
+                <tr><td>API (json-server)</td><td>Persistir tarefas; lidar com carregamento e erro</td><td>08</td></tr>
+                <tr><td>Vue Router</td><td>Navegar entre lista e perfil sem recarregar</td><td>09</td></tr>
+                <tr><td>Vitest</td><td>Provar com testes que a store e a API funcionam</td><td>10</td></tr>
+              </tbody>
+            </table>
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Telas das etapas seguintes">
+                <button role="tab" id="s59-t1" aria-controls="s59-p1" aria-selected="true">06</button>
+                <button role="tab" id="s59-t2" aria-controls="s59-p2" aria-selected="false">07</button>
+                <button role="tab" id="s59-t3" aria-controls="s59-p3" aria-selected="false">08 · API desligada</button>
+                <button role="tab" id="s59-t4" aria-controls="s59-p4" aria-selected="false">09 · Perfil</button>
+              </div>
+              <div role="tabpanel" id="s59-p1" aria-labelledby="s59-t1">
+                <img src="capturas/telas/e06-componentes.png" alt="Etapa 06: lista com formulário, filtro de situação e itens com Excluir" class="recorte" />
+                <p class="legenda">Etapa 06: dados em memória com <code>ref</code> e componentes.</p>
+              </div>
+              <div role="tabpanel" id="s59-p2" aria-labelledby="s59-t2" hidden>
+                <img src="capturas/telas/e07-typescript-pinia.png" alt="Etapa 07: lista com resumo, categorias, busca e filtros" class="recorte" />
+                <p class="legenda">Etapa 07: store Pinia, categorias e busca.</p>
+              </div>
+              <div role="tabpanel" id="s59-p3" aria-labelledby="s59-t3" hidden>
+                <img src="capturas/telas/ref-api-desligada.png" alt="Aviso: Não foi possível conectar à API, com botões Tentar novamente e Fechar aviso" class="recorte" />
+                <p class="legenda">Projeto completo com a API encerrada: mensagem para o usuário em vez de tela vazia.</p>
+              </div>
+              <div role="tabpanel" id="s59-p4" aria-labelledby="s59-t4" hidden>
+                <img src="capturas/telas/ref-perfil.png" alt="Perfil com estatísticas e tabela por categoria" class="recorte" />
+                <p class="legenda">Projeto completo: rota <code>/perfil</code> com estatísticas da mesma store.</p>
+              </div>
+            </figure>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>
+              Mostre o projeto completo (<code>projeto/</code>, <code>npm run dev:all</code>) e aponte
+              <strong>para que</strong> serve cada parte. Não implementar agora: cada etapa tem seus
+              fundamentos e será feita quando eles forem ensinados.
+            </p>
+            <h3>Demonstração de ambiente restaurado</h3>
+            <p>Em uma cópia de <code>etapas/05-vue-inicial</code> sem <code>node_modules</code>: <code>npm ci</code> e <code>npm run dev</code>. Liga o bloco 4 (lockfile) ao bloco 5.</p>
+            <h3>Limite</h3>
+            <p>Reconhecer essas telas não equivale a dominar Pinia, rotas ou testes. As etapas 06–10 não fazem parte dos conteúdos dos cinco PPTX.</p>
+          </aside>
+        </section>
+
+        <!-- 60 -->
+        <section class="slide" data-n="60" data-tipo="verificacao" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Verificação individual, sem IA, e reflexão</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Variação</dt><dd>Acrescente uma 5ª tarefa no <code>App.vue</code>, gere o build e confira com <code>preview</code>.</dd>
+                  <dt>Evidência</dt><dd>5 tarefas em <code>localhost:4173</code>; novo nome com hash em <code>dist/assets/</code></dd>
+                  <dt>Justifique</dt><dd>Por que o nome do arquivo JS mudou? Por que nada foi publicado?</dd>
+                  <dt>Consulta</dt><dd>Próprio registro de comandos; sem IA</dd>
+                </dl>
+              </div>
+              <div class="pergunta pequeno">
+                <strong>Reflexão sobre a IA</strong>
+                Cite uma sugestão que você rejeitou neste módulo e a evidência que usou para rejeitá-la.
+              </div>
+            </div>
+            <table class="tabela">
+              <thead><tr><th>Critério (0–2)</th><th>2 pontos quando…</th></tr></thead>
+              <tbody>
+                <tr><td>Ambiente funcional</td><td>Projeto roda, gera build e é restaurado com <code>npm ci</code></td></tr>
+                <tr><td>Interpretação das ferramentas</td><td>Distingue create-vue, Vue, Vite, npm e Node</td></tr>
+                <tr><td>Gestão de dependências</td><td>Explica <code>package.json</code>, lockfile e <code>node_modules</code></td></tr>
+                <tr><td>Diagnóstico por evidências</td><td>Hipótese, evidência e uma mudança por vez</td></tr>
+                <tr><td>Autonomia com IA</td><td>Verifica sugestões e explica sem IA</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <aside class="notas">
+            <h3>Rubrica do módulo</h3>
+            <p>
+              0 = não demonstrou; 1 = executou com ajuda e explica parcialmente; 2 = executa e
+              explica, inclusive uma variação. Total de 10 pontos, sujeito à política de avaliação
+              da disciplina. Avalie execução, justificativa e o histórico curto da atividade — não
+              use detectores de IA nem a quantidade de mensagens.
+            </p>
+            <h3>Resposta esperada</h3>
+            <p>
+              O hash depende do conteúdo: mudou o código, mudou o nome. O build e o preview rodam
+              no seu computador; publicar exige enviar <code>dist/</code> a uma hospedagem.
+            </p>
+            <h3>Fechamento do módulo</h3>
+            <p>Retome os critérios do slide 49 e o mapa do slide 10. O que cada aluno já consegue explicar sem ajuda?</p>
+          </aside>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

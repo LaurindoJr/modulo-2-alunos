@@ -1,0 +1,6 @@
+~/modulo-2/etapas/04-dependencias-scripts $ npm explain chokidar
+chokidar@3.6.0 dev
+node_modules/chokidar
+  chokidar@"^3.5.2" from nodemon@3.1.14
+  node_modules/nodemon
+    dev nodemon@"^3.1.14" from the root project

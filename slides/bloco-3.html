@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bloco 3 · Navegador e Node</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="3">
+    <div class="janela">
+      <main class="palco" aria-label="Bloco 3: JavaScript no navegador e no Node.js">
+        <!-- 25 -->
+        <section class="slide" data-n="25" data-tipo="previsao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>O mesmo cálculo funciona fora do navegador?</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <p class="lead">
+                Até aqui o JavaScript rodou dentro de uma página. Hoje o mesmo arquivo roda em dois
+                lugares: o Console do navegador e o terminal, com Node.js.
+              </p>
+              <div class="pergunta">
+                <strong>Registre sua previsão (sem IA)</strong>
+                Este código produz a mesma saída nos dois lugares? E um código que lê
+                <code>document.title</code>?
+              </div>
+              <ol class="passos pequeno">
+                <li>Escreva “sim” ou “não” para cada caso e uma razão.</li>
+                <li>Guarde a previsão: ela volta no slide 32.</li>
+              </ol>
+            </div>
+            <div class="bloco-codigo">
+              <div class="bloco-codigo-topo"><span>etapas/03-node-tarefas/tarefas.js (trecho)</span><button type="button" class="copiar">Copiar</button></div>
+              <pre><code>const tarefas = [
+  { titulo: 'Instalar o Node.js', concluida: true },
+  { titulo: 'Abrir a pasta do projeto no editor', concluida: true },
+  { titulo: 'Inspecionar a página no DevTools', concluida: true },
+  { titulo: 'Executar JavaScript no terminal', concluida: false },
+  { titulo: 'Comparar navegador e Node', concluida: false },
+]
+
+const concluidas = tarefas.filter((tarefa) =&gt; tarefa.concluida).length
+const pendentes = tarefas.length - concluidas
+const percentual = Math.round((concluidas / tarefas.length) * 100)
+
+console.log(`Total: ${tarefas.length}`)
+console.log(`Concluídas: ${concluidas}`)
+console.log(`Pendentes: ${pendentes}`)
+console.log(`Progresso: ${percentual}%`)</code></pre>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>
+              Leia o código em voz alta com a turma, sem executar. Peça as previsões e anote no
+              quadro quantos esperam “mesma saída” e quantos esperam diferença. Não corrija agora.
+            </p>
+            <h3>Fundamento</h3>
+            <p>
+              O código usa só recursos da <strong>linguagem</strong> (array, <code>filter</code>,
+              <code>Math.round</code>, template string) e <code>console.log</code>, que os dois
+              ambientes oferecem. A previsão sobre <code>document</code> antecipa a distinção
+              entre linguagem e ambiente hospedeiro (slides 27 e 31).
+            </p>
+            <h3>Base pedagógica</h3>
+            <p>PRIMM: <em>Predict</em> antes de <em>Run</em>. O que se avalia é a comparação previsão × resultado, não o acerto da previsão.</p>
+          </aside>
+        </section>
+
+        <!-- 26 -->
+        <section class="slide" data-n="26" data-tipo="pratica" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Contar as tarefas no Console do navegador</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração no Console">
+                <button role="tab" id="s26-t1" aria-controls="s26-p1" aria-selected="true">1 · Página aberta</button>
+                <button role="tab" id="s26-t2" aria-controls="s26-p2" aria-selected="false">2 · Código colado</button>
+                <button role="tab" id="s26-t3" aria-controls="s26-p3" aria-selected="false">3 · Saída</button>
+              </div>
+              <div role="tabpanel" id="s26-p1" aria-labelledby="s26-t1">
+                <img src="capturas/telas/b1-inicial.png" alt="Página da etapa 01 aberta no navegador, com quatro tarefas" />
+                <p class="legenda"><strong>Estado inicial:</strong> qualquer página serve; usamos a da etapa 01. O Console abre com <kbd>F12</kbd> (<kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>J</kbd> no macOS).</p>
+              </div>
+              <div role="tabpanel" id="s26-p2" aria-labelledby="s26-t2" hidden>
+                <img
+                  src="capturas/telas/b3-console-devtools.png"
+                  alt="Painel Console do Chrome com o conteúdo de tarefas.js colado e as quatro linhas de saída"
+                  data-pendente="Abra a etapa 01 no Chrome, abra o Console (F12), cole o conteúdo de tarefas.js, pressione Enter e capture o painel com as quatro linhas de saída."
+                />
+                <p class="legenda"><strong>Alteração:</strong> o conteúdo completo de <code>tarefas.js</code> colado no Console. O Chrome pode pedir que você digite <code>allow pasting</code> antes de aceitar código colado: é uma proteção contra golpes.</p>
+              </div>
+              <div role="tabpanel" id="s26-p3" aria-labelledby="s26-t3" hidden>
+                <figure class="saida-real">
+                  <pre><code><span class="cmd">&gt; (conteúdo de tarefas.js colado no Console de uma página local)</span>
+Total: 5
+Concluídas: 3
+Pendentes: 2
+Progresso: 60%</code></pre>
+                  <figcaption>Saída real do Console do Chrome 155 · macOS · 21/10/2026 · <a href="capturas/navegador/b3-console-tarefas.txt">registro</a></figcaption>
+                </figure>
+                <p class="legenda"><strong>Compare:</strong> os quatro números. <strong>Aceitável:</strong> o Console também mostrar <code>undefined</code> depois da última linha (é o valor da expressão, não um erro).</p>
+              </div>
+            </figure>
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>3 min demonstração + 7 min reprodução</dd>
+                <dt>Pré-requisitos</dt><dd>Navegador com DevTools; arquivo <code>tarefas.js</code> aberto no editor</dd>
+                <dt>Resultado esperado</dt><dd>Quatro linhas: <code>Total: 5</code> … <code>Progresso: 60%</code></dd>
+              </dl>
+              <ol class="passos">
+                <li>Abra uma página e o Console.</li>
+                <li>Copie todo o conteúdo de <code>tarefas.js</code> e cole no Console.</li>
+                <li>Pressione <kbd>Enter</kbd> e registre as quatro linhas.</li>
+              </ol>
+              <p class="caixa caixa-destaque pequeno"><strong>Pausa:</strong> todos com <code>Total: 5</code> antes de seguir.</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Roteiro da demonstração</h3>
+            <ol>
+              <li>Mostre a página aberta (aba 1) e abra o Console.</li>
+              <li>Cole o código (aba 2); se o Chrome pedir, digite <code>allow pasting</code> e explique a proteção.</li>
+              <li>Execute e leia a saída (aba 3). Pause até a turma chegar ao mesmo estado.</li>
+            </ol>
+            <h3>Fundamento</h3>
+            <p>
+              O Console é um ambiente de execução <em>dentro da página</em>: o código colado roda
+              no mesmo contexto da aba e tem acesso a <code>document</code> e <code>window</code>.
+              Console ≠ terminal: o Console pertence ao navegador; o terminal pertence ao sistema
+              operacional.
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>Se você colar o código duas vezes na mesma aba, o que acontece? (Re-declarar <code>const</code> pode gerar erro; o Console do Chrome tolera em modo REPL. Peça que testem e expliquem.)</p>
+            <h3>Captura pendente</h3>
+            <p>A aba 2 mostra uma caixa até que o professor salve <code>capturas/telas/b3-console-devtools.png</code>. A saída da aba 3 é real, registrada pelo Chrome headless.</p>
+          </aside>
+        </section>
+
+        <!-- 27 -->
+        <section class="slide" data-n="27" data-tipo="explicacao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Linguagem, engine e ambiente: três coisas diferentes</h2>
+          </header>
+          <div class="slide-corpo pilha">
+            <svg viewBox="0 0 1400 300" role="img" aria-labelledby="camadas-b3" style="width: 100%; max-height: 9.5em">
+              <title id="camadas-b3">Camadas: a linguagem JavaScript é executada por uma engine como o V8, dentro de um ambiente hospedeiro — navegador ou Node.js — que fornece APIs diferentes</title>
+              <g font-family="system-ui, sans-serif" font-size="28" fill="currentColor" style="color: var(--texto)">
+                <rect x="10" y="10" width="1380" height="80" rx="14" fill="var(--superficie)" stroke="var(--borda)" stroke-width="3" />
+                <text x="40" y="60" font-weight="700">Linguagem JavaScript</text>
+                <text x="460" y="60" font-size="24" fill="var(--texto-suave)">sintaxe e regras: const, arrays, filter, Math.round, template strings</text>
+                <rect x="10" y="110" width="1380" height="80" rx="14" fill="var(--superficie)" stroke="var(--borda)" stroke-width="3" />
+                <text x="40" y="160" font-weight="700">Engine</text>
+                <text x="460" y="160" font-size="24" fill="var(--texto-suave)">executa o código: V8 (Chrome e Node), SpiderMonkey (Firefox), JavaScriptCore (Safari)</text>
+                <rect x="10" y="210" width="675" height="80" rx="14" fill="var(--primaria-suave)" stroke="var(--primaria)" stroke-width="3" />
+                <text x="40" y="250" font-weight="700">Navegador</text>
+                <text x="40" y="278" font-size="22" fill="var(--texto-suave)">document, window, fetch, eventos da página</text>
+                <rect x="715" y="210" width="675" height="80" rx="14" fill="var(--primaria-suave)" stroke="var(--primaria)" stroke-width="3" />
+                <text x="745" y="250" font-weight="700">Node.js</text>
+                <text x="745" y="278" font-size="22" fill="var(--texto-suave)">process, arquivos (fs), módulos, fetch, terminal</text>
+              </g>
+            </svg>
+            <div class="grade-3">
+              <div class="caixa"><h3>V8 não é o navegador</h3><p class="pequeno">É a engine. O Chrome e o Node usam o V8, mas cada um acrescenta APIs próprias.</p></div>
+              <div class="caixa"><h3>Node é um runtime</h3><p class="pequeno">Executa JavaScript fora do navegador: scripts, ferramentas e servidores. Não é gerenciador de pacotes (esse é o npm).</p></div>
+              <div class="caixa"><h3>Compilar e interpretar</h3><p class="pequeno">Engines modernas combinam interpretação e compilação durante a execução (JIT). Não é “uma ou outra”.</p></div>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              <strong>Linguagem</strong> define semântica (o que <code>filter</code> faz), descrita
+              pela especificação ECMAScript. A <strong>engine</strong> implementa essa semântica e
+              executa o código. O <strong>ambiente hospedeiro</strong> (navegador, Node) cria o
+              contexto de execução e oferece APIs extras. Por isso a mesma linguagem não implica
+              APIs idênticas.
+            </p>
+            <h3>Aprofundamento (opcional, não exigido)</h3>
+            <p>
+              O V8 usa interpretador e compiladores otimizadores; técnicas como <em>hidden
+              classes</em> e <em>inlining</em> aceleram código “quente”. Útil para curiosos; não é
+              condição para configurar o ambiente (exercício teórico 3 revisado: priorizar o papel
+              da engine).
+            </p>
+            <h3>Perguntas de compreensão</h3>
+            <p>O Firefox não usa V8. O código de <code>tarefas.js</code> funciona nele? Por quê? / O que o npm tem a ver com o V8?</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model">MDN — JavaScript execution model</a></li>
+              <li><a href="https://v8.dev/docs">Documentação do V8</a></li>
+              <li><a href="https://nodejs.org/en/learn/getting-started/introduction-to-nodejs">Node.js — Introduction to Node.js</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 28 -->
+        <section class="slide" data-n="28" data-tipo="pratica" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Qual Node está instalado — e em que pasta você está?</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Terminal</span><button type="button" class="copiar">Copiar</button></div>
+                <pre><code>node --version
+npm --version</code></pre>
+              </div>
+              <table class="tabela">
+                <thead><tr><th>Terminal</th><th>Mostrar a pasta atual</th><th>Listar arquivos</th></tr></thead>
+                <tbody>
+                  <tr><td>macOS / Linux (zsh, bash)</td><td><code>pwd</code></td><td><code>ls</code></td></tr>
+                  <tr><td>Windows PowerShell</td><td><code>pwd</code> ou <code>Get-Location</code></td><td><code>ls</code> ou <code>dir</code></td></tr>
+                  <tr><td>Windows Prompt de Comando</td><td><code>cd</code> (sem argumentos)</td><td><code>dir</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre><code><span class="cmd">~/modulo-2/etapas/03-node-tarefas $ node --version &amp;&amp; npm --version</span>
+v24.19.0
+11.17.0</code></pre>
+                <figcaption>Saída real · macOS · Node 24.19.0 · 21/10/2026 · <a href="capturas/terminal/b3-versoes.txt">arquivo</a></figcaption>
+              </figure>
+              <p class="legenda">
+                <strong>Aceitável:</strong> outro número <code>v24.x</code> (linha 24 LTS) e outro npm
+                <code>11.x</code>. Outra linha do Node: registre e avise o professor antes do bloco 5.
+              </p>
+              <p class="pergunta pequeno"><strong>Registre</strong>Versão do Node, versão do npm, nome do terminal e a pasta atual.</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>
+              Instalações demoradas pertencem à sessão de preparação. Aqui só se confere. Mostre
+              que o terminal integrado do editor é um terminal comum: o que importa é a pasta atual.
+            </p>
+            <h3>Fundamento</h3>
+            <p>
+              O <strong>terminal</strong> é a janela; o <strong>shell</strong> (zsh, bash,
+              PowerShell, cmd) interpreta o que você digita. A <strong>pasta atual</strong> é o ponto
+              de partida para caminhos relativos como <code>tarefas.js</code>.
+            </p>
+            <h3>Correções em relação ao material anterior</h3>
+            <p>
+              O laboratório citava v18/v20 como exemplos: essas linhas estão fora de suporte. O
+              exercício prático 2 pedia <code>npm install -g npm@latest</code>: não é tarefa
+              obrigatória; use o npm que acompanha o Node instalado.
+            </p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://nodejs.org/en/about/previous-releases">Node.js — ciclo de lançamentos (LTS)</a></li>
+              <li><a href="https://nodejs.org/en/learn/command-line/run-nodejs-scripts-from-the-command-line">Node.js — executar scripts pela linha de comando</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 29 -->
+        <section class="slide" data-n="29" data-tipo="investigacao" data-tempo="9 min">
+          <header class="slide-topo">
+            <h2>“Comando não encontrado”: falta o programa ou o arquivo?</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Mensagem</th><th>Quem falhou</th><th>Verificação</th></tr></thead>
+                <tbody>
+                  <tr><td><code>zsh:1: command not found: nodee</code></td><td>O shell não achou o <strong>programa</strong></td><td>Grafia; <code>node --version</code></td></tr>
+                  <tr><td><code>/bin/bash: nodee: command not found</code></td><td>Idem, no bash</td><td>Idem</td></tr>
+                  <tr><td><code>Error: Cannot find module '…/tarefas.js'</code></td><td>O Node rodou; não achou o <strong>arquivo</strong></td><td><code>pwd</code> e <code>ls</code>/<code>dir</code></td></tr>
+                </tbody>
+              </table>
+              <p class="pequeno suave">
+                No Windows a mensagem muda de texto, não de sentido: o PowerShell diz que o termo não
+                é reconhecido como comando; o Prompt de Comando diz que não é reconhecido como
+                comando interno ou externo. (Não registradas aqui.)
+              </p>
+              <figure class="saida-real">
+                <pre><code><span class="cmd">$ command -v node &amp;&amp; echo $PATH | tr ':' '\n' | grep -n node</span>
+~/.nvm/versions/node/v24.19.0/bin/node
+4:~/.nvm/versions/node/v24.19.0/bin</code></pre>
+                <figcaption>Saída real · onde o shell encontra o <code>node</code> (macOS, nvm) · <a href="capturas/terminal/b3-which-node.txt">arquivo</a>. No Windows: <code>where node</code>.</figcaption>
+              </figure>
+            </div>
+            <div class="prompt-ia">
+              <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+              <p class="prompt-texto">
+                Meu terminal é <mark>[zsh / bash / PowerShell / Prompt de Comando]</mark> no
+                <mark>[sistema operacional]</mark>. Na pasta <mark>[resultado de pwd ou cd]</mark>
+                digitei <mark>[comando exato]</mark> e apareceu <mark>[mensagem exata]</mark>.
+                <code>node --version</code> mostra <mark>[resultado]</mark>. Antes de sugerir qualquer
+                instalação ou mudança no PATH, pergunte o que ainda falta saber, uma pergunta por
+                vez. Diga qual evidência distingue “programa não encontrado” de “arquivo não
+                encontrado” e qual teste eu devo fazer primeiro.
+              </p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              O shell procura programas nas pastas listadas na variável <strong>PATH</strong>, em
+              ordem. Se nenhuma contém <code>node</code>, o erro é do shell. Já
+              <code>node tarefas.js</code> encontra o programa e pede ao Node que abra
+              <code>tarefas.js</code> <em>relativo à pasta atual</em>: se o arquivo não está ali, o
+              erro é do Node (<code>MODULE_NOT_FOUND</code>).
+            </p>
+            <h3>Condução</h3>
+            <p>
+              A IA deve pedir sistema, terminal e evidências antes de propor ação. Se ela sugerir
+              “reinstale o Node” logo de início, discuta: qual evidência justificaria isso? Após
+              instalar o Node, é preciso abrir um novo terminal para o PATH atualizado valer
+              (laboratório, atividades 1 e 2).
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>Você instalou o Node com a janela do terminal aberta e o comando não é encontrado. Qual a primeira verificação, e por quê?</p>
+          </aside>
+        </section>
+
+        <!-- 30 -->
+        <section class="slide" data-n="30" data-tipo="demonstracao" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Executar <code>tarefas.js</code> no Node — e na pasta errada</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da execução no Node">
+                <button role="tab" id="s30-t1" aria-controls="s30-p1" aria-selected="true">1 · Pasta certa</button>
+                <button role="tab" id="s30-t2" aria-controls="s30-p2" aria-selected="false">2 · Pasta errada</button>
+                <button role="tab" id="s30-t3" aria-controls="s30-p3" aria-selected="false">3 · Comando errado</button>
+              </div>
+              <div role="tabpanel" id="s30-p1" aria-labelledby="s30-t1">
+                <figure class="saida-real">
+                  <pre><code><span class="cmd">~/modulo-2/etapas/03-node-tarefas $ node tarefas.js</span>
+Total: 5
+Concluídas: 3
+Pendentes: 2
+Progresso: 60%</code></pre>
+                  <figcaption>Saída real · macOS · Node 24.19.0 · 21/10/2026 · <a href="capturas/terminal/b3-tarefas.txt">arquivo</a></figcaption>
+                </figure>
+                <p class="legenda"><strong>Compare</strong> com o Console (slide 26): mesmos quatro números.</p>
+              </div>
+              <div role="tabpanel" id="s30-p2" aria-labelledby="s30-t2" hidden>
+                <figure class="saida-real">
+                  <pre><code><span class="cmd">~/modulo-2/etapas $ node tarefas.js</span>
+node:internal/modules/cjs/loader:1520
+…
+<span class="erro">Error: Cannot find module '~/modulo-2/etapas/tarefas.js'</span>
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1517:15)
+    …
+  code: 'MODULE_NOT_FOUND',
+…
+Node.js v24.19.0</code></pre>
+                  <figcaption>Saída real, pilha truncada com “…” · <a href="capturas/terminal/b3-pasta-errada.txt">arquivo completo</a></figcaption>
+                </figure>
+                <p class="legenda"><strong>Leia o caminho:</strong> o Node procurou o arquivo na pasta <code>etapas</code>, não em <code>03-node-tarefas</code>. <strong>Aceitável:</strong> números de linha diferentes em outra versão.</p>
+              </div>
+              <div role="tabpanel" id="s30-p3" aria-labelledby="s30-t3" hidden>
+                <figure class="saida-real">
+                  <pre><code><span class="cmd">~/modulo-2/etapas/03-node-tarefas $ nodee tarefas.js</span>
+<span class="erro">zsh:1: command not found: nodee</span>
+
+<span class="cmd">~/modulo-2/etapas/03-node-tarefas $ nodee tarefas.js</span>
+<span class="erro">/bin/bash: nodee: command not found</span></code></pre>
+                  <figcaption>Saídas reais no zsh e no bash · <a href="capturas/terminal/b3-comando-inexistente-zsh.txt">zsh</a> · <a href="capturas/terminal/b3-comando-inexistente.txt">bash</a></figcaption>
+                </figure>
+                <p class="legenda">Aqui o Node nem chegou a rodar: o shell não encontrou um programa chamado <code>nodee</code>.</p>
+              </div>
+            </figure>
+            <p class="pergunta"><strong>Explique</strong>Na aba 2, quem falhou: o shell, o Node ou o seu arquivo?</p>
+            </div>
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>3 min demonstração + 7 min reprodução</dd>
+                <dt>Pré-requisitos</dt><dd>Slide 28: Node 24 conferido</dd>
+                <dt>Resultado esperado</dt><dd>Mesma saída do Console; o erro da pasta errada explicado</dd>
+              </dl>
+              <ol class="passos">
+                <li>Abra o terminal na pasta <code>03-node-tarefas</code> e liste os arquivos.</li>
+                <li>Execute <code>node tarefas.js</code>.</li>
+                <li>Suba uma pasta (<code>cd ..</code>) e repita. Leia o caminho na mensagem.</li>
+              </ol>
+              <p class="caixa caixa-destaque pequeno"><strong>Pausa:</strong> todos voltam à pasta certa e com a saída da aba 1.</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Roteiro da demonstração</h3>
+            <ol>
+              <li>Estado inicial: terminal na pasta certa; mostre <code>pwd</code> e <code>ls</code>.</li>
+              <li>Execute (aba 1) e compare com o Console.</li>
+              <li>Provoque o erro: <code>cd ..</code> e execute de novo (aba 2). Leia só a linha <code>Error:</code> e o caminho.</li>
+              <li>Mostre o erro de digitação (aba 3) e contraste: programa × arquivo.</li>
+            </ol>
+            <h3>Fundamento</h3>
+            <p>
+              <code>node tarefas.js</code> inicia um <strong>processo</strong> do Node, que carrega
+              o arquivo, executa e termina — diferente do servidor do bloco 1, que fica rodando.
+              O caminho relativo é resolvido a partir da pasta atual do processo.
+            </p>
+            <h3>Origem</h3>
+            <p>A atividade 7 do laboratório (<code>node app.js</code>) foi dividida: execução aqui; uso de pacote no bloco 4.</p>
+          </aside>
+        </section>
+
+        <!-- 31 -->
+        <section class="slide" data-n="31" data-tipo="explicacao" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Por que <code>document</code> não existe no Node?</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>titulo-da-pagina.js</span><button type="button" class="copiar">Copiar</button></div>
+                <pre><code>console.log('Antes de acessar document')
+console.log(`Título da página: ${document.title}`)
+console.log('Depois de acessar document')</code></pre>
+              </div>
+              <div class="pergunta">
+                <strong>Preveja antes de executar</strong>
+                Quantas linhas aparecem no Console? E no terminal com <code>node</code>?
+              </div>
+              <p class="pequeno">
+                <code>document</code> representa a <strong>página carregada</strong> (o DOM). O
+                navegador o cria ao abrir uma página; o Node não abre páginas.
+              </p>
+            </div>
+            <table class="tabela">
+              <thead><tr><th>Situação</th><th>Exemplo deste bloco</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Impossível</strong> neste ambiente</td><td><code>document</code> no Node padrão: não há página carregada</td></tr>
+                <tr><td><strong>Pré-requisito</strong> ausente</td><td><code>command not found: node</code>: falta instalar ou o PATH</td></tr>
+                <tr><td><strong>Alternativa válida</strong> com outra configuração</td><td>DOM simulado por biblioteca (os testes da etapa 10 usam uma); <code>require</code> × <code>import</code></td></tr>
+                <tr><td><strong>Convenção</strong> da aula</td><td>Nomes como <code>tarefas.js</code> e a pasta <code>etapas/</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              Cada ambiente hospedeiro decide quais objetos globais existem. O navegador oferece
+              <code>document</code>, <code>window</code>, eventos de interface. O Node oferece
+              <code>process</code>, acesso a arquivos e módulos. Alguns objetos existem nos dois
+              (<code>console</code>, <code>Math</code>, <code>fetch</code>, <code>globalThis</code>).
+            </p>
+            <h3>Limite</h3>
+            <p>
+              Bibliotecas podem representar um DOM no Node (útil em testes), mas isso não
+              transforma o Node em navegador completo: não há aba, não há tela. Não dizer “nunca
+              existe DOM no Node”; dizer “o Node padrão não fornece o DOM de uma página”.
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>Por que <code>console.log</code> funciona nos dois, se também “não faz parte” da linguagem?</p>
+            <h3>Referência</h3>
+            <ul class="referencias">
+              <li><a href="https://nodejs.org/en/learn/getting-started/differences-between-nodejs-and-the-browser">Node.js — Differences between Node.js and the Browser</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 32 -->
+        <section class="slide" data-n="32" data-tipo="pratica" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Mesma linguagem, APIs diferentes: compare as saídas</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Comparação entre navegador e Node">
+                <button role="tab" id="s32-t1" aria-controls="s32-p1" aria-selected="true">1 · Console</button>
+                <button role="tab" id="s32-t2" aria-controls="s32-p2" aria-selected="false">2 · Node</button>
+                <button role="tab" id="s32-t3" aria-controls="s32-p3" aria-selected="false">3 · Inventário de APIs</button>
+              </div>
+              <div role="tabpanel" id="s32-p1" aria-labelledby="s32-t1">
+                <figure class="saida-real">
+                  <pre><code><span class="cmd">&gt; (conteúdo de titulo-da-pagina.js colado no Console de uma página local)</span>
+Antes de acessar document
+Título da página: Todo List — etapa 01
+Depois de acessar document</code></pre>
+                  <figcaption>Saída real do Console do Chrome 155 · 21/10/2026 · <a href="capturas/navegador/b3-console-titulo.txt">registro</a></figcaption>
+                </figure>
+                <p class="legenda"><strong>Aceitável:</strong> outro título, conforme a página aberta.</p>
+              </div>
+              <div role="tabpanel" id="s32-p2" aria-labelledby="s32-t2" hidden>
+                <figure class="saida-real">
+                  <pre><code><span class="cmd">~/modulo-2/etapas/03-node-tarefas $ node titulo-da-pagina.js</span>
+Antes de acessar document
+~/modulo-2/etapas/03-node-tarefas/titulo-da-pagina.js:5
+console.log(`Título da página: ${document.title}`)
+                                 ^
+
+<span class="erro">ReferenceError: document is not defined</span>
+    at Object.&lt;anonymous&gt; (~/modulo-2/etapas/03-node-tarefas/titulo-da-pagina.js:5:34)
+    …
+
+Node.js v24.19.0</code></pre>
+                  <figcaption>Saída real, pilha truncada com “…” · Node 24.19.0 · <a href="capturas/terminal/b3-document.txt">arquivo completo</a></figcaption>
+                </figure>
+                <p class="legenda">A 1ª linha saiu; a 3ª não: o erro interrompeu o programa na linha 5.</p>
+              </div>
+              <div role="tabpanel" id="s32-p3" aria-labelledby="s32-t3" hidden>
+                <div class="grade-2">
+                  <figure class="saida-real">
+                    <pre><code><span class="cmd">Console do Chrome</span>
+console   → object
+Math      → object
+document  → object
+window    → object
+process   → não existe aqui
+fetch     → function</code></pre>
+                    <figcaption><a href="capturas/navegador/b3-console-ambiente.txt">registro</a></figcaption>
+                  </figure>
+                  <figure class="saida-real">
+                    <pre><code><span class="cmd">$ node ambiente.js</span>
+console   → object
+Math      → object
+document  → não existe aqui
+window    → não existe aqui
+process   → object
+fetch     → function</code></pre>
+                    <figcaption><a href="capturas/terminal/b3-ambiente.txt">arquivo</a></figcaption>
+                  </figure>
+                </div>
+                <p class="legenda">Saídas reais de <code>ambiente.js</code> nos dois ambientes, 21/10/2026.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Tempo</dt><dd>10 min, individual</dd>
+                  <dt>Resultado esperado</dt><dd>Previsão do slide 25 comparada com as saídas reais</dd>
+                </dl>
+                <ol class="passos">
+                  <li>Execute <code>titulo-da-pagina.js</code> e <code>ambiente.js</code> nos dois ambientes.</li>
+                  <li>Marque o que confirmou e o que contrariou sua previsão.</li>
+                </ol>
+              </div>
+              <div class="prompt-ia">
+                <div class="bloco-codigo-topo"><span>Depois de registrar (IA opcional)</span><button type="button" class="copiar">Copiar</button></div>
+                <p class="prompt-texto">
+                  Executei o mesmo cálculo no Console e no Node. No Console obtive
+                  <mark>[saída]</mark>; no Node obtive <mark>[saída ou erro]</mark>. Explique o que
+                  pertence à linguagem e o que pertence ao ambiente. Depois me dê duas previsões
+                  para testar. Não suponha que Node só executa servidores.
+                </p>
+              </div>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Roteiro da demonstração</h3>
+            <ol>
+              <li>Console (aba 1): três linhas, com o título da aba.</li>
+              <li>Node (aba 2): leia a seta <code>^</code> e a primeira linha do erro; mostre que a linha 3 não executou.</li>
+              <li>Inventário (aba 3): coloque lado a lado e peça que a turma circule as diferenças.</li>
+            </ol>
+            <h3>Explicação esperada</h3>
+            <p>
+              <code>document</code> e <code>window</code> são do navegador; <code>process</code> é do
+              Node; <code>console</code>, <code>Math</code> e <code>fetch</code> existem nos dois. O
+              resultado observado é a evidência; a resposta da IA só vale se concordar com ele.
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>Se movermos a linha com <code>document</code> para o final do arquivo, quantas linhas o Node imprime?</p>
+          </aside>
+        </section>
+
+        <!-- 33 -->
+        <section class="slide" data-n="33" data-tipo="ia" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>“Node só serve para backend”: a evidência concorda?</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <div class="prompt-ia">
+                <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+                <p class="prompt-texto">
+                  Avalie a frase “Node.js só serve para backend”. Eu executei
+                  <mark>[comando que você rodou]</mark> e obtive <mark>[saída]</mark>, sem nenhum
+                  servidor. Use esse resultado como evidência: o que ele mostra sobre onde o Node
+                  roda e para que serve? Cite um uso em servidores e dois usos fora deles.
+                  Diferencie limitação técnica de convenção e indique uma fonte oficial
+                  verificável, sem inventar referências.
+                </p>
+              </div>
+              <p class="pequeno suave">Sem IA: discuta em dupla com as três evidências ao lado.</p>
+            </div>
+            <div class="pilha">
+              <div class="caixa pequeno"><h3>Evidência 1</h3><p><code>node tarefas.js</code> rodou e terminou. Nenhum servidor envolvido.</p></div>
+              <div class="caixa pequeno"><h3>Evidência 2 (bloco 4)</h3><p><code>npm</code> e <code>nodemon</code> são programas escritos para o Node.</p></div>
+              <div class="caixa pequeno"><h3>Evidência 3 (bloco 5)</h3><p>O Vite, servidor de desenvolvimento e build do Vue, roda no Node.</p></div>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Resposta esperada</h3>
+            <p>
+              Falsa como regra. Node é um <strong>runtime JavaScript fora do navegador</strong>,
+              usado também em servidores, mas igualmente em scripts locais, ferramentas de linha de
+              comando e servidores de desenvolvimento.
+            </p>
+            <h3>Exercício teórico 1 revisado</h3>
+            <p>
+              A alternativa “fora do navegador, no lado do servidor” era a melhor oferecida, mas
+              a explicação restringia demais. Reformulação: “runtime JavaScript que executa código
+              fora do navegador, usado também em servidores”. Use esta reformulação no gabarito.
+            </p>
+            <h3>Se a IA errar</h3>
+            <p>Se a resposta disser que Node “é um servidor” ou “é uma linguagem”, peça à turma o contraexemplo executado.</p>
+            <h3>Referência</h3>
+            <ul class="referencias">
+              <li><a href="https://nodejs.org/en/learn/getting-started/introduction-to-nodejs">Node.js — Introduction to Node.js</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 34 -->
+        <section class="slide" data-n="34" data-tipo="explicacao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>CommonJS e ES Modules: dois sistemas válidos</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th></th><th>CommonJS</th><th>ES Modules</th></tr></thead>
+                <tbody>
+                  <tr><td>Expor</td><td><code>module.exports = { tarefas }</code></td><td><code>export const tarefas = …</code></td></tr>
+                  <tr><td>Usar</td><td><code>const { tarefas } = require('./dados.cjs')</code></td><td><code>import { tarefas } from './dados.mjs'</code></td></tr>
+                  <tr><td>Como o Node decide</td><td><code>.cjs</code>, ou <code>.js</code> com <code>"type": "commonjs"</code></td><td><code>.mjs</code>, ou <code>.js</code> com <code>"type": "module"</code></td></tr>
+                  <tr><td>Onde aparece</td><td>Pasta de treino do bloco 4</td><td>Projeto Vue do bloco 5</td></tr>
+                </tbody>
+              </table>
+              <p class="pergunta pequeno"><strong>Pergunta</strong>Em que contexto <code>require</code> funciona? E <code>import</code>? Nenhum dos dois é “o errado”.</p>
+            </div>
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Execução dos dois sistemas de módulos">
+                <button role="tab" id="s34-t1" aria-controls="s34-p1" aria-selected="true">1 · CommonJS</button>
+                <button role="tab" id="s34-t2" aria-controls="s34-p2" aria-selected="false">2 · ES Modules</button>
+                <button role="tab" id="s34-t3" aria-controls="s34-p3" aria-selected="false">3 · Incoerente</button>
+              </div>
+              <div role="tabpanel" id="s34-p1" aria-labelledby="s34-t1">
+                <figure class="saida-real">
+                  <pre><code><span class="cmd">~/modulo-2/etapas/03-node-tarefas/modulos/commonjs $ node resumo.cjs</span>
+[CommonJS] 1 de 2 tarefas concluídas</code></pre>
+                  <figcaption>Saída real · <a href="capturas/terminal/b3-commonjs.txt">arquivo</a></figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s34-p2" aria-labelledby="s34-t2" hidden>
+                <figure class="saida-real">
+                  <pre><code><span class="cmd">~/modulo-2/etapas/03-node-tarefas/modulos/esm $ node resumo.mjs</span>
+[ES Modules] 1 de 2 tarefas concluídas</code></pre>
+                  <figcaption>Saída real · <a href="capturas/terminal/b3-esm.txt">arquivo</a></figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s34-p3" aria-labelledby="s34-t3" hidden>
+                <figure class="saida-real">
+                  <pre><code><span class="cmd">~/…/modulos/incoerente $ node resumo.cjs</span>
+(node:93382) Warning: Failed to load the ES module: ~/modulo-2/etapas/03-node-tarefas/modulos/incoerente/resumo.cjs. Make sure to set "type": "module" in the nearest package.json file or use the .mjs extension.
+…
+import { tarefas } from '../esm/dados.mjs'
+^^^^^^
+
+<span class="erro">SyntaxError: Cannot use import statement outside a module</span>
+    …
+Node.js v24.19.0</code></pre>
+                  <figcaption>Saída real, truncada com “…” · <a href="capturas/terminal/b3-incoerente.txt">arquivo completo</a></figcaption>
+                </figure>
+                <p class="legenda"><code>import</code> num arquivo <code>.cjs</code>. Duas correções válidas: usar <code>require</code> ou renomear para <code>.mjs</code>.</p>
+              </div>
+            </figure>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              Módulos organizam e expõem código. <strong>CommonJS</strong> carrega com
+              <code>require</code> durante a execução; <strong>ES Modules</strong> declaram
+              dependências com <code>import</code>/<code>export</code>, o formato padronizado da
+              linguagem e usado nos navegadores. O Node decide o sistema pela extensão
+              (<code>.cjs</code>/<code>.mjs</code>) ou pelo campo <code>"type"</code> do
+              <code>package.json</code> mais próximo. Sintaxe, extensão e configuração precisam ser
+              coerentes.
+            </p>
+            <h3>Alternativas e limites</h3>
+            <p>
+              <code>require</code> continua válido em CommonJS — não chamá-lo de obsoleto (o
+              laboratório usa <code>require</code>). O Node 24 também tenta detectar sintaxe de ES
+              Modules em <code>.js</code> sem campo <code>type</code>, mas não conte com isso em
+              projeto: declare a intenção. Trocar sintaxe por tentativa é o anti-padrão; identificar
+              o contexto é a habilidade.
+            </p>
+            <h3>Ligação com os próximos blocos</h3>
+            <p><code>npm init -y</code> grava <code>"type": "commonjs"</code> (bloco 4); o projeto Vue tem <code>"type": "module"</code> (bloco 5).</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://nodejs.org/api/modules.html">Node.js — CommonJS modules</a></li>
+              <li><a href="https://nodejs.org/api/esm.html">Node.js — ECMAScript modules</a></li>
+              <li><a href="https://nodejs.org/api/packages.html">Node.js — Packages (campo type)</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 35 -->
+        <section class="slide" data-n="35" data-tipo="integracao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Exemplo integrador: mude os dados, preveja, execute</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>8 min, individual, depois comparação em dupla</dd>
+                <dt>Pré-requisitos</dt><dd>Slide 30: <code>node tarefas.js</code> funcionando</dd>
+                <dt>Resultado esperado</dt><dd>Previsão escrita e saída real lado a lado</dd>
+              </dl>
+              <ol class="passos">
+                <li>Em <code>tarefas.js</code>, marque “Comparar navegador e Node” como <code>concluida: true</code>.</li>
+                <li><strong>Antes de executar</strong>, escreva os quatro números previstos.</li>
+                <li>Execute <code>node tarefas.js</code> e compare.</li>
+                <li>Desafio: o que acontece com <code>Progresso</code> se a lista ficar vazia?</li>
+              </ol>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Linha a alterar</span><button type="button" class="copiar">Copiar</button></div>
+                <pre><code>  { titulo: 'Comparar navegador e Node', concluida: true },</code></pre>
+              </div>
+            </div>
+            <div class="dicas">
+              <details class="dica"><summary>Dica 1</summary><p>Só uma tarefa mudou de situação; o total não muda.</p></details>
+              <details class="dica"><summary>Dica 2</summary><p>Para a lista vazia: quanto é <code>0 / 0</code> em JavaScript?</p></details>
+              <details class="solucao">
+                <summary>Mostrar solução (após a tentativa)</summary>
+                <p>
+                  <code>Total: 5</code>, <code>Concluídas: 4</code>, <code>Pendentes: 1</code>,
+                  <code>Progresso: 80%</code>. Lista vazia: <code>0 / 0</code> é <code>NaN</code>, e
+                  a saída é <code>Progresso: NaN%</code> (verificado no Node 24.19.0). O projeto
+                  completo trata esse caso devolvendo 0%.
+                </p>
+              </details>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>
+              Exija a previsão por escrito antes da execução. Na comparação em dupla, cada um
+              explica a diferença que encontrou. O desafio da lista vazia liga este script à
+              função <code>calcularEstatisticas</code> do projeto completo
+              (<code>projeto/src/utils/tarefas.ts</code>), que verifica <code>total === 0</code>.
+            </p>
+            <h3>Limite didático</h3>
+            <p>Aprender execução, não arquitetura de estado: os dados continuam fixos no arquivo.</p>
+          </aside>
+        </section>
+
+        <!-- 36 -->
+        <section class="slide" data-n="36" data-tipo="verificacao" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Verificação individual, sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="pergunta">
+                <strong>Uma frase para cada</strong>
+                O que é o Node.js? O que é o V8? O que é o npm?
+              </div>
+              <div class="atividade">
+                <dl>
+                  <dt>Variação</dt><dd>Acrescente duas tarefas em <code>tarefas.js</code>: uma concluída e uma pendente. Preveja os quatro números e execute.</dd>
+                  <dt>Evidência</dt><dd>Saída real do terminal ao lado da previsão</dd>
+                  <dt>Consulta</dt><dd>Permitido usar o próprio registro; não usar IA</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Critério (0–2)</th><th>2 pontos quando…</th></tr></thead>
+                <tbody>
+                  <tr><td>Ambiente funcional</td><td>Executa na pasta certa e confere a versão</td></tr>
+                  <tr><td>Interpretação</td><td>Distingue linguagem, engine, runtime e npm</td></tr>
+                  <tr><td>Diagnóstico</td><td>Explica “programa” × “arquivo” não encontrado</td></tr>
+                  <tr><td>Variação</td><td>Previsão confere ou a diferença é explicada</td></tr>
+                </tbody>
+              </table>
+              <details class="solucao">
+                <summary>Gabarito do professor</summary>
+                <p>Variação: <code>Total: 7</code>, <code>Concluídas: 4</code>, <code>Pendentes: 3</code>, <code>Progresso: 57%</code> (4/7 ≈ 57,1%, arredondado).</p>
+              </details>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Respostas esperadas</h3>
+            <p>
+              <strong>Node.js:</strong> runtime que executa JavaScript fora do navegador (scripts,
+              ferramentas, servidores). <strong>V8:</strong> engine que executa JavaScript, usada
+              pelo Chrome e pelo Node. <strong>npm:</strong> gerenciador de pacotes que acompanha
+              o Node (bloco 4).
+            </p>
+            <h3>Rubrica do módulo</h3>
+            <p>0 = não demonstrou; 1 = executou com ajuda e explica parcialmente; 2 = executa e explica, inclusive a variação.</p>
+            <h3>Ponto de retomada para o bloco 4</h3>
+            <p>Pasta <code>etapas/04-dependencias-scripts</code>: o mesmo tipo de dado de tarefas, agora com manifesto e dependências.</p>
+          </aside>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

@@ -1,0 +1,2 @@
+~/modulo-2/etapas/03-node-tarefas/modulos/esm $ node resumo.mjs
+[ES Modules] 1 de 2 tarefas concluídas

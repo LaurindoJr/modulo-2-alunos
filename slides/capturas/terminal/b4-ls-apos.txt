@@ -1,0 +1,8 @@
+~/modulo-2/etapas/04-dependencias-scripts $ ls && ls node_modules
+node_modules
+package-lock.json
+package.json
+relatorio-nativo.js
+relatorio.js
+tarefas.json
+picocolors

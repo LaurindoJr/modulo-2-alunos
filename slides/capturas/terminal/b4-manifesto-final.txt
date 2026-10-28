@@ -1,0 +1,22 @@
+~/modulo-2/etapas/04-dependencias-scripts $ cat package.json
+{
+  "name": "04-dependencias-scripts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node relatorio.js",
+    "dev": "nodemon relatorio.js",
+    "dev:nativo": "node --watch relatorio.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

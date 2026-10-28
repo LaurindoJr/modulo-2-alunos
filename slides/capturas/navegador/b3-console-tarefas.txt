@@ -1,0 +1,5 @@
+> (conteúdo de tarefas.js colado no Console de uma página local)
+Total: 5
+Concluídas: 3
+Pendentes: 2
+Progresso: 60%

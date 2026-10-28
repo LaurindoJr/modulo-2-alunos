@@ -1,0 +1,24 @@
+~/modulo-2/etapas/04-dependencias-scripts $ npm run dev:nativo
+
+> 04-dependencias-scripts@1.0.0 dev:nativo
+> node --watch relatorio.js
+
+Relatório da Todo List
+[x] Criar o package.json
+[x] Instalar uma dependência
+[ ] Comparar manifesto e lockfile
+[ ] Criar scripts no package.json
+[ ] Restaurar o ambiente com npm ci
+2 de 5 concluídas
+Completed running 'relatorio.js'. Waiting for file changes before restarting...
+Change detected in '~/modulo-2/etapas/04-dependencias-scripts/relatorio.js'
+Restarting 'relatorio.js'
+Relatório da Todo List
+[x] Criar o package.json
+[x] Instalar uma dependência
+[ ] Comparar manifesto e lockfile
+[ ] Criar scripts no package.json
+[ ] Restaurar o ambiente com npm ci
+2 de 5 concluídas
+Completed running 'relatorio.js'. Waiting for file changes before restarting...
+^C

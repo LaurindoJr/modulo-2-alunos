@@ -1,0 +1,16 @@
+~/modulo-2/etapas/04-dependencias-scripts $ npm init -y
+Wrote to ~/modulo-2/etapas/04-dependencias-scripts/package.json:
+
+{
+  "name": "04-dependencias-scripts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

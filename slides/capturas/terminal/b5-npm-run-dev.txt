@@ -1,0 +1,14 @@
+~/modulo-2/etapas/todo-list $ npm run dev
+
+> todo-list@0.0.0 dev
+> vite
+
+Port 5173 is in use, trying another one...
+
+  VITE v8.3.5  ready in 772 ms
+
+  ➜  Local:   http://localhost:5174/
+  ➜  Network: use --host to expose
+  ➜  Vue DevTools: Open http://localhost:5174/__devtools__/ as a separate window
+  ➜  Vue DevTools: Press Option(⌥)+Shift(⇧)+D in App to toggle the Vue DevTools
+^C

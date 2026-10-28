@@ -1,0 +1,179 @@
+{
+  "b1-inicial": {
+    "arquivo": "b1-inicial.png",
+    "url": "file://~/modulo-2/etapas/01-pagina-estatica/index.html",
+    "descricao": "Etapa 01 aberta do disco (file://), antes da edição",
+    "registrado_em": "2026-10-21T19:29:44.407Z"
+  },
+  "b1-caixa-marcada": {
+    "arquivo": "b1-caixa-marcada.png",
+    "url": "file://~/modulo-2/etapas/01-pagina-estatica/index.html",
+    "descricao": "Após marcar a 2ª tarefa: o resumo muda sem recarregar",
+    "registrado_em": "2026-10-21T19:29:44.473Z"
+  },
+  "b1-alterada": {
+    "arquivo": "b1-alterada.png",
+    "url": "file://~/variantes-de-captura/variantes/01-alterada/index.html",
+    "descricao": "Após editar título e uma tarefa, salvar e recarregar",
+    "registrado_em": "2026-10-21T19:29:44.590Z"
+  },
+  "b1-versao-antiga": {
+    "arquivo": "b1-versao-antiga.png",
+    "url": "file://~/modulo-2/etapas/01-pagina-estatica/versao-antiga/index.html",
+    "descricao": "Arquivo errado: versao-antiga/index.html aberto em outra aba",
+    "registrado_em": "2026-10-21T19:29:44.671Z"
+  },
+  "navegador:b1-rede-arquivo-vs-servidor": {
+    "arquivo": "../navegador/b1-rede-arquivo-vs-servidor.txt",
+    "descricao": "Recursos carregados com file:// e com servidor HTTP local",
+    "registrado_em": "2026-10-21T19:29:45.324Z"
+  },
+  "b1-servida-http": {
+    "arquivo": "b1-servida-http.png",
+    "url": "http://localhost:8089/",
+    "descricao": "Mesma página servida em http://localhost:8089",
+    "registrado_em": "2026-10-21T19:29:45.373Z"
+  },
+  "b2-defeituosa": {
+    "arquivo": "b2-defeituosa.png",
+    "url": "http://localhost:8088/",
+    "descricao": "Etapa 02 com os três defeitos (servida em localhost:8088)",
+    "registrado_em": "2026-10-21T19:42:08.324Z"
+  },
+  "navegador:b2-console": {
+    "arquivo": "../navegador/b2-console.txt",
+    "descricao": "Mensagens do Console ao carregar a etapa 02",
+    "registrado_em": "2026-10-21T19:42:08.328Z"
+  },
+  "navegador:b2-network": {
+    "arquivo": "../navegador/b2-network.txt",
+    "descricao": "Requisições observadas ao carregar a etapa 02",
+    "registrado_em": "2026-10-21T19:42:08.328Z"
+  },
+  "navegador:b2-elements-lista": {
+    "arquivo": "../navegador/b2-elements-lista.txt",
+    "descricao": "Itens presentes no DOM (Elements)",
+    "registrado_em": "2026-10-21T19:42:08.346Z"
+  },
+  "navegador:b2-breakpoint": {
+    "arquivo": "../navegador/b2-breakpoint.txt",
+    "descricao": "Valores observados em um breakpoint na linha 27 de app.js",
+    "registrado_em": "2026-10-21T19:42:09.748Z"
+  },
+  "b2-correcao-1-css": {
+    "arquivo": "b2-correcao-1-css.png",
+    "url": "file://~/variantes-de-captura/variantes/02-fix-a/index.html",
+    "descricao": "Depois da 1ª correção (estilos.css): estilo volta, ainda 3 tarefas e resumo parado",
+    "registrado_em": "2026-10-21T19:42:09.850Z"
+  },
+  "b2-correcao-2-resumo": {
+    "arquivo": "b2-correcao-2-resumo.png",
+    "url": "file://~/variantes-de-captura/variantes/02-fix-ab/index.html",
+    "descricao": "Depois da 2ª correção (#contador): resumo aparece, ainda 3 tarefas",
+    "registrado_em": "2026-10-21T19:42:09.934Z"
+  },
+  "b2-corrigida": {
+    "arquivo": "b2-corrigida.png",
+    "url": "file://~/modulo-2/etapas/02-erros-controlados/corrigido/index.html",
+    "descricao": "Versão corrigida: 4 tarefas, estilo e resumo",
+    "registrado_em": "2026-10-21T19:42:10.002Z"
+  },
+  "b2-elements-alterado": {
+    "arquivo": "b2-elements-alterado.png",
+    "url": "file://~/modulo-2/etapas/02-erros-controlados/corrigido/index.html",
+    "descricao": "Alteração feita no documento carregado (equivalente a editar no Elements)",
+    "registrado_em": "2026-10-21T19:42:10.069Z"
+  },
+  "b2-elements-recarregado": {
+    "arquivo": "b2-elements-recarregado.png",
+    "url": "file://~/modulo-2/etapas/02-erros-controlados/corrigido/index.html",
+    "descricao": "Após recarregar: a alteração desapareceu, o arquivo não mudou",
+    "registrado_em": "2026-10-21T19:42:10.135Z"
+  },
+  "navegador:b3-console-tarefas": {
+    "arquivo": "../navegador/b3-console-tarefas.txt",
+    "descricao": "tarefas.js executado no Console do Chrome",
+    "registrado_em": "2026-10-21T19:29:48.184Z"
+  },
+  "navegador:b3-console-ambiente": {
+    "arquivo": "../navegador/b3-console-ambiente.txt",
+    "descricao": "ambiente.js executado no Console do Chrome",
+    "registrado_em": "2026-10-21T19:29:48.437Z"
+  },
+  "navegador:b3-console-titulo": {
+    "arquivo": "../navegador/b3-console-titulo.txt",
+    "descricao": "titulo-da-pagina.js executado no Console do Chrome",
+    "registrado_em": "2026-10-21T19:29:48.739Z"
+  },
+  "b5-projeto-gerado": {
+    "arquivo": "b5-projeto-gerado.png",
+    "url": "http://localhost:5181/",
+    "descricao": "Projeto recém-criado (opção sem código de exemplo) em npm run dev",
+    "registrado_em": "2026-10-21T19:29:51.366Z"
+  },
+  "b5-app-alterado": {
+    "arquivo": "b5-app-alterado.png",
+    "url": "http://localhost:5181/",
+    "descricao": "App.vue com título e lista estática, atualizado pelo servidor de desenvolvimento",
+    "registrado_em": "2026-10-21T19:29:53.791Z"
+  },
+  "b5-dist-direto-do-disco": {
+    "arquivo": "b5-dist-direto-do-disco.png",
+    "url": "file://~/modulo-2/etapas/05-vue-inicial/dist/index.html",
+    "descricao": "dist/index.html aberto direto do disco: página em branco",
+    "registrado_em": "2026-10-21T19:29:54.352Z"
+  },
+  "navegador:b5-dist-direto-do-disco": {
+    "arquivo": "../navegador/b5-dist-direto-do-disco.txt",
+    "descricao": "Requisições ao abrir dist/index.html por file://",
+    "registrado_em": "2026-10-21T19:29:54.353Z"
+  },
+  "b5-preview": {
+    "arquivo": "b5-preview.png",
+    "url": "http://localhost:4173/",
+    "descricao": "npm run preview: o build servido em http://localhost:4173",
+    "registrado_em": "2026-10-21T19:29:55.503Z"
+  },
+  "ref-lista": {
+    "arquivo": "ref-lista.png",
+    "url": "http://localhost:5190/",
+    "descricao": "Projeto completo: lista com resumo, formulário, filtros e tarefas",
+    "registrado_em": "2026-10-21T19:31:11.254Z"
+  },
+  "ref-edicao": {
+    "arquivo": "ref-edicao.png",
+    "url": "http://localhost:5190/",
+    "descricao": "Edição inline de uma tarefa",
+    "registrado_em": "2026-10-21T19:31:11.327Z"
+  },
+  "ref-busca": {
+    "arquivo": "ref-busca.png",
+    "url": "http://localhost:5190/",
+    "descricao": "Busca por \"npm\"",
+    "registrado_em": "2026-10-21T19:31:11.395Z"
+  },
+  "ref-perfil": {
+    "arquivo": "ref-perfil.png",
+    "url": "http://localhost:5190/perfil",
+    "descricao": "Página de perfil com estatísticas por categoria",
+    "registrado_em": "2026-10-21T19:31:12.039Z"
+  },
+  "navegador:ref-network": {
+    "arquivo": "../navegador/ref-network.txt",
+    "descricao": "Requisições do projeto completo à API json-server",
+    "registrado_em": "2026-10-21T19:31:12.040Z"
+  },
+  "e06-componentes": {
+    "arquivo": "e06-componentes.png",
+    "url": "http://localhost:5186/",
+    "descricao": "Etapa 06: componentes e reatividade em memória",
+    "registrado_em": "2026-10-21T19:29:58.552Z"
+  },
+  "e07-typescript-pinia": {
+    "arquivo": "e07-typescript-pinia.png",
+    "url": "http://localhost:5187/",
+    "descricao": "Etapa 07: TypeScript e Pinia com dados em memória",
+    "registrado_em": "2026-10-21T19:29:59.627Z"
+  },
+  "_navegador": "Chrome/155.0.8059.85"
+}

@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bloco 4 · Dependências</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="4">
+    <div class="janela">
+      <main class="palco" aria-label="Bloco 4: dependências e scripts reproduzíveis">
+        <!-- 37 -->
+        <section class="slide" data-n="37" data-tipo="previsao" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Funciona no computador do colega e falha no seu</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <p class="lead">
+                Você copiou a pasta de treino de um colega — sem a pasta <code>node_modules</code>,
+                que é grande. Rodou o mesmo comando que ele roda todo dia.
+              </p>
+              <div class="pergunta">
+                <strong>Registre sua hipótese (sem IA)</strong>
+                O que existe no computador do colega e não existe no seu? Como provar?
+              </div>
+              <ul class="objetivos">
+                <li>ler o manifesto (<code>package.json</code>) e o lockfile</li>
+                <li>explicar o que muda numa instalação</li>
+                <li>restaurar o ambiente com um comando e uma evidência</li>
+              </ul>
+            </div>
+            <figure class="saida-real">
+              <pre style="max-height: none"><code><span class="cmd">~/modulo-2/etapas/04-dependencias-scripts $ rm -rf node_modules &amp;&amp; npm start</span>
+
+&gt; 04-dependencias-scripts@1.0.0 start
+&gt; node relatorio.js
+
+node:internal/modules/cjs/loader:1520
+  throw err;
+  ^
+
+<span class="erro">Error: Cannot find module 'picocolors'</span>
+Require stack:
+- ~/modulo-2/etapas/04-dependencias-scripts/relatorio.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1517:15)
+    …</code></pre>
+              <figcaption>Saída real (trecho; a pilha completa segue no arquivo) · macOS · Node 24.19.0 · npm 11.17.0 · 21/10/2026 · <a href="capturas/terminal/b4-remover-node-modules.txt">arquivo</a></figcaption>
+            </figure>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>
+              Mostre o erro antes de qualquer explicação. Peça hipóteses e escreva-as no quadro
+              (versão do Node? arquivo faltando? pasta errada? pacote não instalado?). Elas serão
+              testadas ao longo do bloco: o slide 47 fecha o ciclo restaurando a mesma pasta.
+            </p>
+            <h3>Fundamento</h3>
+            <p>
+              O código-fonte do colega pede um pacote (<code>require('picocolors')</code>). O
+              pacote mora em <code>node_modules</code>, que não foi copiado. O
+              <code>package.json</code> diz <em>o que</em> o projeto precisa; o lockfile registra
+              <em>exatamente o que foi instalado</em>. Com os dois, o ambiente pode ser
+              reconstruído.
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>A mensagem diz que o <strong>Node</strong> faltou ou que um <strong>módulo</strong> faltou? Compare com o bloco 3 (“command not found” × “Cannot find module”).</p>
+            <h3>Origem</h3>
+            <p>Laboratório 2, atividade 10 (apagar <code>node_modules</code> e restaurar), agora como problema inicial.</p>
+          </aside>
+        </section>
+
+        <!-- 38 -->
+        <section class="slide" data-n="38" data-tipo="pratica" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Pasta de treino: crie o manifesto com <code>npm init -y</code></h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>8 min, individual</dd>
+                <dt>Pré-requisitos</dt><dd>Node 24 e npm 11 funcionando (bloco 3); uma pasta vazia de treino aberta no editor e no terminal</dd>
+                <dt>Resultado esperado</dt><dd>Um <code>package.json</code> criado e três campos explicados</dd>
+              </dl>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Terminal, dentro da pasta de treino</span><button type="button" class="copiar">Copiar</button></div>
+                <pre><code>npm init -y</code></pre>
+              </div>
+              <ol class="passos pequeno">
+                <li>Confira a pasta atual antes (<code>pwd</code> ou <code>cd</code>).</li>
+                <li>Execute o comando e abra o arquivo criado <strong>no editor</strong>.</li>
+                <li>Explique <code>name</code>, <code>scripts</code> e <code>type</code>.</li>
+              </ol>
+              <p class="caixa pequeno">JSON <strong>não aceita comentários</strong> (<code>//</code>). Anote explicações fora do arquivo.</p>
+            </div>
+            <figure class="saida-real">
+              <pre style="max-height: none"><code><span class="cmd">~/modulo-2/etapas/04-dependencias-scripts $ npm init -y</span>
+Wrote to ~/modulo-2/etapas/04-dependencias-scripts/package.json:
+
+{
+  "name": "04-dependencias-scripts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" &amp;&amp; exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}</code></pre>
+              <figcaption>Saída real · npm 11.17.0 · Node 24.19.0 · macOS · 21/10/2026 · <a href="capturas/terminal/b4-npm-init.txt">arquivo</a></figcaption>
+            </figure>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              <strong>Manifesto</strong>: arquivo JSON que identifica o pacote (nome, versão),
+              declara scripts e requisitos de dependências. <code>-y</code> aceita os valores
+              padrão. O npm 11 grava <code>"type": "commonjs"</code>: arquivos <code>.js</code>
+              desta pasta são CommonJS, por isso <code>relatorio.js</code> usa <code>require</code>
+              (ligação com o bloco 3). <code>main</code> só importa quando a pasta é usada como
+              biblioteca; aqui não tem efeito.
+            </p>
+            <h3>Correção dos materiais</h3>
+            <p>
+              A imagem do manifesto da Aula 4 tem comentários <code>//</code> dentro do JSON: o npm
+              recusaria o arquivo. Explique campos com legendas externas. O Laboratório pedia
+              <code>cd Documents</code>, <code>notepad</code> e <code>dir</code>: use o editor para
+              abrir arquivos e identifique o shell de cada aluno.
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>O que aconteceria se você executasse <code>npm init -y</code> na pasta do projeto Vue em vez da pasta de treino?</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://docs.npmjs.com/cli/configuring-npm/package-json">npm — package.json</a></li>
+              <li><a href="https://nodejs.org/api/packages.html#type">Node — campo "type"</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 39 -->
+        <section class="slide" data-n="39" data-tipo="explicacao" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Módulo, pacote, gerenciador e registro</h2>
+          </header>
+          <div class="slide-corpo pilha">
+            <div class="grade-2">
+              <div class="caixa"><h3>Módulo</h3><p class="pequeno">Um arquivo que expõe código a outros (<code>module.exports</code>, <code>export</code>). Ex.: <code>relatorio.js</code>.</p></div>
+              <div class="caixa"><h3>Pacote</h3><p class="pequeno">Pasta com um <code>package.json</code>, publicada para reuso. Ex.: <code>picocolors</code>.</p></div>
+              <div class="caixa"><h3>Gerenciador (npm CLI)</h3><p class="pequeno">Programa que lê o manifesto, resolve versões, baixa, instala e executa scripts.</p></div>
+              <div class="caixa"><h3>Registro</h3><p class="pequeno">Serviço que hospeda os pacotes publicados (<code>registry.npmjs.org</code>).</p></div>
+            </div>
+            <p class="caixa caixa-destaque pequeno">
+              “npm” nomeia duas coisas: o <strong>programa</strong> no seu computador e o
+              <strong>registro</strong> na internet. Instalar exige o registro; executar scripts, não.
+            </p>
+            <p class="pergunta pequeno"><strong>Pergunta</strong>Sem internet, quais destes ainda funcionam: <code>npm start</code>, <code>npm install dayjs</code>, <code>npm run</code>?</p>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              <strong>Dependência</strong> é um pacote que o projeto declara precisar. O gerenciador
+              resolve cada requisito para uma versão concreta, baixa do registro e grava em
+              <code>node_modules</code>. Outros gerenciadores (Yarn, pnpm) usam o mesmo manifesto e
+              o mesmo registro, com lockfiles próprios (<code>yarn.lock</code>,
+              <code>pnpm-lock.yaml</code>). Use <strong>um</strong> gerenciador por projeto.
+            </p>
+            <h3>Resposta da pergunta</h3>
+            <p><code>npm start</code> e <code>npm run</code> funcionam (usam arquivos locais). <code>npm install dayjs</code> precisa do registro, exceto se o pacote já estiver no cache.</p>
+            <h3>Correção dos materiais</h3>
+            <p>O Laboratório dizia “todos gratuitos” e citava contagens fixas de pacotes. Substitua por critérios de escolha: necessidade, documentação, licença, manutenção e compatibilidade.</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://docs.npmjs.com/about-packages-and-modules">npm — About packages and modules</a></li>
+              <li><a href="https://docs.npmjs.com/cli/commands/npm-install">npm install</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 40 -->
+        <section class="slide" data-n="40" data-tipo="demonstracao" data-tempo="12 min">
+          <header class="slide-topo">
+            <h2>Instalar uma dependência e ver o que mudou</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da instalação">
+                <button role="tab" id="s40-t1" aria-controls="s40-p1" aria-selected="true">1 · Antes</button>
+                <button role="tab" id="s40-t2" aria-controls="s40-p2" aria-selected="false">2 · Instalação</button>
+                <button role="tab" id="s40-t3" aria-controls="s40-p3" aria-selected="false">3 · Resultado</button>
+              </div>
+              <div role="tabpanel" id="s40-p1" aria-labelledby="s40-t1">
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">~/modulo-2/etapas/04-dependencias-scripts $ node relatorio.js</span>
+node:internal/modules/cjs/loader:1520
+  throw err;
+  ^
+
+<span class="erro">Error: Cannot find module 'picocolors'</span>
+Require stack:
+- ~/modulo-2/etapas/04-dependencias-scripts/relatorio.js
+    …</code></pre>
+                  <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-antes-de-instalar.txt">arquivo</a>. <strong>Compare:</strong> o código pede o pacote, mas ele ainda não foi instalado.</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s40-p2" aria-labelledby="s40-t2" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">~/modulo-2/etapas/04-dependencias-scripts $ npm install picocolors</span>
+
+added 1 package, and audited 2 packages in 703ms
+
+found 0 vulnerabilities
+<span class="cmd">~/modulo-2/etapas/04-dependencias-scripts $ ls &amp;&amp; ls node_modules</span>
+node_modules
+package-lock.json
+package.json
+relatorio-nativo.js
+relatorio.js
+tarefas.json
+picocolors</code></pre>
+                  <figcaption>Saídas reais · <a href="capturas/terminal/b4-install-picocolors.txt">instalação</a> · <a href="capturas/terminal/b4-ls-apos.txt">listagem</a>. <strong>Compare:</strong> surgiram <code>node_modules/</code> e <code>package-lock.json</code>. <strong>Aceitável:</strong> tempo diferente.</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s40-p3" aria-labelledby="s40-t3" hidden>
+                <div class="pilha">
+                  <figure class="saida-real">
+                    <pre style="max-height: none"><code><span class="cmd">$ cat package.json</span>   (trecho)
+  "dependencies": {
+    "picocolors": "^1.1.1"
+  }
+<span class="cmd">$ grep -A 6 '"node_modules/picocolors"' package-lock.json</span>
+    "node_modules/picocolors": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz",
+      "integrity": "sha512-xceH2snhtb5M9…",
+      "license": "ISC"
+    }</code></pre>
+                    <figcaption>Trechos reais (integridade abreviada) · <a href="capturas/terminal/b4-manifesto-apos.txt">manifesto</a> · <a href="capturas/terminal/b4-lock-picocolors.txt">lockfile</a>. <strong>Compare:</strong> faixa no manifesto, versão exata no lockfile.</figcaption>
+                  </figure>
+                  <figure class="saida-real">
+                    <pre style="max-height: none"><code><span class="cmd">$ node relatorio.js</span>
+Relatório da Todo List
+…
+2 de 5 concluídas</code></pre>
+                    <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-relatorio.txt">arquivo</a> · cores omitidas no registro</figcaption>
+                  </figure>
+                </div>
+              </div>
+            </figure>
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>5 min demonstração + 7 min reprodução</dd>
+                <dt>Pré-requisitos</dt><dd>Slide 38; copiar <code>relatorio.js</code> e <code>tarefas.json</code> da etapa 04</dd>
+                <dt>Resultado esperado</dt><dd>Relatório impresso; três arquivos/pastas novos identificados</dd>
+              </dl>
+              <p class="pequeno"><strong>Pausa:</strong> reproduza na sua pasta de treino e só então compare.</p>
+              <p class="pergunta pequeno"><strong>Explique</strong>Por que o manifesto diz <code>^1.1.1</code> e o lockfile diz <code>1.1.1</code>?</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Roteiro</h3>
+            <ol>
+              <li>Rodar <code>node relatorio.js</code> antes de instalar e ler o erro.</li>
+              <li>Prever quais arquivos vão surgir; instalar.</li>
+              <li>Comparar manifesto, lockfile e <code>node_modules</code> (aba 3).</li>
+              <li>Rodar de novo; pausa para a turma alcançar o mesmo estado.</li>
+            </ol>
+            <h3>Fundamento</h3>
+            <p>
+              <code>npm install &lt;pacote&gt;</code> resolve a versão mais recente compatível,
+              baixa do registro, grava em <code>node_modules</code>, acrescenta o requisito em
+              <code>dependencies</code> (faixa <code>^</code> por padrão) e registra a resolução
+              exata — versão, endereço e hash de integridade — no lockfile.
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>Qual dos três você enviaria a um colega: <code>package.json</code>, <code>package-lock.json</code>, <code>node_modules</code>? Por quê?</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://docs.npmjs.com/cli/configuring-npm/package-lock-json">npm — package-lock.json</a></li>
+              <li><a href="https://docs.npmjs.com/cli/commands/npm-install">npm install</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 41 -->
+        <section class="slide" data-n="41" data-tipo="ia" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Precisava mesmo de uma biblioteca? Revise a escolha</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="prompt-ia">
+                <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+                <p class="prompt-texto">
+                  Num script Node <mark>[versão: node --version]</mark> quero
+                  <mark>[o que o código precisa fazer]</mark>. Instalei o pacote
+                  <mark>[nome e versão]</mark>. Antes de qualquer código: existe recurso nativo do
+                  Node que resolve isso? Compare as duas opções por necessidade, documentação,
+                  licença, manutenção e compatibilidade. Para cada afirmação, indique a página
+                  oficial que eu devo abrir para conferir. Não invente referências.
+                </p>
+              </div>
+              <div class="caixa pequeno">
+                <h3>Confira na documentação</h3>
+                <p>A sugestão nativa existe na sua versão do Node? Execute antes de aceitar.</p>
+              </div>
+            </div>
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ node relatorio-nativo.js</span>
+Relatório da Todo List (sem dependências)
+[x] Criar o package.json
+[x] Instalar uma dependência
+[ ] Comparar manifesto e lockfile
+[ ] Criar scripts no package.json
+[ ] Restaurar o ambiente com npm ci
+2 de 5 concluídas</code></pre>
+                <figcaption>Saída real · <code>util.styleText</code>, nativo do Node · <a href="capturas/terminal/b4-relatorio-nativo.txt">arquivo</a></figcaption>
+              </figure>
+              <p class="pequeno suave">Mesmo resultado de <code>relatorio.js</code> (slide 40), sem nenhum pacote instalado.</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              Toda dependência traz código de terceiros, atualizações a acompanhar e possíveis
+              avisos de segurança. Alternativa válida aqui: <code>util.styleText</code> (módulo
+              nativo <code>node:util</code>). Isso não torna <code>picocolors</code> errado — é uma
+              biblioteca pequena e sem dependências; a pergunta é se o problema exige uma.
+            </p>
+            <h3>Distinção dos quatro casos</h3>
+            <p>Usar biblioteca aqui é <em>convenção/escolha</em>, não <em>impossibilidade</em> do recurso nativo. Peça que a turma classifique.</p>
+            <h3>Quando a IA errar</h3>
+            <p>Respostas podem citar funções que não existem na versão instalada. O teste é executar <code>relatorio-nativo.js</code> e abrir a documentação da versão.</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://nodejs.org/api/util.html#utilstyletextformat-text-options">Node — util.styleText</a></li>
+              <li><a href="https://www.npmjs.com/package/picocolors">picocolors no registro npm</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 42 -->
+        <section class="slide" data-n="42" data-tipo="explicacao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2><code>dependencies</code>, <code>devDependencies</code> e o que vem junto</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Campo</th><th>Papel no projeto</th><th>Exemplo</th></tr></thead>
+                <tbody>
+                  <tr><td><code>dependencies</code></td><td>O código precisa dele para funcionar</td><td><code>picocolors</code>: <code>relatorio.js</code> faz <code>require</code></td></tr>
+                  <tr><td><code>devDependencies</code></td><td>Ferramenta usada durante o desenvolvimento</td><td><code>nodemon</code>: reinicia o script ao salvar</td></tr>
+                </tbody>
+              </table>
+              <p class="pequeno">
+                <strong>Direta</strong>: declarada por você (2). <strong>Transitiva</strong>: exigida por
+                uma dependência sua. Instalar <code>nodemon</code> trouxe <strong>28 pacotes</strong>.
+              </p>
+              <p class="pergunta pequeno"><strong>Pergunta</strong>Se você apagar <code>nodemon</code> do manifesto, <code>chokidar</code> continua necessário?</p>
+            </div>
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ npm ls --depth=0</span>
+04-dependencias-scripts@1.0.0 ~/modulo-2/etapas/04-dependencias-scripts
+├── nodemon@3.1.14
+└── picocolors@1.1.1
+<span class="cmd">$ ls node_modules | wc -l</span>
+      29
+<span class="cmd">$ npm explain chokidar</span>
+chokidar@3.6.0 dev
+node_modules/chokidar
+  chokidar@"^3.5.2" from nodemon@3.1.14
+  node_modules/nodemon
+    dev nodemon@"^3.1.14" from the root project</code></pre>
+                <figcaption>Saídas reais · <a href="capturas/terminal/b4-ls-depth0.txt">npm ls</a> · <a href="capturas/terminal/b4-contagem-node-modules.txt">contagem</a> · <a href="capturas/terminal/b4-explain-chokidar.txt">npm explain</a></figcaption>
+              </figure>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              Os dois campos descrevem <strong>papéis</strong>, não um destino fixo. Efeito
+              observável: <code>npm ci --omit=dev</code> (ou <code>NODE_ENV=production</code>)
+              deixa de instalar <code>devDependencies</code>. Num projeto com Vite, o que entra no
+              build é o que o código <em>importa</em>, não a seção do manifesto — por isso não use
+              a regra simples “dependencies vai para o navegador”.
+            </p>
+            <h3>Resposta da pergunta</h3>
+            <p><code>npm explain chokidar</code> mostra que ele só existe por causa do <code>nodemon</code>: sem ele, uma nova instalação não o traria.</p>
+            <h3>Pacote descartável (só na pasta de treino)</h3>
+            <p>
+              Para praticar remoção, use um pacote sem finalidade no projeto: <code>npm install dayjs</code>
+              e depois <code>npm uninstall dayjs</code> (<a href="capturas/terminal/b4-descartavel-instalar.txt">instalar</a>,
+              <a href="capturas/terminal/b4-descartavel-remover.txt">remover</a>). O Exercício Prático 4 removia o
+              ESLint antes de criar o script <code>lint</code> — corrigido: ferramentas usadas pelo projeto
+              não são removidas.
+            </p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://docs.npmjs.com/cli/configuring-npm/package-json#dependencies">npm — dependencies e devDependencies</a></li>
+              <li><a href="https://docs.npmjs.com/cli/commands/npm-explain">npm explain</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 43 -->
+        <section class="slide" data-n="43" data-tipo="demonstracao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Ferramenta local e scripts: <code>npm run dev</code></h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da ferramenta e dos scripts">
+                <button role="tab" id="s43-t1" aria-controls="s43-p1" aria-selected="true">1 · Instalar</button>
+                <button role="tab" id="s43-t2" aria-controls="s43-p2" aria-selected="false">2 · Scripts</button>
+                <button role="tab" id="s43-t3" aria-controls="s43-p3" aria-selected="false">3 · Executar</button>
+                <button role="tab" id="s43-t4" aria-controls="s43-p4" aria-selected="false">Alternativa nativa</button>
+              </div>
+              <div role="tabpanel" id="s43-p1" aria-labelledby="s43-t1">
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm install --save-dev nodemon</span>
+
+added 28 packages, and audited 30 packages in 2s
+
+5 packages are looking for funding
+  run `npm fund` for details
+
+<span class="erro">3 high severity vulnerabilities</span>
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.</code></pre>
+                  <figcaption>Saída real · <a href="capturas/terminal/b4-install-nodemon.txt">arquivo</a>. <strong>Compare:</strong> 1 ferramenta, 28 pacotes; aviso de auditoria (discutido nas notas).</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s43-p2" aria-labelledby="s43-t2" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm pkg get scripts</span>   (após editar o package.json)
+{
+  "start": "node relatorio.js",
+  "dev": "nodemon relatorio.js",
+  "dev:nativo": "node --watch relatorio.js"
+}
+<span class="cmd">$ npm run</span>
+Lifecycle scripts included in 04-dependencias-scripts@1.0.0:
+  start
+    node relatorio.js
+available via `npm run`:
+  dev
+    nodemon relatorio.js
+  dev:nativo
+    node --watch relatorio.js</code></pre>
+                  <figcaption>Saídas reais · <a href="capturas/terminal/b4-pkg-set.txt">npm pkg</a> (os scripts foram gravados com <code>npm pkg set</code>; no editor, o resultado é o mesmo) · <a href="capturas/terminal/b4-npm-run-lista.txt">npm run</a></figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s43-p3" aria-labelledby="s43-t3" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm run dev</span>
+
+&gt; 04-dependencias-scripts@1.0.0 dev
+&gt; nodemon relatorio.js
+
+[nodemon] 3.1.14
+[nodemon] starting `node relatorio.js`
+Relatório da Todo List
+…
+2 de 5 concluídas
+[nodemon] clean exit - waiting for changes before restart
+[nodemon] restarting due to changes...
+[nodemon] starting `node relatorio.js`
+…
+^C</code></pre>
+                  <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-npm-run-dev.txt">arquivo</a>. Registro automatizado: <code>relatorio.js</code> foi salvo 3 s depois e a execução interrompida após 7 s, equivalente a <kbd>Ctrl</kbd>+<kbd>C</kbd>.</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s43-p4" aria-labelledby="s43-t4" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm run dev:nativo</span>
+
+&gt; 04-dependencias-scripts@1.0.0 dev:nativo
+&gt; node --watch relatorio.js
+
+Relatório da Todo List
+…
+Completed running 'relatorio.js'. Waiting for file changes before restarting...
+Change detected in '~/modulo-2/etapas/04-dependencias-scripts/relatorio.js'
+Restarting 'relatorio.js'
+…
+^C</code></pre>
+                  <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-npm-run-dev-nativo.txt">arquivo</a>. Mesmo registro automatizado (salvo após 3 s, interrompido após 7 s). Zero pacotes instalados.</figcaption>
+                </figure>
+              </div>
+            </figure>
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>3 min demonstração + 5 min reprodução</dd>
+                <dt>Resultado esperado</dt><dd><code>npm run dev</code> reinicia o relatório ao salvar; <kbd>Ctrl</kbd>+<kbd>C</kbd> libera o terminal</dd>
+              </dl>
+              <ol class="passos pequeno">
+                <li><code>npm install --save-dev nodemon</code></li>
+                <li>Acrescente <code>start</code>, <code>dev</code> e <code>dev:nativo</code> em <code>scripts</code>.</li>
+                <li>Rode <code>npm run dev</code>, altere uma tarefa em <code>tarefas.json</code>, salve.</li>
+              </ol>
+              <p class="pergunta pequeno"><strong>Pergunta</strong>Por que o terminal fica ocupado com <code>dev</code> e não com <code>start</code>?</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              <code>scripts</code> associa nomes a comandos. <code>npm run &lt;nome&gt;</code> executa
+              o comando na pasta do projeto e acrescenta <code>node_modules/.bin</code> ao PATH:
+              por isso <code>nodemon</code> funciona no script sem instalação global.
+              <code>dev</code> é um processo de longa duração (observa arquivos); <code>start</code>
+              termina quando o relatório é impresso. <code>start</code> e <code>test</code> também
+              rodam sem <code>run</code>; os demais precisam de <code>npm run</code>.
+            </p>
+            <h3>Instalação global não é requisito</h3>
+            <p>O Laboratório usava <code>npm install -g nodemon</code>. Global funciona, mas cria diferença entre máquinas e não fica registrada no manifesto. Local + script é reproduzível.</p>
+            <h3>Caso real do <code>npm audit</code></h3>
+            <p>
+              Os 3 avisos “high” vêm de <code>braces</code> via <code>chokidar@3</code> via
+              <code>nodemon</code>; o aviso não tem versão corrigida de <code>braces</code>. A
+              sugestão <code>npm audit fix --force</code> instalaria <code>nodemon@1.14.10</code>,
+              versão muito antiga — mudança incompatível. Leia o aviso, avalie o contexto
+              (ferramenta local, padrões definidos por nós) e considere <code>node --watch</code>.
+              Não use <code>--force</code> sem entender o que muda.
+              <a href="capturas/terminal/b4-audit.txt">Saída real de npm audit</a>.
+            </p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://docs.npmjs.com/cli/using-npm/scripts">npm — scripts</a> · <a href="https://docs.npmjs.com/cli/commands/npm-run">npm run</a></li>
+              <li><a href="https://nodejs.org/api/cli.html#--watch">Node — --watch</a> · <a href="https://docs.npmjs.com/cli/commands/npm-audit">npm audit</a> · <a href="https://github.com/advisories/GHSA-vfj7-8cjw-p6xm">aviso de braces</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 44 -->
+        <section class="slide" data-n="44" data-tipo="explicacao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Versão exata, faixa e lockfile</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <p class="pequeno"><strong>SemVer</strong>: <code>MAJOR.MINOR.PATCH</code> — incompatível · nova função compatível · correção.</p>
+              <table class="tabela">
+                <thead><tr><th>No manifesto</th><th>Aceita</th></tr></thead>
+                <tbody>
+                  <tr><td><code>"1.1.1"</code></td><td>só 1.1.1</td></tr>
+                  <tr><td><code>"~1.1.1"</code></td><td>≥ 1.1.1 e &lt; 1.2.0</td></tr>
+                  <tr><td><code>"^1.1.1"</code></td><td>≥ 1.1.1 e &lt; 2.0.0</td></tr>
+                  <tr><td><code>"^0.27.2"</code></td><td>≥ 0.27.2 e &lt; <strong>0.28.0</strong></td></tr>
+                  <tr><td><code>"^0.0.4"</code></td><td>só 0.0.4 (&lt; 0.0.5)</td></tr>
+                </tbody>
+              </table>
+              <p class="caixa pequeno"><code>^</code> não muda o primeiro número <strong>diferente de zero</strong>. Em <code>0.x</code>, isso é bem mais restrito.</p>
+            </div>
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ npm view picocolors version &amp;&amp; npm ls picocolors</span>
+1.1.1
+04-dependencias-scripts@1.0.0 ~/modulo-2/etapas/04-dependencias-scripts
+└── picocolors@1.1.1</code></pre>
+                <figcaption>Saída real · <a href="capturas/terminal/b4-exata.txt">arquivo</a> · versão publicada e versão instalada em 21/10/2026</figcaption>
+              </figure>
+              <div class="grade-2 pequeno">
+                <div class="caixa"><h3>Manifesto</h3><p>Requisito: “aceito qualquer 1.x a partir de 1.1.1”.</p></div>
+                <div class="caixa"><h3>Lockfile</h3><p>Resolução: “instalei 1.1.1, deste endereço, com este hash”.</p></div>
+              </div>
+              <p class="pergunta pequeno"><strong>Preveja</strong>Se sair a 1.2.0 amanhã, o que <code>npm install</code> e <code>npm ci</code> fazem nesta pasta?</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              Uma faixa não é uma versão exata. Sem lockfile, duas instalações em dias diferentes
+              podem resolver versões diferentes. O lockfile registra a árvore resolvida (inclusive
+              transitivas) e é a base de <code>npm ci</code>. Para gravar versão exata no
+              manifesto: <code>npm install --save-exact &lt;pacote&gt;</code>.
+            </p>
+            <h3>Resposta da previsão</h3>
+            <p><code>npm ci</code> instala 1.1.1 (o lockfile manda). <code>npm install</code> mantém 1.1.1 se o lockfile já satisfaz a faixa; <code>npm update</code> buscaria 1.2.0 e atualizaria o lockfile.</p>
+            <h3>Correções dos materiais</h3>
+            <p>
+              Teórico 5: a explicação do <code>^</code> (“patch e minor, não major”) vale para
+              <code>^3.2.13</code>, mas não para <code>axios ^0.27.2</code> do mesmo manifesto.
+              Prático 4: não instalar <code>lodash@4.17.20</code> — versão abrangida por aviso de
+              vulnerabilidade (<a href="https://github.com/advisories/GHSA-35jh-r3h4-6jhm">GHSA-35jh-r3h4-6jhm</a>);
+              para ensinar versão exata, use um pacote realmente necessário, verificado na data.
+            </p>
+            <h3>Limites</h3>
+            <p>O lockfile não elimina diferenças de sistema operacional, versão do Node ou dependências opcionais por plataforma (ex.: <code>fsevents</code> só no macOS).</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://semver.org/">Semantic Versioning 2.0.0</a></li>
+              <li><a href="https://docs.npmjs.com/about-semantic-versioning">npm — About semantic versioning</a> · <a href="https://github.com/npm/node-semver#caret-ranges-123-025-004">node-semver — caret ranges</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 45 -->
+        <section class="slide" data-n="45" data-tipo="investigacao" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Leia a mensagem antes de pedir ajuda</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ npm run inicio</span>
+<span class="erro">npm error Missing script: "inicio"</span>
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run
+npm error A complete log of this run can be found in: ~/.npm/_logs/2026-10-21T19_06_08_632Z-debug-0.log</code></pre>
+                <figcaption>Saída real · <a href="capturas/terminal/b4-script-inexistente.txt">arquivo</a></figcaption>
+              </figure>
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ node relatorio.js</span>   (sem node_modules)
+…
+<span class="erro">Error: Cannot find module 'picocolors'</span>
+…</code></pre>
+                <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-antes-de-instalar.txt">arquivo</a></figcaption>
+              </figure>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Sintoma</th><th>Quem reclamou</th><th>Primeira verificação</th></tr></thead>
+                <tbody>
+                  <tr><td>Missing script</td><td>…</td><td>…</td></tr>
+                  <tr><td>Cannot find module</td><td>…</td><td>…</td></tr>
+                </tbody>
+              </table>
+              <details class="dica"><summary>Dica</summary><p>Veja o prefixo da linha de erro: <code>npm error</code> ou o carregador de módulos do Node?</p></details>
+              <details class="solucao">
+                <summary>Mostrar solução (após a tentativa)</summary>
+                <p>Missing script: o npm não achou o nome em <code>scripts</code> → <code>npm run</code> lista os nomes. Cannot find module: o Node não achou o pacote em <code>node_modules</code> → <code>ls node_modules</code> e o manifesto.</p>
+              </details>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Condução</h3>
+            <p>Provoque os dois erros ao vivo numa cópia da pasta. Antes de qualquer consulta, cada aluno preenche a tabela: quem reclamou, o que faltou, qual verificação distingue.</p>
+            <h3>Fundamento</h3>
+            <p>
+              O nome <code>dev</code> não é obrigatório: <code>npm run</code> procura o nome no
+              <code>package.json</code> da pasta atual. Renomear o script numa cópia e chamar o
+              nome antigo reproduz “Missing script”. Rodar fora da pasta produz outro erro
+              (<code>ENOENT … package.json</code>, visto no bloco 5).
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>Instalar o pacote globalmente resolveria “Cannot find module” para <code>require</code>? (Não: o <code>require</code> procura em <code>node_modules</code> do projeto e acima; global é para executáveis.)</p>
+          </aside>
+        </section>
+
+        <!-- 46 -->
+        <section class="slide" data-n="46" data-tipo="ia" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Duas hipóteses, uma verificação, uma mudança</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="prompt-ia">
+              <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+              <p class="prompt-texto">
+                Meu script é <mark>[nome e comando do script]</mark>, meu manifesto relevante é
+                <mark>[trecho do package.json]</mark> e o erro é <mark>[mensagem completa]</mark>.
+                Liste duas causas possíveis e a evidência que distingue cada uma. Peça que eu
+                execute uma verificação antes de sugerir instalação ou atualização.
+              </p>
+            </div>
+            <div class="pilha">
+              <div class="caixa pequeno">
+                <h3>Não aceite como resposta automática</h3>
+                <ul>
+                  <li><code>npm install -g …</code></li>
+                  <li><code>npm audit fix --force</code></li>
+                  <li>apagar o lockfile “para resolver”</li>
+                </ul>
+              </div>
+              <p class="caixa caixa-destaque pequeno">Teste <strong>uma</strong> mudança por vez e registre a evidência antes e depois.</p>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              Respostas fluentes costumam propor várias mudanças juntas. Se o erro some, ninguém sabe
+              qual delas resolveu — e o ambiente pode ter ficado diferente do lockfile. Hipótese →
+              verificação → uma mudança → evidência.
+            </p>
+            <h3>Discussão</h3>
+            <p>Peça a uma dupla para mostrar uma sugestão rejeitada e a evidência que levou à rejeição. Esse registro vale mais que a resposta correta.</p>
+            <h3>Cuidados</h3>
+            <p>Não colar tokens, <code>.npmrc</code> com credenciais ou caminhos com dados pessoais.</p>
+          </aside>
+        </section>
+
+        <!-- 47 -->
+        <section class="slide" data-n="47" data-tipo="pratica" data-tempo="12 min">
+          <header class="slide-topo">
+            <h2>Restaurar a cópia com <code>npm ci</code></h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da restauração">
+                <button role="tab" id="s47-t1" aria-controls="s47-p1" aria-selected="true">1 · Sem node_modules</button>
+                <button role="tab" id="s47-t2" aria-controls="s47-p2" aria-selected="false">2 · npm ci</button>
+                <button role="tab" id="s47-t3" aria-controls="s47-p3" aria-selected="false">3 · Restaurado</button>
+                <button role="tab" id="s47-t4" aria-controls="s47-p4" aria-selected="false">Erro: fora de sincronia</button>
+              </div>
+              <div role="tabpanel" id="s47-p1" aria-labelledby="s47-t1">
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ rm -rf node_modules &amp;&amp; npm start</span>
+
+&gt; 04-dependencias-scripts@1.0.0 start
+&gt; node relatorio.js
+…
+<span class="erro">Error: Cannot find module 'picocolors'</span>
+…</code></pre>
+                  <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-remover-node-modules.txt">arquivo</a>. No Windows (PowerShell): <code>Remove-Item -Recurse node_modules</code>, ou apague pelo explorador de arquivos.</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s47-p2" aria-labelledby="s47-t2" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm ci</span>
+
+added 30 packages, and audited 31 packages in 818ms
+
+5 packages are looking for funding
+  run `npm fund` for details
+
+3 high severity vulnerabilities
+…
+npm warn allow-scripts 1 package has install scripts not yet covered by allowScripts:
+npm warn allow-scripts   fsevents@2.3.3 (install: (install scripts present))
+…</code></pre>
+                  <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-npm-ci.txt">arquivo</a>. <strong>Aceitável:</strong> tempo e o aviso <code>allow-scripts</code> (npm 11; <code>fsevents</code> é opcional e só existe no macOS).</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s47-p3" aria-labelledby="s47-t3" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm start</span>
+
+&gt; 04-dependencias-scripts@1.0.0 start
+&gt; node relatorio.js
+
+Relatório da Todo List
+[x] Criar o package.json
+[x] Instalar uma dependência
+[ ] Comparar manifesto e lockfile
+[ ] Criar scripts no package.json
+[ ] Restaurar o ambiente com npm ci
+2 de 5 concluídas</code></pre>
+                  <figcaption>Saída real · <a href="capturas/terminal/b4-npm-start-restaurado.txt">arquivo</a>. <strong>Compare</strong> com o slide 40: mesmo comportamento.</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s47-p4" aria-labelledby="s47-t4" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm pkg set dependencies.picocolors="1.0.1" &amp;&amp; npm ci</span>
+npm error code EUSAGE
+npm error
+<span class="erro">npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync.</span> Please update your lock file with `npm install` before continuing.
+npm error
+npm error Invalid: lock file's picocolors@1.1.1 does not satisfy picocolors@1.0.1
+…</code></pre>
+                  <figcaption>Saída real (truncada: em seguida o npm imprime a ajuda completa do comando) · <a href="capturas/terminal/b4-ci-incoerente.txt">arquivo</a>. O manifesto foi restaurado depois do registro.</figcaption>
+                </figure>
+              </div>
+            </figure>
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>12 min, individual</dd>
+                <dt>Pré-requisitos</dt><dd>Uma <strong>cópia</strong> da pasta de treino com <code>package-lock.json</code></dd>
+                <dt>Resultado esperado</dt><dd><code>npm start</code> volta a funcionar só com <code>npm ci</code></dd>
+              </dl>
+              <ol class="passos pequeno">
+                <li>Apague <code>node_modules</code> da cópia; rode <code>npm start</code> e leia o erro.</li>
+                <li><code>npm ci</code> e de novo <code>npm start</code>.</li>
+                <li>Feche o ciclo do slide 37: qual hipótese se confirmou?</li>
+              </ol>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Fundamento</h3>
+            <p>
+              <code>npm ci</code> (clean install) apaga <code>node_modules</code> e instala
+              exatamente o que está no lockfile; nunca altera <code>package.json</code> nem o
+              lockfile. Se os dois estiverem incoerentes, <strong>falha</strong> em vez de
+              “consertar”. <code>npm install</code> lê o manifesto, pode ajustar o lockfile e é o
+              comando para <em>mudar</em> dependências. Reinstalar ≠ atualizar.
+            </p>
+            <h3>Pergunta de compreensão</h3>
+            <p>Por que a mensagem manda usar <code>npm install</code>, e por que fazer isso “às cegas” pode esconder uma mudança indesejada?</p>
+            <h3>Limites</h3>
+            <p>Reproduz as versões, não o sistema: Node diferente ou dependência opcional por plataforma ainda podem mudar o resultado. Registre <code>node --version</code> junto.</p>
+            <h3>Referências</h3>
+            <ul class="referencias">
+              <li><a href="https://docs.npmjs.com/cli/commands/npm-ci/">npm ci</a></li>
+              <li><a href="https://docs.npmjs.com/cli/configuring-npm/package-lock-json">npm — package-lock.json</a></li>
+            </ul>
+          </aside>
+        </section>
+
+        <!-- 48 -->
+        <section class="slide" data-n="48" data-tipo="verificacao" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Verificação individual, sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Manifesto da pasta de treino (trecho)</span></div>
+                <pre><code>"scripts": {
+  "start": "node relatorio.js",
+  "dev": "nodemon relatorio.js",
+  "dev:nativo": "node --watch relatorio.js"
+},
+"type": "commonjs",
+"dependencies": { "picocolors": "^1.1.1" },
+"devDependencies": { "nodemon": "^3.1.14" }</code></pre>
+              </div>
+              <ol class="passos pequeno">
+                <li>Qual pacote o código usa ao executar? Qual é só ferramenta?</li>
+                <li>Que versões <code>^1.1.1</code> aceita? Qual está instalada, e onde isso está escrito?</li>
+                <li>Que comando restaura uma cópia sem <code>node_modules</code>?</li>
+              </ol>
+            </div>
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Variação</dt><dd>Crie o script <code>relatorio:nativo</code> para <code>relatorio-nativo.js</code>. Antes de executar, escreva o comando e a saída esperada.</dd>
+                  <dt>Evidência</dt><dd>Relatório impresso pelo novo script</dd>
+                </dl>
+              </div>
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ npm relatorio:nativo</span>
+<span class="erro">Unknown command: "relatorio:nativo"</span>
+
+To see a list of supported npm commands, run:
+  npm help</code></pre>
+                <figcaption>Saída real · <a href="capturas/terminal/b4-npm-sem-run.txt">arquivo</a> · explique por que faltou <code>run</code></figcaption>
+              </figure>
+              <details class="solucao">
+                <summary>Comparação opcional: npm × Yarn</summary>
+                <p>Mesmo <code>package.json</code>; lockfile próprio (<code>yarn.lock</code>); <code>yarn add</code> ≈ <code>npm install &lt;pacote&gt;</code>. Um gerenciador por projeto. Velocidade só com medição controlada.</p>
+              </details>
+            </div>
+          </div>
+          <aside class="notas">
+            <h3>Respostas esperadas</h3>
+            <p>
+              1) <code>picocolors</code> (dependencies) / <code>nodemon</code> (devDependencies).
+              2) ≥ 1.1.1 e &lt; 2.0.0; 1.1.1, registrado no lockfile. 3) <code>npm ci</code>.
+              Variação: <code>"relatorio:nativo": "node relatorio-nativo.js"</code> e
+              <code>npm run relatorio:nativo</code>; só <code>start</code>/<code>test</code> (e
+              alguns outros nomes de ciclo de vida) dispensam <code>run</code>.
+            </p>
+            <h3>Rubrica (0–2)</h3>
+            <p>Gestão de dependências: 2 = classifica os pacotes, explica faixa × resolução e restaura com evidência; 1 = executa com ajuda; 0 = não demonstrou.</p>
+            <h3>Correções dos exercícios</h3>
+            <p>
+              Teórico 2: retirar a afirmação IV (“npm serial, Yarn paralelo”) ou tratá-la como
+              discussão histórica de versões antigas; não prometer superioridade de velocidade.
+              Prático 5: o Yarn moderno não se instala como <code>npm install -g yarn</code> — veja
+              a <a href="https://yarnpkg.com/getting-started/install">instalação oficial</a>; deixe a
+              comparação prática para depois de consolidar o npm.
+            </p>
+            <h3>Ponto de retomada para o bloco 5</h3>
+            <p>Etapa <code>05-vue-inicial</code>: um projeto real com muito mais dependências — os mesmos arquivos e comandos.</p>
+          </aside>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

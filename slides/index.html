@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Módulo 2 · Slides</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+    <style>
+      body {
+        overflow: auto;
+      }
+
+      .indice {
+        max-width: 68rem;
+        margin: 0 auto;
+        padding: 2.5rem 1rem 3rem;
+        font-size: 17px;
+      }
+
+      .indice h1 {
+        margin: 0 0 0.3rem;
+        font-family: var(--fonte-titulo);
+        font-size: clamp(2rem, 1.4rem + 2.5vw, 3.2rem);
+        line-height: 1.1;
+      }
+
+      .indice h2 {
+        margin: 2.2rem 0 0.8rem;
+        font-family: var(--fonte-titulo);
+        font-size: 1.5rem;
+      }
+
+      .indice .lead {
+        max-width: 48rem;
+        font-size: 1.1rem;
+      }
+
+      .blocos {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .bloco-cartao {
+        display: grid;
+        gap: 0.5rem;
+        align-content: start;
+        padding: 1rem 1.1rem;
+        border: 1px solid var(--borda);
+        border-radius: 0.6rem;
+        background: var(--superficie);
+        box-shadow: var(--sombra);
+      }
+
+      .bloco-cartao h3 {
+        margin: 0;
+        font-size: 1.15rem;
+      }
+
+      .bloco-cartao a.abrir {
+        justify-self: start;
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.4rem;
+        background: var(--primaria);
+        color: var(--palco);
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .bloco-cartao a.abrir:hover {
+        background: var(--primaria-forte);
+      }
+
+      .bloco-num {
+        color: var(--texto-suave);
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .legenda-tipos {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        font-size: 24px;
+      }
+
+      .indice table {
+        font-size: 0.95rem;
+      }
+
+      .indice .caixa {
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="indice">
+      <p class="bloco-num">Módulo 2 · Ambientes de desenvolvimento e gerenciamento de dependências</p>
+      <h1>Todo List: do arquivo HTML ao projeto Vue</h1>
+      <p class="lead">
+        Cinco encontros de 100 minutos, 60 slides. Cada bloco alterna demonstração, previsão,
+        explicação, prática, consulta à IA e verificação individual, sempre sobre a mesma Todo
+        List.
+      </p>
+
+      <h2>Blocos</h2>
+      <ol class="blocos">
+        <li class="bloco-cartao">
+          <span class="bloco-num">Bloco 1 · slides 1–12</span>
+          <h3>Ambientes e primeiro contato</h3>
+          <p>Onde se edita, executa, observa e publica. Página estática da Todo List.</p>
+          <p class="pequeno suave">Etapa <code>01-pagina-estatica</code></p>
+          <a class="abrir" href="bloco-1.html">Abrir bloco 1</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Bloco 2 · slides 13–24</span>
+          <h3>Editor, navegador e erros</h3>
+          <p>Elements, Console, breakpoint e Network para localizar três defeitos controlados.</p>
+          <p class="pequeno suave">Etapa <code>02-erros-controlados</code></p>
+          <a class="abrir" href="bloco-2.html">Abrir bloco 2</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Bloco 3 · slides 25–36</span>
+          <h3>JavaScript no navegador e no Node</h3>
+          <p>Linguagem, engine e runtime; terminal, PATH, pasta atual e módulos.</p>
+          <p class="pequeno suave">Etapa <code>03-node-tarefas</code></p>
+          <a class="abrir" href="bloco-3.html">Abrir bloco 3</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Bloco 4 · slides 37–48</span>
+          <h3>Dependências e scripts</h3>
+          <p>Manifesto, lockfile, dependências diretas e transitivas, scripts e <code>npm ci</code>.</p>
+          <p class="pequeno suave">Etapa <code>04-dependencias-scripts</code></p>
+          <a class="abrir" href="bloco-4.html">Abrir bloco 4</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Bloco 5 · slides 49–60</span>
+          <h3>Ambiente Vue e desafios</h3>
+          <p>create-vue, Vite, estrutura do projeto, build, preview e diagnóstico.</p>
+          <p class="pequeno suave">Etapa <code>05-vue-inicial</code></p>
+          <a class="abrir" href="bloco-5.html">Abrir bloco 5</a>
+        </li>
+      </ol>
+
+      <h2>Como usar</h2>
+      <div class="grade-2" style="font-size: 1rem">
+        <table class="tabela">
+          <tbody>
+            <tr><td><kbd>→</kbd> <kbd>PageDown</kbd> <kbd>Espaço</kbd></td><td>Próximo slide (passa para o bloco seguinte no fim)</td></tr>
+            <tr><td><kbd>←</kbd> <kbd>PageUp</kbd></td><td>Slide anterior</td></tr>
+            <tr><td><kbd>N</kbd></td><td>Notas do professor: fundamento, perguntas, condução e referências</td></tr>
+            <tr><td><kbd>L</kbd></td><td>Modo leitura: todos os slides com notas (revisão, impressão, celular)</td></tr>
+            <tr><td><kbd>T</kbd></td><td>Tema escuro</td></tr>
+            <tr><td><kbd>?</kbd></td><td>Ajuda</td></tr>
+          </tbody>
+        </table>
+        <div class="pilha">
+          <p class="legenda-tipos" aria-label="Tipos de slide">
+            <span class="selo selo-demonstracao">Demonstração</span>
+            <span class="selo selo-previsao">Previsão</span>
+            <span class="selo selo-explicacao">Explicação</span>
+            <span class="selo selo-pratica">Prática</span>
+            <span class="selo selo-investigacao">Investigação</span>
+            <span class="selo selo-ia">Consulta à IA</span>
+            <span class="selo selo-verificacao">Verificação sem IA</span>
+            <span class="selo selo-integracao">Integração</span>
+          </p>
+          <p class="caixa">
+            Os slides funcionam offline, abertos direto do disco. Instalações de pacotes e o uso de
+            IA exigem internet. Nenhum slide executa Node, npm ou comandos do sistema: as saídas de
+            terminal mostradas são <strong>registros reais</strong> feitos em 21/10/2026 (macOS,
+            Node 24.19.0, npm 11.17.0), identificados na legenda.
+          </p>
+        </div>
+      </div>
+
+      <h2>Capturas</h2>
+      <p>
+        Telas de página e registros de Console, Network e breakpoint foram produzidos com o Chrome
+        155 em modo automatizado; saídas de terminal, com os comandos reais. Telas do VS Code e dos
+        painéis do DevTools não puderam ser capturadas neste ambiente: aparecem como
+        <strong>“Captura a produzir pelo professor”</strong>, com instruções, e são exibidas
+        automaticamente quando o arquivo é salvo em <code>capturas/telas/</code>. Lista completa em
+        <a href="capturas/LEIAME.md">capturas/LEIAME.md</a>.
+      </p>
+
+      <h2>Pacote</h2>
+      <ul>
+        <li><strong>Projeto de referência</strong> — demonstrado em aula pelo professor (visão geral do produto final)</li>
+        <li><a href="../etapas/README.md">etapas/</a> — construção guiada em 5 etapas numeradas (Blocos 1 a 5)</li>
+        <li><a href="../materiais/">materiais/</a> — roteiro de instalação, registro de investigação com IA, exercícios revisados e rubrica</li>
+        <li><a href="../README.md">README do pacote</a> — versões verificadas, decisões e pendências</li>
+      </ul>
+
+      <h2>Referências técnicas</h2>
+      <ul class="pequeno">
+        <li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works">MDN — How the web works</a> · <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview">Overview of HTTP</a> · <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction">Introduction to the DOM</a> · <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model">JavaScript execution model</a></li>
+        <li><a href="https://code.visualstudio.com/docs">VS Code</a> · <a href="https://eslint.org/docs/latest/">ESLint</a> · <a href="https://developer.chrome.com/docs/devtools">Chrome DevTools</a></li>
+        <li><a href="https://v8.dev/docs">V8</a> · <a href="https://nodejs.org/en/learn/getting-started/introduction-to-nodejs">Introduction to Node.js</a> · <a href="https://nodejs.org/en/learn/getting-started/differences-between-nodejs-and-the-browser">Node.js × navegador</a> · <a href="https://nodejs.org/api/modules.html">CommonJS</a> · <a href="https://nodejs.org/api/esm.html">ES Modules</a> · <a href="https://nodejs.org/api/packages.html">Packages</a> · <a href="https://nodejs.org/en/about/previous-releases">Ciclo de versões</a></li>
+        <li><a href="https://docs.npmjs.com/cli/configuring-npm/package-json">npm package.json</a> · <a href="https://docs.npmjs.com/cli/configuring-npm/package-lock-json">package-lock.json</a> · <a href="https://docs.npmjs.com/cli/using-npm/scripts">scripts</a> · <a href="https://docs.npmjs.com/cli/commands/npm-ci/">npm ci</a> · <a href="https://semver.org/">SemVer 2.0.0</a></li>
+        <li><a href="https://vuejs.org/guide/quick-start.html">Vue — Quick Start</a> · <a href="https://vuejs.org/guide/scaling-up/tooling.html">Tooling</a> · <a href="https://vite.dev/guide/">Vite — guia</a> · <a href="https://vite.dev/guide/build.html">build</a></li>
+      </ul>
+      <h2>Apoio pedagógico (preparação do professor)</h2>
+      <ul class="pequeno">
+        <li><a href="https://www.raspberrypi.org/blog/primm-talk-in-programming-lessons-research-seminar/">PRIMM — Predict, Run, Investigate, Modify, Make</a> (Sue Sentance e colaboradores; Raspberry Pi Foundation)</li>
+        <li><a href="https://www.cambridge.org/core/books/abs/cognitive-load-theory/learning-from-workedout-examples-and-problem-solving/DBA85CE81E9A7B1B090547D12E2F2A04">Learning from Worked-Out Examples and Problem Solving</a> (Cognitive Load Theory, Cambridge)</li>
+        <li><a href="https://www.cambridge.org/core/books/abs/cambridge-handbook-of-multimedia-learning/worked-examples-principle-in-multimedia-learning/8753055D1FB47CF1E2BB897FD44FBEF8">The Worked Examples Principle in Multimedia Learning</a> (Cambridge Handbook)</li>
+        <li><a href="https://www.nationalacademies.org/read/24783/chapter/7">How People Learn II</a> (National Academies, 2018)</li>
+      </ul>
+    </main>
+  </body>
+</html>

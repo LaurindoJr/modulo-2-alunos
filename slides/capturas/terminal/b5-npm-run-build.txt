@@ -1,0 +1,15 @@
+~/modulo-2/etapas/todo-list $ npm run build
+
+> todo-list@0.0.0 build
+> vite build
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 12 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                  0.43 kB │ gzip:  0.29 kB
+dist/assets/index-DPF0c5U5.css   0.57 kB │ gzip:  0.33 kB
+dist/assets/index-CsxmxGsD.js   62.04 kB │ gzip: 24.52 kB
+
+✓ built in 378ms
