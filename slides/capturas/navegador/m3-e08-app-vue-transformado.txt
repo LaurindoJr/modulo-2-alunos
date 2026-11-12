@@ -1,0 +1,17 @@
+# Registro real · 04/11/2026 · macOS · Vite 8.3.5 · Vue 3.5.44
+# Etapa 08-projeto-sfc com npm run dev · resposta a GET http://localhost:5480/src/App.vue (trechos; porta escolhida nesta captura — normalmente 5173)
+# Atributos data-v-inspector (do Vue DevTools) foram retirados para facilitar a leitura.
+
+HTTP/1.1 200 OK
+Content-Type: text/javascript
+
+// O <template> virou uma função JavaScript que desenha o DOM:
+function _sfc_render(_ctx, _cache) {
+  return (_openBlock(), _createElementBlock("main", _hoisted_1, [...(_cache[0] || (_cache[0] = [
+    _createStaticVNode("<h1 data-v-7a7a37b1>Minhas tarefas</h1><p class=\"resumo\" data-v-7a7a37b1>Lista ainda escrita no template: 4 tarefas · 2 concluídas</p><ul class=\"lista\" data-v-7a7a37b1><li class=\"concluida\" data-v-7a7a37b1>Criar o projeto com npm create vue@latest</li><li class=\"concluida\" data-v-7a7a37b1>Seguir o caminho index.html → main.js → App.vue</li><li data-v-7a7a37b1>Reconhecer os três blocos de um arquivo .vue</li><li data-v-7a7a37b1>Achar o atributo data-v-… do estilo scoped no Elements</li></ul>", 3)
+  ]))]))
+}
+
+
+// O <style scoped> virou um id único, aplicado como atributo nos elementos:
+export default /*#__PURE__*/_export_sfc(_sfc_main, [['render',_sfc_render],['__scopeId',"data-v-7a7a37b1"],['__file',"~/modulo-2/etapas/08-projeto-sfc/src/App.vue"]])

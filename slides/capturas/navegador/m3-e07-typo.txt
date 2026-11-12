@@ -1,0 +1,8 @@
+# Registro real · 04/11/2026 · macOS · Node 24.19.0 · Vue 3.5.44 · Vite 8.3.5 · Chromium (Chrome for Testing) automatizado
+# Etapa 07-vue-na-pagina — defeito provocado de propósito: index.html: {{ contarConcluidas() }} trocado por {{ contarConcluida() }} (arquivo aberto via file://)
+# Mensagens do Console (sem as mensagens do websocket do Vite):
+
+[Vue warn]: Property "contarConcluida" was accessed during render but is not defined on instance. 
+  at <App>
+[Vue warn]: Unhandled error during execution of render function 
+  at <App>

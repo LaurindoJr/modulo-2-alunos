@@ -1,0 +1,9 @@
+# Registro real · 04/11/2026 · macOS · Node 24.19.0 · Vue 3.5.44 · Vite 8.3.5 · Chromium (Chrome for Testing) automatizado
+# Etapa 10-listas-eventos — defeito provocado de propósito: src/App.vue: v-if="!tarefa.concluida" no mesmo <li> do v-for
+# Mensagens do Console (sem as mensagens do websocket do Vite):
+
+[Vue warn]: Property "tarefa" was accessed during render but is not defined on instance. 
+  at <App>
+[Vue warn]: Unhandled error during execution of render function 
+  at <App>
+Uncaught TypeError: Cannot read properties of undefined (reading 'concluida')

@@ -1,0 +1,5 @@
+~/modulo-2/etapas/04-dependencias-scripts $ npm relatorio:nativo
+Unknown command: "relatorio:nativo"
+
+To see a list of supported npm commands, run:
+  npm help

@@ -1,0 +1,12 @@
+~/modulo-2/etapas/todo-list $ npm run lint
+
+> todo-list@0.0.0 lint
+> run-s "lint:*"
+
+
+> todo-list@0.0.0 lint:oxlint
+> oxlint . --fix
+
+
+> todo-list@0.0.0 lint:eslint
+> eslint . --fix --cache

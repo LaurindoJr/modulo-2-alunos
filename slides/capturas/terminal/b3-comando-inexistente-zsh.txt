@@ -1,0 +1,2 @@
+~/modulo-2/etapas/03-node-tarefas $ nodee tarefas.js
+zsh:1: command not found: nodee

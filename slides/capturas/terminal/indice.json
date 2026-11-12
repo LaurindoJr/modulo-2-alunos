@@ -1,0 +1,318 @@
+{
+  "b2-porta-ocupada": {
+    "codigo_saida": 1,
+    "comando": "node ../ferramentas/servidor-local.mjs",
+    "pasta": "~/modulo-2/etapas/02-erros-controlados",
+    "registrado_em": "2026-10-21T16:51:24-03:00"
+  },
+  "b3-ambiente": {
+    "codigo_saida": 0,
+    "comando": "node ambiente.js",
+    "pasta": "~/modulo-2/etapas/03-node-tarefas",
+    "registrado_em": "2026-10-21T16:04:46-03:00"
+  },
+  "b3-comando-inexistente": {
+    "codigo_saida": 127,
+    "comando": "nodee tarefas.js",
+    "pasta": "~/modulo-2/etapas/03-node-tarefas",
+    "registrado_em": "2026-10-21T16:04:46-03:00"
+  },
+  "b3-comando-inexistente-zsh": {
+    "codigo_saida": 127,
+    "comando": "nodee tarefas.js",
+    "pasta": "~/modulo-2/etapas/03-node-tarefas",
+    "registrado_em": "2026-10-21T16:04:57-03:00"
+  },
+  "b3-commonjs": {
+    "codigo_saida": 0,
+    "comando": "node resumo.cjs",
+    "pasta": "~/modulo-2/etapas/03-node-tarefas/modulos/commonjs",
+    "registrado_em": "2026-10-21T16:04:46-03:00"
+  },
+  "b3-document": {
+    "codigo_saida": 1,
+    "comando": "node titulo-da-pagina.js",
+    "pasta": "~/modulo-2/etapas/03-node-tarefas",
+    "registrado_em": "2026-10-21T16:04:46-03:00"
+  },
+  "b3-esm": {
+    "codigo_saida": 0,
+    "comando": "node resumo.mjs",
+    "pasta": "~/modulo-2/etapas/03-node-tarefas/modulos/esm",
+    "registrado_em": "2026-10-21T16:04:46-03:00"
+  },
+  "b3-incoerente": {
+    "codigo_saida": 1,
+    "comando": "node resumo.cjs",
+    "pasta": "~/modulo-2/etapas/03-node-tarefas/modulos/incoerente",
+    "registrado_em": "2026-10-21T16:04:46-03:00"
+  },
+  "b3-pasta-errada": {
+    "codigo_saida": 1,
+    "comando": "node tarefas.js",
+    "pasta": "~/modulo-2/etapas",
+    "registrado_em": "2026-10-21T16:04:46-03:00"
+  },
+  "b3-tarefas": {
+    "codigo_saida": 0,
+    "comando": "node tarefas.js",
+    "pasta": "~/modulo-2/etapas/03-node-tarefas",
+    "registrado_em": "2026-10-21T16:04:46-03:00"
+  },
+  "b3-versoes": {
+    "codigo_saida": 0,
+    "comando": "node --version && npm --version",
+    "pasta": "~/modulo-2/etapas/03-node-tarefas",
+    "registrado_em": "2026-10-21T16:04:46-03:00"
+  },
+  "b3-which-node": {
+    "codigo_saida": 0,
+    "comando": "command -v node && echo $PATH | tr ':' '\\n' | grep -n node",
+    "pasta": "~/modulo-2/etapas/03-node-tarefas",
+    "registrado_em": "2026-10-21T16:04:47-03:00"
+  },
+  "b4-antes-de-instalar": {
+    "codigo_saida": 1,
+    "comando": "node relatorio.js",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:05:54-03:00"
+  },
+  "b4-audit": {
+    "codigo_saida": 1,
+    "comando": "npm audit",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:06:09-03:00"
+  },
+  "b4-ci-incoerente": {
+    "codigo_saida": 1,
+    "comando": "npm pkg set dependencies.picocolors=\"1.0.1\" && npm ci",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:09:40-03:00"
+  },
+  "b4-contagem-node-modules": {
+    "codigo_saida": 0,
+    "comando": "ls node_modules | wc -l",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:06:07-03:00"
+  },
+  "b4-descartavel-instalar": {
+    "codigo_saida": 0,
+    "comando": "npm install dayjs && npm pkg get dependencies",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:09:25-03:00"
+  },
+  "b4-descartavel-remover": {
+    "codigo_saida": 0,
+    "comando": "npm uninstall dayjs && npm pkg get dependencies",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:09:26-03:00"
+  },
+  "b4-exata": {
+    "codigo_saida": 0,
+    "comando": "npm view picocolors version && npm ls picocolors",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:09:26-03:00"
+  },
+  "b4-explain-chokidar": {
+    "codigo_saida": 0,
+    "comando": "npm explain chokidar",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:06:07-03:00"
+  },
+  "b4-install-nodemon": {
+    "codigo_saida": 0,
+    "comando": "npm install --save-dev nodemon",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:06:07-03:00"
+  },
+  "b4-install-picocolors": {
+    "codigo_saida": 0,
+    "comando": "npm install picocolors",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:05:55-03:00"
+  },
+  "b4-lock-picocolors": {
+    "codigo_saida": 0,
+    "comando": "grep -A 6 '\"node_modules/picocolors\"' package-lock.json",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:05:55-03:00"
+  },
+  "b4-ls-apos": {
+    "codigo_saida": 0,
+    "comando": "ls && ls node_modules",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:05:55-03:00"
+  },
+  "b4-ls-depth0": {
+    "codigo_saida": 0,
+    "comando": "npm ls --depth=0",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:06:25-03:00"
+  },
+  "b4-ls-inicial": {
+    "codigo_saida": 0,
+    "comando": "ls",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:05:34-03:00"
+  },
+  "b4-manifesto-apos": {
+    "codigo_saida": 0,
+    "comando": "cat package.json",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:05:55-03:00"
+  },
+  "b4-manifesto-final": {
+    "codigo_saida": 0,
+    "comando": "cat package.json",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:09:22-03:00"
+  },
+  "b4-npm-ci": {
+    "codigo_saida": 0,
+    "comando": "npm ci",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:09:24-03:00"
+  },
+  "b4-npm-init": {
+    "codigo_saida": 0,
+    "comando": "npm init -y",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:05:34-03:00"
+  },
+  "b4-npm-run-dev": {
+    "codigo_saida": 0,
+    "comando": "npm run dev",
+    "nota": "Registro automatizado: relatorio.js foi salvo por outro processo 3 s apos o inicio e a execucao foi interrompida apos 7 s (equivalente a Ctrl+C). A linha de comando auxiliar e o aviso do sinal foram removidos; o restante e a saida real.",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:08:33-03:00"
+  },
+  "b4-npm-run-dev-nativo": {
+    "codigo_saida": 0,
+    "comando": "npm run dev:nativo",
+    "nota": "Registro automatizado: relatorio.js foi salvo por outro processo 3 s apos o inicio e a execucao foi interrompida apos 7 s (equivalente a Ctrl+C). A linha de comando auxiliar e o aviso do sinal foram removidos; o restante e a saida real.",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:08:56-03:00"
+  },
+  "b4-npm-run-lista": {
+    "codigo_saida": 0,
+    "comando": "npm run",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:06:08-03:00"
+  },
+  "b4-npm-sem-run": {
+    "codigo_saida": 1,
+    "comando": "npm relatorio:nativo",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:39:04-03:00"
+  },
+  "b4-npm-start": {
+    "codigo_saida": 0,
+    "comando": "npm start",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:06:08-03:00"
+  },
+  "b4-npm-start-restaurado": {
+    "codigo_saida": 0,
+    "comando": "npm start",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:09:24-03:00"
+  },
+  "b4-pkg-set": {
+    "codigo_saida": 0,
+    "comando": "npm pkg set scripts.start=\"node relatorio.js\" scripts.dev=\"nodemon relatorio.js\" scripts.dev:nativo=\"node --watch relatorio.js\" && npm pkg delete scripts.test && npm pkg get scripts",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:06:08-03:00"
+  },
+  "b4-relatorio": {
+    "codigo_saida": 0,
+    "comando": "node relatorio.js",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:05:55-03:00"
+  },
+  "b4-relatorio-nativo": {
+    "codigo_saida": 0,
+    "comando": "node relatorio-nativo.js",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:05:55-03:00"
+  },
+  "b4-remover-node-modules": {
+    "codigo_saida": 1,
+    "comando": "rm -rf node_modules && npm start",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:09:23-03:00"
+  },
+  "b4-script-inexistente": {
+    "codigo_saida": 1,
+    "comando": "npm run inicio",
+    "pasta": "~/modulo-2/etapas/04-dependencias-scripts",
+    "registrado_em": "2026-10-21T16:06:08-03:00"
+  },
+  "b5-dist": {
+    "codigo_saida": 0,
+    "comando": "find dist -type f | sort && head -c 600 dist/index.html",
+    "pasta": "~/modulo-2/etapas/todo-list",
+    "registrado_em": "2026-10-21T16:20:38-03:00"
+  },
+  "b5-dist-sem-servidor": {
+    "codigo_saida": 0,
+    "comando": "grep -o 'src=\"[^\"]*\"' dist/index.html",
+    "pasta": "~/modulo-2/etapas/todo-list",
+    "registrado_em": "2026-10-21T16:20:38-03:00"
+  },
+  "b5-estrutura": {
+    "codigo_saida": 0,
+    "comando": "find . -type f -not -path './node_modules/*' | sort",
+    "pasta": "~/modulo-2/etapas/todo-list",
+    "registrado_em": "2026-10-21T16:17:00-03:00"
+  },
+  "b5-npm-install": {
+    "codigo_saida": 0,
+    "comando": "npm install",
+    "pasta": "~/modulo-2/etapas/todo-list",
+    "registrado_em": "2026-10-21T16:17:13-03:00"
+  },
+  "b5-npm-run-build": {
+    "codigo_saida": 0,
+    "comando": "npm run build",
+    "pasta": "~/modulo-2/etapas/todo-list",
+    "registrado_em": "2026-10-21T16:20:38-03:00"
+  },
+  "b5-npm-run-dev": {
+    "codigo_saida": 0,
+    "comando": "npm run dev",
+    "nota": "Registro automatizado interrompido apos 6 s (equivalente a Ctrl+C). A porta 5173 estava ocupada por outro projeto na maquina de registro; por isso o Vite usou 5174.",
+    "pasta": "~/modulo-2/etapas/todo-list",
+    "registrado_em": "2026-10-21T16:17:35-03:00"
+  },
+  "b5-npm-run-lint": {
+    "codigo_saida": 0,
+    "comando": "npm run lint",
+    "pasta": "~/modulo-2/etapas/todo-list",
+    "registrado_em": "2026-10-21T16:20:37-03:00"
+  },
+  "b5-npm-run-preview": {
+    "codigo_saida": 0,
+    "comando": "npm run preview",
+    "nota": "Registro automatizado interrompido apos 5 s (equivalente a Ctrl+C).",
+    "pasta": "~/modulo-2/etapas/todo-list",
+    "registrado_em": "2026-10-21T16:20:56-03:00"
+  },
+  "b5-pasta-errada": {
+    "codigo_saida": 254,
+    "comando": "npm run dev",
+    "pasta": "~/modulo-2/etapas",
+    "registrado_em": "2026-10-21T16:17:00-03:00"
+  },
+  "b5-script-serve": {
+    "codigo_saida": 1,
+    "comando": "npm run serve",
+    "pasta": "~/modulo-2/etapas/todo-list",
+    "registrado_em": "2026-10-21T16:17:13-03:00"
+  },
+  "b5-scripts-gerados": {
+    "codigo_saida": 0,
+    "comando": "npm pkg get scripts",
+    "pasta": "~/modulo-2/etapas/todo-list",
+    "registrado_em": "2026-10-21T16:17:00-03:00"
+  }
+}

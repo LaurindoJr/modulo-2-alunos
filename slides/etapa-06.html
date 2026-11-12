@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 06 · Três camadas e DOM</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="6">
+    <div class="janela">
+      <main class="palco" aria-label="Módulo 3, etapa 06: a web em três camadas e o DOM">
+        <!-- 61 -->
+        <section class="slide" data-n="61" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Módulo 3: da página em JavaScript puro ao Vue, parte por parte</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">
+                Nove etapas de 40 minutos com a mesma Todo List. Em cada uma: o que o dev frontend
+                precisa <strong>conhecer</strong>, <strong>executar</strong>,
+                <strong>entender</strong> e <strong>pesquisar</strong>.
+              </p>
+              <table class="tabela">
+                <thead><tr><th>Hoje (etapa 06)</th><th>Evidência de conclusão</th></tr></thead>
+                <tbody>
+                  <tr><td>De onde vêm HTML, CSS e JS</td><td>As três requisições no Network</td></tr>
+                  <tr><td>Desenhar a lista a partir de dados</td><td>Ação nova que muda o estado e chama <code>render()</code></td></tr>
+                  <tr><td>Por que estado e tela se desencontram</td><td>O defeito de sincronia explicado com o Console</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pilha">
+              <div class="pergunta">
+                <strong>Previsão (sem IA)</strong>
+                Para abrir a Todo List, quantas requisições o navegador faz? E quem desenha a
+                lista: o HTML ou o JavaScript?
+              </div>
+              <p class="caixa pequeno">
+                Pasta da etapa: <code>etapas/06-dom-imperativo</code>. Revisão compacta das Aulas 1
+                e 2 — o foco do módulo é o Vue, a partir da etapa 07.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 62 -->
+        <section class="slide" data-n="62" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Cliente, servidor e as três camadas da página</h2>
+          </header>
+          <div class="slide-corpo pilha">
+            <figure class="diagrama">
+              <svg viewBox="0 0 1400 260" role="img" aria-labelledby="d62-t d62-d">
+                <title id="d62-t">Navegador e servidor trocando requisições e respostas</title>
+                <desc id="d62-d">O navegador envia requests ao servidor, que responde com index.html, estilos.css e app.js. O navegador executa os três arquivos.</desc>
+                <rect class="no-destaque" x="20" y="20" width="460" height="220" rx="16" />
+                <text x="250" y="70" text-anchor="middle" font-weight="700">Navegador (cliente)</text>
+                <text x="250" y="105" text-anchor="middle" class="texto-suave">executa o frontend</text>
+                <rect class="no" x="45" y="130" width="130" height="80" rx="10" />
+                <text x="110" y="165" text-anchor="middle" font-weight="700">HTML</text>
+                <text x="110" y="192" text-anchor="middle" class="texto-suave">estrutura</text>
+                <rect class="no" x="185" y="130" width="130" height="80" rx="10" />
+                <text x="250" y="165" text-anchor="middle" font-weight="700">CSS</text>
+                <text x="250" y="192" text-anchor="middle" class="texto-suave">apresentação</text>
+                <rect class="no" x="325" y="130" width="130" height="80" rx="10" />
+                <text x="390" y="165" text-anchor="middle" font-weight="700">JS</text>
+                <text x="390" y="192" text-anchor="middle" class="texto-suave">comportamento</text>
+                <rect class="no" x="920" y="20" width="460" height="220" rx="16" />
+                <text x="1150" y="70" text-anchor="middle" font-weight="700">Servidor</text>
+                <text x="1150" y="105" text-anchor="middle" class="texto-suave">entrega arquivos (servidor local, Vite)</text>
+                <text x="1150" y="160" text-anchor="middle" class="texto-suave">no projeto completo, o backend</text>
+                <text x="1150" y="188" text-anchor="middle" class="texto-suave">json-server responde GET /tarefas</text>
+                <path class="seta-destaque" d="M490 100 H905" />
+                <polygon class="ponta-destaque" points="910,100 892,90 892,110" />
+                <text x="700" y="85" text-anchor="middle">request · GET /estilos.css</text>
+                <path class="seta" d="M910 170 H495" />
+                <polygon class="ponta" points="490,170 508,160 508,180" />
+                <text x="700" y="205" text-anchor="middle">response · 200 + o arquivo</text>
+              </svg>
+            </figure>
+            <div class="grade-3">
+              <div class="caixa pequeno"><h3>Estrutura · HTML</h3><p>O que existe: título, formulário e uma <code>&lt;ul&gt;</code> vazia.</p></div>
+              <div class="caixa pequeno"><h3>Apresentação · CSS</h3><p>Como aparece: cores e Flexbox (container organiza os itens).</p></div>
+              <div class="caixa pequeno"><h3>Comportamento · JS</h3><p>O que acontece: estado, eventos e <code>render()</code>.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 63 -->
+        <section class="slide" data-n="63" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Três pedidos, três respostas — e uma lista que o HTML não tinha</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 06">
+                <button role="tab" id="s63-t1" aria-controls="s63-p1" aria-selected="true">1 · Network</button>
+                <button role="tab" id="s63-t2" aria-controls="s63-p2" aria-selected="false">2 · Página</button>
+                <button role="tab" id="s63-t3" aria-controls="s63-p3" aria-selected="false">3 · Arquivo × DOM</button>
+              </div>
+              <div role="tabpanel" id="s63-p1" aria-labelledby="s63-t1">
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code>Requisição                          Status  Tipo
+http://localhost:8088/              200     document
+http://localhost:8088/estilos.css   200     stylesheet
+http://localhost:8088/app.js        200     script</code></pre>
+                  <figcaption>Registro real · etapa 06 com o servidor local · Chromium automatizado · 04/11/2026 · <a href="capturas/navegador/m3-e06-network.txt">arquivo</a></figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s63-p2" aria-labelledby="s63-t2" hidden>
+                <img src="capturas/telas/m3-e06-inicial.png" alt="Todo List da etapa 06: título, resumo 3 tarefas e 1 concluída, formulário e três tarefas com botão Remover" class="recorte" />
+                <p class="legenda">Tela real da etapa 06. <strong>Compare:</strong> resumo e três tarefas.</p>
+              </div>
+              <div role="tabpanel" id="s63-p3" aria-labelledby="s63-t3" hidden>
+                <div class="grade-2">
+                  <div class="bloco-codigo">
+                    <div class="bloco-codigo-topo"><span>index.html (arquivo)</span></div>
+                    <pre><code>&lt;ul id="lista" class="lista"&gt;&lt;/ul&gt;</code></pre>
+                  </div>
+                  <div class="bloco-codigo">
+                    <div class="bloco-codigo-topo"><span>Elements (DOM)</span></div>
+                    <pre><code>&lt;ul id="lista" class="lista"&gt;
+  &lt;li class="tarefa concluida"&gt;…&lt;/li&gt;
+  &lt;li class="tarefa"&gt;…&lt;/li&gt;
+  &lt;li class="tarefa"&gt;…&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+                  </div>
+                </div>
+              </div>
+            </figure>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Terminal · dentro de etapas/06-dom-imperativo</span><button type="button" class="copiar">Copiar</button></div>
+                <pre><code>node ../ferramentas/servidor-local.mjs</code></pre>
+              </div>
+              <p class="pergunta pequeno"><strong>Observe</strong>A <code>&lt;ul&gt;</code> do arquivo está vazia. Quem colocou os três <code>&lt;li&gt;</code> que o Elements mostra?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 64 -->
+        <section class="slide" data-n="64" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: toda ação muda o estado e chama <code>render()</code></h2>
+          </header>
+          <div class="slide-corpo pilha">
+            <div class="grade-2">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>app.js (trechos)</span></div>
+                <pre><code>function render() {
+  lista.replaceChildren(...tarefas.map(criarItem))
+  const concluidas = tarefas.filter((t) =&gt; t.concluida).length
+  resumo.textContent = `${tarefas.length} tarefas · ${concluidas} concluídas`
+}
+
+function remover(id) {
+  tarefas = tarefas.filter((t) =&gt; t.id !== id) // novo array
+  render()                                      // tela = cópia do estado
+}</code></pre>
+              </div>
+              <div class="pilha">
+                <div class="atividade">
+                  <dl>
+                    <dt>Tarefa</dt><dd>Botão “Concluir todas”: um novo array com <code>map</code> e, em seguida, <code>render()</code>.</dd>
+                    <dt>Flexbox</dt><dd>Em <code>.tarefa</code>, troque <code>justify-content</code> e explique o efeito no botão.</dd>
+                    <dt>Evidência</dt><dd>Todas riscadas e o resumo certo, sem recarregar.</dd>
+                  </dl>
+                </div>
+                <details class="dica"><summary>Dica</summary><p>Um <code>&lt;button id="concluir-todas"&gt;</code> e <code>addEventListener('click', …)</code>.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>document.querySelector('#concluir-todas').addEventListener('click', () =&gt; {
+  tarefas = tarefas.map((t) =&gt; ({ ...t, concluida: true })); render()
+})</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 65 -->
+        <section class="slide" data-n="65" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Quem garante que a tela mostra o estado? Você, em cada ação</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="diagrama">
+              <svg viewBox="0 0 1000 300" role="img" aria-labelledby="d65-t d65-d">
+                <title id="d65-t">Ciclo imperativo da etapa 06</title>
+                <desc id="d65-d">Uma ação muda o estado; o programador precisa chamar render, que redesenha a tela; a tela gera novas ações.</desc>
+                <rect class="no" x="20" y="110" width="200" height="80" rx="12" />
+                <text x="120" y="158" text-anchor="middle" font-weight="700">ação</text>
+                <rect class="no-destaque" x="290" y="110" width="200" height="80" rx="12" />
+                <text x="390" y="148" text-anchor="middle" font-weight="700">estado</text>
+                <text x="390" y="176" text-anchor="middle" class="texto-suave">array tarefas</text>
+                <rect class="no" x="560" y="110" width="200" height="80" rx="12" />
+                <text x="660" y="148" text-anchor="middle" font-weight="700">render()</text>
+                <text x="660" y="176" text-anchor="middle" class="texto-suave">você chama</text>
+                <rect class="no" x="830" y="110" width="150" height="80" rx="12" />
+                <text x="905" y="158" text-anchor="middle" font-weight="700">tela</text>
+                <path class="seta" d="M220 150 H282" /><polygon class="ponta" points="288,150 272,141 272,159" />
+                <path class="seta-destaque" d="M490 150 H552" /><polygon class="ponta-destaque" points="558,150 542,141 542,159" />
+                <path class="seta" d="M760 150 H822" /><polygon class="ponta" points="828,150 812,141 812,159" />
+                <path class="seta" d="M905 110 C905 30, 120 30, 120 102" /><polygon class="ponta" points="120,108 111,92 129,92" />
+                <text x="512" y="44" text-anchor="middle" class="texto-suave">clique, envio do formulário…</text>
+                <text x="520" y="250" text-anchor="middle">esqueceu de chamar render() → a tela mostra um estado antigo</text>
+              </svg>
+            </figure>
+            <div class="pilha">
+              <p class="caixa caixa-destaque pequeno"><strong>Modelo:</strong> a tela é uma <em>consequência</em> do estado. No JavaScript puro, essa consequência depende de você lembrar.</p>
+              <div class="caixa pequeno">
+                <h3>Custo escondido</h3>
+                <p><code>render()</code> recria todos os <code>&lt;li&gt;</code>. Marque uma caixa pelo teclado (<kbd>Tab</kbd>, <kbd>Espaço</kbd>): o foco vai para o <code>&lt;body&gt;</code>, porque o elemento focado foi substituído.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 66 -->
+        <section class="slide" data-n="66" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: depois de remover, o resumo mente</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <figure class="captura">
+              <img src="capturas/telas/m3-e06-sincronia.png" alt="Página de investigação: resumo diz 3 tarefas e 1 concluída, mas só há duas tarefas na lista" class="recorte" />
+              <figcaption><strong>Tela real</strong> de <code>investigacao-sincronia/</code> após remover a 1ª tarefa: resumo “3 tarefas”, lista com 2.</figcaption>
+            </figure>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Console (DevTools) · evidência</span><button type="button" class="copiar">Copiar</button></div>
+                <pre><code>tarefas.length
+document.querySelector('#resumo').textContent</code></pre>
+              </div>
+              <ol class="passos pequeno">
+                <li>Hipótese: qual ação esquece um pedaço da tela?</li>
+                <li>Evidência: estado (2) × resumo (3) no Console.</li>
+                <li>Correção: a menor mudança possível.</li>
+              </ol>
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>Compare <code>adicionar</code>, <code>alternar</code> e <code>remover</code>: qual não chama <code>atualizarResumo()</code>?</p></details>
+                <details class="solucao"><summary>Mostrar solução (após a tentativa)</summary><p><code>remover</code> faz <code>item.remove()</code> mas não chama <code>atualizarResumo()</code>. A correção pontual é chamá-la; a correção de desenho é ter <strong>um</strong> <code>render()</code>, como na versão principal.</p></details>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 67 -->
+        <section class="slide" data-n="67" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: a documentação primeiro, a IA com verificação</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="prompt-ia">
+              <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+              <p class="prompt-texto">
+                Nesta Todo List em JavaScript puro, o resumo fica desatualizado depois de remover
+                uma tarefa. Estas são as funções: <mark>[cole remover() e atualizarResumo()]</mark>.
+                Responda com: (1) a causa em uma frase; (2) a evidência que devo procurar no
+                Console; (3) a menor correção. Não reescreva o arquivo nem sugira um framework.
+              </p>
+            </div>
+            <div class="pilha">
+              <div class="caixa pequeno">
+                <h3>Onde procurar</h3>
+                <ul>
+                  <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction">MDN — Introduction to the DOM</a></li>
+                  <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent">MDN — textContent</a></li>
+                </ul>
+              </div>
+              <p class="caixa caixa-destaque pequeno"><strong>Rejeite</strong> sugestões com <code>innerHTML</code> para texto digitado pelo usuário: o título passaria a ser interpretado como HTML.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 68 -->
+        <section class="slide" data-n="68" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="atividade">
+              <dl>
+                <dt>1</dt><dd>Qual das três requisições traz o comportamento da página?</dd>
+                <dt>2</dt><dd>Em <code>.tarefa { display: flex }</code>, quem é o container e quem são os itens?</dd>
+                <dt>3</dt><dd>Uma função muda <code>tarefas</code> e não chama <code>render()</code>. O que o usuário vê?</dd>
+              </dl>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+# Registro real · 04/11/2026 · macOS · Node 24.19.0 · Vue 3.5.44 · Vite 8.3.5 · ESLint 10 + eslint-plugin-vue (configuração gerada pelo create-vue)
+# Etapa 10-listas-eventos — defeito provocado de propósito: v-if="!tarefa.concluida" no mesmo <li> do v-for
+
+$ npx eslint src
+
+~/modulo-2/etapas/10-listas-eventos/src/App.vue
+  53:9  error  The 'tarefas' variable inside 'v-for' directive should be replaced with a computed property that returns filtered array instead. You should not mix 'v-for' with 'v-if'  vue/no-use-v-if-with-v-for
+
+✖ 1 problem (1 error, 0 warnings)
+
+(código de saída: 1)

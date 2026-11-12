@@ -1,0 +1,6 @@
+~/modulo-2/etapas/01-pagina-estatica $ PORTA=8089 node ../ferramentas/servidor-local.mjs
+Servindo ~/modulo-2/etapas/01-pagina-estatica
+Abra http://localhost:8089/ no navegador. Ctrl+C encerra o servidor.
+200 GET /
+200 GET /app.js
+200 GET /estilos.css

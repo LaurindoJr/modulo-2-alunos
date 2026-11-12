@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 10 · Listas e eventos</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="10">
+    <div class="janela">
+      <main class="palco" aria-label="Módulo 3, etapa 10: listas, condicionais, classes e eventos">
+        <!-- 93 -->
+        <section class="slide" data-n="93" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Desafio: a lista vira dados</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">Os quatro <code>&lt;li&gt;</code> repetidos da etapa 09 viram um <strong>array de objetos</strong>. O template desenha, decide o que aparece e reage a cliques.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Desenhar a partir do array</td><td>Um <code>&lt;li&gt;</code> por tarefa, <code>:key</code> com o id</td></tr>
+                  <tr><td>Concluir e remover</td><td>Eventos com argumento: <code>remover(tarefa.id)</code></td></tr>
+                  <tr><td>Distinguir <code>v-if</code> e <code>v-show</code></td><td>No Elements: elemento ausente × <code>display: none</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              Se você remover as quatro tarefas, o que deve aparecer no lugar da lista? O
+              <code>&lt;ul&gt;</code> continua existindo no DOM?
+            </div>
+          </div>
+        </section>
+
+        <!-- 94 -->
+        <section class="slide" data-n="94" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Diretivas: repetir, decidir, ligar classes e ouvir eventos</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <table class="tabela">
+              <thead><tr><th>Diretiva</th><th>O que faz</th><th>Na Todo List</th></tr></thead>
+              <tbody>
+                <tr><td><code>v-for</code> + <code>:key</code></td><td>Repete o elemento para cada item</td><td><code>v-for="tarefa in tarefas" :key="tarefa.id"</code></td></tr>
+                <tr><td><code>v-if</code> / <code>v-else</code></td><td>Cria <strong>ou</strong> destrói o elemento</td><td>Lista ou “Nenhuma tarefa”</td></tr>
+                <tr><td><code>v-show</code></td><td>Mostra ou esconde (<code>display: none</code>)</td><td>Dica que some com “Entendi”</td></tr>
+                <tr><td><code>:class</code></td><td>Liga classes ao estado</td><td><code>{ concluida: tarefa.concluida }</code></td></tr>
+                <tr><td><code>@evento="f(arg)"</code></td><td>Chama com argumento</td><td><code>@click="remover(tarefa.id)"</code></td></tr>
+                <tr><td>Modificadores</td><td>Ajustam o evento</td><td><code>.prevent</code>, <code>.enter</code>, <code>.once</code></td></tr>
+              </tbody>
+            </table>
+            <div class="bloco-codigo">
+              <div class="bloco-codigo-topo"><span>Estado</span></div>
+              <pre><code>const tarefas = ref([
+  { id: 1, titulo: '…', concluida: true },
+  { id: 2, titulo: '…', concluida: true },
+  { id: 3, titulo: '…', concluida: false },
+  { id: 4, titulo: '…', concluida: false },
+])
+
+function remover(id) {
+  tarefas.value = tarefas.value
+    .filter((t) =&gt; t.id !== id)
+}</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 95 -->
+        <section class="slide" data-n="95" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Do array à tela — e de volta ao estado vazio</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 10">
+                <button role="tab" id="s95-t1" aria-controls="s95-p1" aria-selected="true">1 · Template</button>
+                <button role="tab" id="s95-t2" aria-controls="s95-p2" aria-selected="false">2 · Lista</button>
+                <button role="tab" id="s95-t3" aria-controls="s95-p3" aria-selected="false">3 · Tudo removido</button>
+              </div>
+              <div role="tabpanel" id="s95-p1" aria-labelledby="s95-t1">
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>App.vue · &lt;template&gt; (trecho)</span></div>
+                  <pre><code>&lt;ul v-if="tarefas.length &gt; 0" class="lista"&gt;
+  &lt;li v-for="tarefa in tarefas" :key="tarefa.id"
+      class="tarefa" :class="{ concluida: tarefa.concluida }"&gt;
+    &lt;label&gt;
+      &lt;input type="checkbox" :checked="tarefa.concluida"
+             @change="alternar(tarefa.id)" /&gt;
+      &lt;span&gt;{{ tarefa.titulo }}&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;button @click="remover(tarefa.id)"&gt;Remover&lt;/button&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p v-else class="vazio"&gt;Nenhuma tarefa na lista. …&lt;/p&gt;</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s95-p2" aria-labelledby="s95-t2" hidden>
+                <img src="capturas/telas/m3-e10-lista.png" alt="Etapa 10: resumo, dica com botão Entendi e quatro tarefas, duas concluídas" class="recorte" />
+                <p class="legenda">Tela real inicial: dica (<code>v-show</code>) e quatro itens (<code>v-for</code>).</p>
+              </div>
+              <div role="tabpanel" id="s95-p3" aria-labelledby="s95-t3" hidden>
+                <img src="capturas/telas/m3-e10-vazio.png" alt="Etapa 10 após remover tudo: Nenhuma tarefa na lista e botão Restaurar exemplo" class="recorte" />
+                <p class="legenda">Tela real depois de remover as quatro: o <code>v-else</code> assumiu.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa pequeno">No Elements: depois de “Entendi”, o <code>&lt;p class="dica"&gt;</code> <strong>continua</strong> lá com <code>display: none</code>. Depois de remover tudo, o <code>&lt;ul&gt;</code> <strong>some</strong>.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>Por que <code>remover</code> recebe o <code>id</code> e não a posição na lista?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 96 -->
+        <section class="slide" data-n="96" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: “Remover concluídas” e “Concluir todas”</h2>
+          </header>
+          <div class="slide-corpo pilha">
+            <div class="grade-2">
+              <div class="atividade">
+                <dl>
+                  <dt>1</dt><dd>“Remover concluídas”: um <code>filter</code> que fica só com as pendentes.</dd>
+                  <dt>2</dt><dd>“Concluir todas”: um <code>map</code>; desabilitado (<code>:disabled</code>) quando não houver pendentes.</dd>
+                  <dt>Evidência</dt><dd>Os dois botões funcionam; “Concluir todas” fica cinza quando tudo está concluído.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>“Há pendentes?” é uma expressão: <code>tarefas.some((t) =&gt; !t.concluida)</code>.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <div class="grade-2">
+                <pre><code>function removerConcluidas() {
+  tarefas.value = tarefas.value.filter((t) =&gt; !t.concluida)
+}
+function concluirTodas() {
+  tarefas.value = tarefas.value
+    .map((t) =&gt; ({ ...t, concluida: true }))
+}</code></pre>
+                <pre><code>&lt;button @click="removerConcluidas"&gt;
+  Remover concluídas&lt;/button&gt;
+&lt;button :disabled="!tarefas.some((t) =&gt; !t.concluida)"
+  @click="concluirTodas"&gt;Concluir todas&lt;/button&gt;</code></pre>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 97 -->
+        <section class="slide" data-n="97" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Por que a chave é o id, e não a posição</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <figure class="diagrama">
+              <svg viewBox="0 0 900 330" role="img" aria-labelledby="d97-t d97-d">
+                <title id="d97-t">Chave por posição e chave por id ao remover o primeiro item</title>
+                <desc id="d97-d">Com chave por posição, o elemento da posição 0, que guarda o texto digitado, passa a mostrar a tarefa B. Com chave por id, o elemento da tarefa A sai junto com o texto.</desc>
+                <text x="210" y="30" text-anchor="middle" font-weight="700">:key="indice"</text>
+                <text x="660" y="30" text-anchor="middle" font-weight="700">:key="tarefa.id"</text>
+                <rect class="no" x="40" y="60" width="340" height="70" rx="10" />
+                <text x="60" y="92">posição 0 → tarefa B</text>
+                <text x="60" y="118" class="texto-suave">observação: “ligar p/ Ana” (era da A!)</text>
+                <rect class="no" x="40" y="150" width="340" height="70" rx="10" />
+                <text x="60" y="190">posição 1 → tarefa C</text>
+                <rect class="no-destaque" x="490" y="60" width="340" height="70" rx="10" />
+                <text x="510" y="92">id 2 → tarefa B</text>
+                <text x="510" y="118" class="texto-suave">observação: (vazia, como estava)</text>
+                <rect class="no-destaque" x="490" y="150" width="340" height="70" rx="10" />
+                <text x="510" y="190">id 3 → tarefa C</text>
+                <text x="450" y="270" text-anchor="middle">depois de remover a tarefa A, que tinha “ligar p/ Ana” digitado</text>
+                <text x="450" y="305" text-anchor="middle" class="texto-suave">estado do DOM não ligado a dados (campo digitado, foco) segue a chave</text>
+              </svg>
+            </figure>
+            <div class="pilha">
+              <p class="caixa caixa-destaque pequeno"><strong>Modelo:</strong> o Vue reaproveita elementos. A chave diz <em>qual item é qual</em>. Com a posição, o elemento da posição 0 fica e só troca o texto — o que estava digitado nele “pula” de tarefa.</p>
+              <div class="caixa pequeno">
+                <h3><code>v-if</code> × <code>v-show</code></h3>
+                <p><code>v-if</code>: custo ao alternar (cria e destrói). <code>v-show</code>: custo inicial (sempre desenha). Alternância frequente → <code>v-show</code>.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 98 -->
+        <section class="slide" data-n="98" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: <code>v-if</code> e <code>v-for</code> no mesmo elemento</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ npx eslint src</span>
+  53:9  <span class="erro">error</span>  … You should not mix 'v-for' with 'v-if'
+        vue/no-use-v-if-with-v-for</code></pre>
+                <figcaption>Lint real · <code>v-if="!tarefa.concluida"</code> no <code>&lt;li&gt;</code> do <code>v-for</code> · <a href="capturas/terminal/m3-lint-e10-vif-vfor.txt">arquivo</a></figcaption>
+              </figure>
+              <figure class="saida-real">
+                <pre style="max-height: none"><code>[Vue warn]: Property "tarefa" was accessed during render
+but is not defined on instance.
+<span class="erro">Uncaught TypeError: Cannot read properties of undefined
+(reading 'concluida')</span></code></pre>
+                <figcaption>Console real · página em branco · <a href="capturas/navegador/m3-e10-vif-vfor.txt">arquivo</a></figcaption>
+              </figure>
+            </div>
+            <div class="pilha">
+              <p class="pequeno">No Vue 3, o <code>v-if</code> é avaliado <strong>antes</strong> do <code>v-for</code>: quando ele roda, <code>tarefa</code> ainda não existe.</p>
+              <figure class="saida-real">
+                <pre style="max-height: none"><code>  48:7  <span class="erro">error</span>  Elements in iteration expect to have
+        'v-bind:key' directives  vue/require-v-for-key</code></pre>
+                <figcaption>Lint real · <code>:key</code> apagado · <a href="capturas/terminal/m3-lint-e10-sem-key.txt">arquivo</a></figcaption>
+              </figure>
+              <details class="solucao"><summary>Mostrar solução</summary><p>Para mostrar só pendentes, crie uma lista filtrada (<code>computed</code>, etapa 11) e faça o <code>v-for</code> sobre ela. Para “esconder a lista inteira”, ponha o <code>v-if</code> num elemento de fora (<code>&lt;ul&gt;</code> ou <code>&lt;template&gt;</code>).</p></details>
+            </div>
+          </div>
+        </section>
+
+        <!-- 99 -->
+        <section class="slide" data-n="99" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: a seção certa da documentação</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="prompt-ia">
+              <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+              <p class="prompt-texto">
+                Recebi este erro de lint num projeto Vue 3: <mark>[cole a linha do erro]</mark>.
+                Este é o trecho do template: <mark>[cole o &lt;ul&gt; e o &lt;li&gt;]</mark>. Explique a
+                causa, mostre a correção com <code>computed</code> e indique a seção da documentação
+                oficial do Vue que trata disso. Não use Options API.
+              </p>
+            </div>
+            <div class="caixa pequeno">
+              <h3>Onde procurar</h3>
+              <ul>
+                <li><a href="https://vuejs.org/guide/essentials/list.html#v-for-with-v-if">List Rendering — v-for with v-if</a></li>
+                <li><a href="https://eslint.vuejs.org/rules/no-use-v-if-with-v-for.html">eslint-plugin-vue — no-use-v-if-with-v-for</a></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 100 -->
+        <section class="slide" data-n="100" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="atividade">
+              <dl>
+                <dt>1</dt><dd>Escreva o <code>v-for</code> de uma lista <code>tarefas</code> com a chave correta.</dd>
+                <dt>2</dt><dd>Uma dica é escondida e mostrada várias vezes por minuto: <code>v-if</code> ou <code>v-show</code>?</dd>
+                <dt>3</dt><dd>Por que <code>v-if</code> no mesmo <code>&lt;li&gt;</code> do <code>v-for</code> quebra a página?</dd>
+              </dl>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

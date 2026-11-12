@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 13 · Props e eventos</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="13">
+    <div class="janela">
+      <main class="palco" aria-label="Módulo 3, etapa 13: componentes, props e eventos">
+        <!-- 117 -->
+        <section class="slide" data-n="117" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Desafio: dividir o <code>App.vue</code> sem mudar nada para o usuário</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">Aula 4: “o data binding é ótimo para demos pequenas. E aplicações grandes?” Resposta do Vue: <strong>componentes</strong>.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Extrair <code>TarefaItem</code> e <code>TarefaForm</code></td><td>Criar, concluir, remover e validar iguais à etapa 12</td></tr>
+                  <tr><td>Props descem, eventos sobem</td><td>Árvore desenhada com ↓ e ↑</td></tr>
+                  <tr><td>Um dono para a lista</td><td>Só o <code>App</code> altera <code>tarefas</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              Se o <code>TarefaItem</code> marcar a tarefa como concluída sozinho, quem mais fica
+              sabendo? E se dois componentes fizerem isso ao mesmo tempo?
+            </div>
+          </div>
+        </section>
+
+        <!-- 118 -->
+        <section class="slide" data-n="118" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Árvore de componentes: props ↓, eventos ↑</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="diagrama">
+              <svg viewBox="0 0 1000 330" role="img" aria-labelledby="d118-t d118-d">
+                <title id="d118-t">Árvore de componentes da Todo List na etapa 13</title>
+                <desc id="d118-d">App é dono das tarefas. Envia titulosExistentes para TarefaForm e recebe o evento criar. Envia tarefa para cada TarefaItem e recebe alternar e remover.</desc>
+                <rect class="no-destaque" x="330" y="10" width="340" height="100" rx="14" />
+                <text x="500" y="52" text-anchor="middle" font-weight="700">App.vue</text>
+                <text x="500" y="85" text-anchor="middle" class="texto-suave">dono: tarefas, busca, situação, tema</text>
+                <rect class="no" x="40" y="220" width="360" height="100" rx="14" />
+                <text x="220" y="262" text-anchor="middle" font-weight="700">TarefaForm</text>
+                <text x="220" y="295" text-anchor="middle" class="texto-suave">estado local: texto digitado</text>
+                <rect class="no" x="600" y="220" width="360" height="100" rx="14" />
+                <text x="780" y="262" text-anchor="middle" font-weight="700">TarefaItem × n</text>
+                <text x="780" y="295" text-anchor="middle" class="texto-suave">sem estado próprio</text>
+                <path class="seta-destaque" d="M380 110 L245 212" /><polygon class="ponta-destaque" points="240,216 248,199 258,212" />
+                <path class="seta" d="M305 216 L440 115" /><polygon class="ponta" points="445,111 428,114 438,127" />
+                <path class="seta-destaque" d="M620 110 L755 212" /><polygon class="ponta-destaque" points="760,216 742,212 752,199" />
+                <path class="seta" d="M695 216 L560 115" /><polygon class="ponta" points="555,111 562,127 572,114" />
+                <text x="235" y="150" text-anchor="end">↓ titulosExistentes</text>
+                <text x="235" y="185" text-anchor="end" class="texto-suave">↑ criar(titulo)</text>
+                <text x="765" y="150" text-anchor="start">↓ tarefa</text>
+                <text x="765" y="185" text-anchor="start" class="texto-suave">↑ alternar · remover</text>
+              </svg>
+            </figure>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>TarefaItem.vue · script</span></div>
+                <pre><code>defineProps({
+  tarefa: { type: Object, required: true },
+})
+const emit = defineEmits(['alternar', 'remover'])</code></pre>
+              </div>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>App.vue · uso</span></div>
+                <pre><code>&lt;TarefaItem v-for="tarefa in visiveis"
+  :key="tarefa.id" :tarefa="tarefa"
+  @alternar="alternar" @remover="remover" /&gt;</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 119 -->
+        <section class="slide" data-n="119" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Extrair o <code>TarefaItem</code> em quatro passos</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Passos da extração do TarefaItem">
+                <button role="tab" id="s119-t1" aria-controls="s119-p1" aria-selected="true">1 · Mover o template</button>
+                <button role="tab" id="s119-t2" aria-controls="s119-p2" aria-selected="false">2 · Prop e eventos</button>
+                <button role="tab" id="s119-t3" aria-controls="s119-p3" aria-selected="false">3 · Usar no App</button>
+                <button role="tab" id="s119-t4" aria-controls="s119-p4" aria-selected="false">4 · Resultado</button>
+              </div>
+              <div role="tabpanel" id="s119-p1" aria-labelledby="s119-t1">
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>components/TarefaItem.vue · template</span></div>
+                  <pre><code>&lt;li class="tarefa" :class="{ concluida: tarefa.concluida }"&gt;
+  &lt;label class="tarefa-rotulo"&gt;
+    &lt;input type="checkbox" :checked="tarefa.concluida"
+           @change="emit('alternar', tarefa.id)" /&gt;
+    &lt;span&gt;{{ tarefa.titulo }}&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;button type="button" @click="emit('remover', tarefa.id)"&gt;Remover&lt;/button&gt;
+&lt;/li&gt;</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s119-p2" aria-labelledby="s119-t2" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>components/TarefaItem.vue · script</span></div>
+                  <pre><code>// O item recebe a tarefa por props e avisa o pai por eventos.
+// Props são SOMENTE LEITURA: quem guarda a lista é o App.vue.
+defineProps({ tarefa: { type: Object, required: true } })
+const emit = defineEmits(['alternar', 'remover'])</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s119-p3" aria-labelledby="s119-t3" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>App.vue</span></div>
+                  <pre><code>import TarefaItem from './components/TarefaItem.vue'
+…
+&lt;ul v-if="visiveis.length &gt; 0" class="lista"&gt;
+  &lt;TarefaItem v-for="tarefa in visiveis" :key="tarefa.id"
+    :tarefa="tarefa" @alternar="alternar" @remover="remover" /&gt;
+&lt;/ul&gt;</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s119-p4" aria-labelledby="s119-t4" hidden>
+                <img src="capturas/telas/e13-componentes.png" alt="Etapa 13: mesma Todo List da etapa 12, agora montada com componentes" class="recorte" />
+                <p class="legenda">Tela real: idêntica à etapa 12. O que mudou foi a organização do código.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa pequeno">Vue DevTools › Components: a árvore <code>App → TarefaForm, TarefaItem…</code> e as props de cada um.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>Os estilos de <code>.tarefa</code> foram junto para o <code>&lt;style scoped&gt;</code> do item. Por que isso é bom?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 120 -->
+        <section class="slide" data-n="120" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: extrair o <code>TarefaForm</code></h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Pergunta-guia</dt><dd>Que dados o formulário precisa <strong>receber</strong>? Que <strong>pedido</strong> ele faz ao pai?</dd>
+                  <dt>Mova</dt><dd><code>novoTitulo</code> (no formulário, basta <code>titulo</code>), <code>mensagem</code>, <code>validar</code> e o <code>onMounted</code> do foco. A validação do <code>adicionar</code> vira <code>enviar</code>; a criação fica no <code>App</code>.</dd>
+                  <dt>Evidência</dt><dd>Validação e criação iguais à etapa 12; foco no campo ao abrir.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica 1</summary><p>Para checar repetição, o formulário precisa dos títulos existentes: uma prop.</p></details>
+                <details class="dica"><summary>Dica 2</summary><p>O formulário não cria a tarefa: emite <code>criar</code> com o título e o <code>App</code> cria.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>// TarefaForm.vue
+const props = defineProps({
+  titulosExistentes: { type: Array, default: () =&gt; [] },
+})
+const emit = defineEmits(['criar'])
+…
+function enviar() {
+  mensagem.value = validar(titulo.value)
+  if (mensagem.value) return
+  emit('criar', titulo.value)
+  titulo.value = ''
+}</code></pre>
+              <pre><code>&lt;!-- App.vue --&gt;
+&lt;TarefaForm :titulos-existentes="titulos" @criar="adicionar" /&gt;
+// const titulos = computed(() =&gt; tarefas.value.map((t) =&gt; t.titulo))</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 121 -->
+        <section class="slide" data-n="121" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Um dono, muitas leituras</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <p class="caixa caixa-destaque pequeno"><strong>Modelo:</strong> o estado mora num lugar. Quem precisa <em>ver</em> recebe por prop; quem quer <em>mudar</em> pede por evento. O dono decide e a reatividade atualiza todos os que leem.</p>
+              <table class="tabela">
+                <thead><tr><th>Estado</th><th>Onde mora</th><th>Por quê</th></tr></thead>
+                <tbody>
+                  <tr><td>Lista de tarefas</td><td><code>App</code></td><td>Formulário, itens e resumo dependem dela</td></tr>
+                  <tr><td>Texto sendo digitado</td><td><code>TarefaForm</code></td><td>Só o formulário usa</td></tr>
+                  <tr><td>Tema</td><td><code>App</code></td><td>Afeta a página inteira</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="caixa pequeno">
+              <h3>Benefícios (teórico 5)</h3>
+              <ul>
+                <li>Reutilização: o mesmo <code>TarefaItem</code> para cada tarefa.</li>
+                <li>Manutenção: mudar o visual do item é mexer num arquivo.</li>
+                <li>Testes: um componente pode ser testado isolado (etapa 18).</li>
+                <li>Leitura: cada arquivo responde a uma pergunta.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 122 -->
+        <section class="slide" data-n="122" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: o filho que altera a prop e o evento que ninguém ouve</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <h3 class="pequeno">1 · Alterar a prop</h3>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>TarefaItem.vue</span></div>
+                <pre><code>@change="tarefa.concluida = !tarefa.concluida"</code></pre>
+              </div>
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ npx eslint src</span>
+src/components/TarefaItem.vue
+  14:67  <span class="erro">error</span>  Unexpected mutation of "tarefa" prop
+         vue/no-mutating-props</code></pre>
+                <figcaption>Lint real · <a href="capturas/terminal/m3-lint-e13-muta-prop.txt">arquivo</a></figcaption>
+              </figure>
+            </div>
+            <div class="pilha">
+              <h3 class="pequeno">2 · Evento com nome errado</h3>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>App.vue</span></div>
+                <pre><code>&lt;TarefaItem … @excluir="remover" /&gt;   &lt;!-- o filho emite 'remover' --&gt;</code></pre>
+              </div>
+              <p class="pequeno">Clique em Remover: nada acontece e o Console fica limpo. Na Timeline do Vue DevTools, o evento <code>remover</code> aparece — só que ninguém o ouvia.</p>
+              <details class="solucao"><summary>Mostrar explicação</summary><p>1: o Vue avisa quando se troca a prop inteira, mas não impede mudar uma propriedade <em>dentro</em> do objeto: o dado do pai muda sem passar pelo dono. O lint pega. 2: nome de evento é contrato entre filho (<code>defineEmits</code>) e pai (<code>@nome</code>); declarar os eventos ajuda a achar o erro.</p></details>
+            </div>
+          </div>
+        </section>
+
+        <!-- 123 -->
+        <section class="slide" data-n="123" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: julgar uma divisão em componentes</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="prompt-ia">
+              <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+              <p class="prompt-texto">
+                Proponha uma divisão deste <code>App.vue</code> em componentes Vue 3:
+                <mark>[cole o App.vue da etapa 12]</mark>. Para cada componente, liste: props
+                recebidas, eventos emitidos e estado local. Mantenha a lista de tarefas como estado
+                do App. Não use Pinia nem bibliotecas.
+              </p>
+            </div>
+            <div class="caixa pequeno">
+              <h3>Critérios para julgar</h3>
+              <ul>
+                <li>Cada componente tem uma responsabilidade?</li>
+                <li>Algum filho altera dados do pai? (rejeite)</li>
+                <li>Estado local onde só um componente usa?</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 124 -->
+        <section class="slide" data-n="124" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="atividade">
+              <dl>
+                <dt>1</dt><dd>Desenhe a árvore da etapa 13 com props (↓) e eventos (↑).</dd>
+                <dt>2</dt><dd>Onde deve morar o texto que está sendo digitado no formulário? Por quê?</dd>
+                <dt>3</dt><dd>Escreva o <code>defineEmits</code> de um componente que avisa <code>salvar</code> e <code>cancelar</code>.</dd>
+              </dl>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

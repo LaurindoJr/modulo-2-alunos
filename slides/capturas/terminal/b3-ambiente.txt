@@ -1,0 +1,7 @@
+~/modulo-2/etapas/03-node-tarefas $ node ambiente.js
+console   → object
+Math      → object
+document  → não existe aqui
+window    → não existe aqui
+process   → object
+fetch     → function

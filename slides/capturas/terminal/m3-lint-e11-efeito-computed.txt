@@ -1,0 +1,21 @@
+# Registro real · 11/11/2026 · macOS · Node 24.19.0 · Vue 3.5.44 · Vite 8.3.5 · oxlint 1.82.0 · ESLint 10 + eslint-plugin-vue (configuração gerada pelo create-vue)
+# Etapa 11-formularios-computed — defeito provocado de propósito: busca.value = busca.value.trim() no início do computed visiveis (linha 25)
+
+$ npx eslint src
+(código de saída: 0)
+
+$ npm run lint
+
+> todo-list@0.0.0 lint
+> run-s "lint:*"
+
+
+> todo-list@0.0.0 lint:oxlint
+> oxlint . --fix
+
+src/App.vue:25:3: error vue(no-side-effects-in-computed-properties): Unexpected side effect in computed function.
+ERROR: "lint:oxlint" exited with 1.
+(código de saída: 1 · o --fix não altera o arquivo)
+
+# O ESLint não acusa porque o eslint-plugin-oxlint desliga nele as regras que o oxlint já cobre
+# (npx eslint --print-config src/App.vue mostra vue/no-side-effects-in-computed-properties com 0).

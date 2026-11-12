@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List — etapa 06</title>
+    <link rel="icon" href="data:," />
+    <!-- Apresentação: o CSS chega numa requisição própria -->
+    <link rel="stylesheet" href="estilos.css" />
+  </head>
+  <body>
+    <!-- Estrutura: o HTML descreve o que existe na página, não a aparência -->
+    <main class="cartao">
+      <h1>Minhas tarefas</h1>
+      <p id="resumo" class="resumo">Carregando…</p>
+
+      <form id="formulario" class="formulario" novalidate>
+        <label for="nova-tarefa">Nova tarefa</label>
+        <div class="formulario-linha">
+          <input
+            id="nova-tarefa"
+            type="text"
+            maxlength="80"
+            autocomplete="off"
+            placeholder="Ex.: revisar o DOM"
+            aria-describedby="erro-tarefa"
+          />
+          <button type="submit" class="botao botao-principal">Adicionar</button>
+        </div>
+        <p id="erro-tarefa" class="erro" role="alert"></p>
+      </form>
+
+      <!-- A lista começa vazia: o JavaScript a preenche a partir do array de tarefas -->
+      <ul id="lista" class="lista"></ul>
+    </main>
+
+    <!-- Comportamento: carregado no fim do body, quando os elementos acima já existem -->
+    <script src="app.js"></script>
+  </body>
+</html>

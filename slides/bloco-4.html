@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bloco 4 · Dependências</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="4">
+    <div class="janela">
+      <main class="palco" aria-label="Bloco 4: dependências e scripts reproduzíveis">
+        <!-- 37 -->
+        <section class="slide" data-n="37" data-tipo="previsao" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Funciona no computador do colega e falha no seu</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <p class="lead">
+                Você copiou a pasta de treino de um colega — sem a pasta <code>node_modules</code>,
+                que é grande. Rodou o mesmo comando que ele roda todo dia.
+              </p>
+              <div class="pergunta">
+                <strong>Registre sua hipótese (sem IA)</strong>
+                O que existe no computador do colega e não existe no seu? Como provar?
+              </div>
+              <ul class="objetivos">
+                <li>ler o manifesto (<code>package.json</code>) e o lockfile</li>
+                <li>explicar o que muda numa instalação</li>
+                <li>restaurar o ambiente com um comando e uma evidência</li>
+              </ul>
+            </div>
+            <figure class="saida-real">
+              <pre style="max-height: none"><code><span class="cmd">~/modulo-2/etapas/04-dependencias-scripts $ rm -rf node_modules &amp;&amp; npm start</span>
+
+&gt; 04-dependencias-scripts@1.0.0 start
+&gt; node relatorio.js
+
+node:internal/modules/cjs/loader:1520
+  throw err;
+  ^
+
+<span class="erro">Error: Cannot find module 'picocolors'</span>
+Require stack:
+- ~/modulo-2/etapas/04-dependencias-scripts/relatorio.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1517:15)
+    …</code></pre>
+              <figcaption>Saída real (trecho; a pilha completa segue no arquivo) · macOS · Node 24.19.0 · npm 11.17.0 · 21/10/2026 · <a href="capturas/terminal/b4-remover-node-modules.txt">arquivo</a></figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <!-- 38 -->
+        <section class="slide" data-n="38" data-tipo="pratica" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Pasta de treino: crie o manifesto com <code>npm init -y</code></h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>8 min, individual</dd>
+                <dt>Pré-requisitos</dt><dd>Node 24 e npm 11 funcionando (bloco 3); uma pasta vazia de treino aberta no editor e no terminal</dd>
+                <dt>Resultado esperado</dt><dd>Um <code>package.json</code> criado e três campos explicados</dd>
+              </dl>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Terminal, dentro da pasta de treino</span><button type="button" class="copiar">Copiar</button></div>
+                <pre><code>npm init -y</code></pre>
+              </div>
+              <ol class="passos pequeno">
+                <li>Confira a pasta atual antes (<code>pwd</code> ou <code>cd</code>).</li>
+                <li>Execute o comando e abra o arquivo criado <strong>no editor</strong>.</li>
+                <li>Explique <code>name</code>, <code>scripts</code> e <code>type</code>.</li>
+              </ol>
+              <p class="caixa pequeno">JSON <strong>não aceita comentários</strong> (<code>//</code>). Anote explicações fora do arquivo.</p>
+            </div>
+            <figure class="saida-real">
+              <pre style="max-height: none"><code><span class="cmd">~/modulo-2/etapas/04-dependencias-scripts $ npm init -y</span>
+Wrote to ~/modulo-2/etapas/04-dependencias-scripts/package.json:
+
+{
+  "name": "04-dependencias-scripts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" &amp;&amp; exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}</code></pre>
+              <figcaption>Saída real · npm 11.17.0 · Node 24.19.0 · macOS · 21/10/2026 · <a href="capturas/terminal/b4-npm-init.txt">arquivo</a></figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <!-- 39 -->
+        <section class="slide" data-n="39" data-tipo="explicacao" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Módulo, pacote, gerenciador e registro</h2>
+          </header>
+          <div class="slide-corpo pilha">
+            <div class="grade-2">
+              <div class="caixa"><h3>Módulo</h3><p class="pequeno">Um arquivo que expõe código a outros (<code>module.exports</code>, <code>export</code>). Ex.: <code>relatorio.js</code>.</p></div>
+              <div class="caixa"><h3>Pacote</h3><p class="pequeno">Pasta com um <code>package.json</code>, publicada para reuso. Ex.: <code>picocolors</code>.</p></div>
+              <div class="caixa"><h3>Gerenciador (npm CLI)</h3><p class="pequeno">Programa que lê o manifesto, resolve versões, baixa, instala e executa scripts.</p></div>
+              <div class="caixa"><h3>Registro</h3><p class="pequeno">Serviço que hospeda os pacotes publicados (<code>registry.npmjs.org</code>).</p></div>
+            </div>
+            <p class="caixa caixa-destaque pequeno">
+              “npm” nomeia duas coisas: o <strong>programa</strong> no seu computador e o
+              <strong>registro</strong> na internet. Instalar exige o registro; executar scripts, não.
+            </p>
+            <p class="pergunta pequeno"><strong>Pergunta</strong>Sem internet, quais destes ainda funcionam: <code>npm start</code>, <code>npm install dayjs</code>, <code>npm run</code>?</p>
+          </div>
+        </section>
+
+        <!-- 40 -->
+        <section class="slide" data-n="40" data-tipo="demonstracao" data-tempo="12 min">
+          <header class="slide-topo">
+            <h2>Instalar uma dependência e ver o que mudou</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da instalação">
+                <button role="tab" id="s40-t1" aria-controls="s40-p1" aria-selected="true">1 · Antes</button>
+                <button role="tab" id="s40-t2" aria-controls="s40-p2" aria-selected="false">2 · Instalação</button>
+                <button role="tab" id="s40-t3" aria-controls="s40-p3" aria-selected="false">3 · Resultado</button>
+              </div>
+              <div role="tabpanel" id="s40-p1" aria-labelledby="s40-t1">
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">~/modulo-2/etapas/04-dependencias-scripts $ node relatorio.js</span>
+node:internal/modules/cjs/loader:1520
+  throw err;
+  ^
+
+<span class="erro">Error: Cannot find module 'picocolors'</span>
+Require stack:
+- ~/modulo-2/etapas/04-dependencias-scripts/relatorio.js
+    …</code></pre>
+                  <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-antes-de-instalar.txt">arquivo</a>. <strong>Compare:</strong> o código pede o pacote, mas ele ainda não foi instalado.</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s40-p2" aria-labelledby="s40-t2" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">~/modulo-2/etapas/04-dependencias-scripts $ npm install picocolors</span>
+
+added 1 package, and audited 2 packages in 703ms
+
+found 0 vulnerabilities
+<span class="cmd">~/modulo-2/etapas/04-dependencias-scripts $ ls &amp;&amp; ls node_modules</span>
+node_modules
+package-lock.json
+package.json
+relatorio-nativo.js
+relatorio.js
+tarefas.json
+picocolors</code></pre>
+                  <figcaption>Saídas reais · <a href="capturas/terminal/b4-install-picocolors.txt">instalação</a> · <a href="capturas/terminal/b4-ls-apos.txt">listagem</a>. <strong>Compare:</strong> surgiram <code>node_modules/</code> e <code>package-lock.json</code>. <strong>Aceitável:</strong> tempo diferente.</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s40-p3" aria-labelledby="s40-t3" hidden>
+                <div class="pilha">
+                  <figure class="saida-real">
+                    <pre style="max-height: none"><code><span class="cmd">$ cat package.json</span>   (trecho)
+  "dependencies": {
+    "picocolors": "^1.1.1"
+  }
+<span class="cmd">$ grep -A 6 '"node_modules/picocolors"' package-lock.json</span>
+    "node_modules/picocolors": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz",
+      "integrity": "sha512-xceH2snhtb5M9…",
+      "license": "ISC"
+    }</code></pre>
+                    <figcaption>Trechos reais (integridade abreviada) · <a href="capturas/terminal/b4-manifesto-apos.txt">manifesto</a> · <a href="capturas/terminal/b4-lock-picocolors.txt">lockfile</a>. <strong>Compare:</strong> faixa no manifesto, versão exata no lockfile.</figcaption>
+                  </figure>
+                  <figure class="saida-real">
+                    <pre style="max-height: none"><code><span class="cmd">$ node relatorio.js</span>
+Relatório da Todo List
+…
+2 de 5 concluídas</code></pre>
+                    <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-relatorio.txt">arquivo</a> · cores omitidas no registro</figcaption>
+                  </figure>
+                </div>
+              </div>
+            </figure>
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>5 min demonstração + 7 min reprodução</dd>
+                <dt>Pré-requisitos</dt><dd>Slide 38; copiar <code>relatorio.js</code> e <code>tarefas.json</code> da etapa 04</dd>
+                <dt>Resultado esperado</dt><dd>Relatório impresso; três arquivos/pastas novos identificados</dd>
+              </dl>
+              <p class="pequeno"><strong>Pausa:</strong> reproduza na sua pasta de treino e só então compare.</p>
+              <p class="pergunta pequeno"><strong>Explique</strong>Por que o manifesto diz <code>^1.1.1</code> e o lockfile diz <code>1.1.1</code>?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 41 -->
+        <section class="slide" data-n="41" data-tipo="ia" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Precisava mesmo de uma biblioteca? Revise a escolha</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="prompt-ia">
+                <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+                <p class="prompt-texto">
+                  Num script Node <mark>[versão: node --version]</mark> quero
+                  <mark>[o que o código precisa fazer]</mark>. Instalei o pacote
+                  <mark>[nome e versão]</mark>. Antes de qualquer código: existe recurso nativo do
+                  Node que resolve isso? Compare as duas opções por necessidade, documentação,
+                  licença, manutenção e compatibilidade. Para cada afirmação, indique a página
+                  oficial que eu devo abrir para conferir. Não invente referências.
+                </p>
+              </div>
+              <div class="caixa pequeno">
+                <h3>Confira na documentação</h3>
+                <p>A sugestão nativa existe na sua versão do Node? Execute antes de aceitar.</p>
+              </div>
+            </div>
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ node relatorio-nativo.js</span>
+Relatório da Todo List (sem dependências)
+[x] Criar o package.json
+[x] Instalar uma dependência
+[ ] Comparar manifesto e lockfile
+[ ] Criar scripts no package.json
+[ ] Restaurar o ambiente com npm ci
+2 de 5 concluídas</code></pre>
+                <figcaption>Saída real · <code>util.styleText</code>, nativo do Node · <a href="capturas/terminal/b4-relatorio-nativo.txt">arquivo</a></figcaption>
+              </figure>
+              <p class="pequeno suave">Mesmo resultado de <code>relatorio.js</code> (slide 40), sem nenhum pacote instalado.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 42 -->
+        <section class="slide" data-n="42" data-tipo="explicacao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2><code>dependencies</code>, <code>devDependencies</code> e o que vem junto</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Campo</th><th>Papel no projeto</th><th>Exemplo</th></tr></thead>
+                <tbody>
+                  <tr><td><code>dependencies</code></td><td>O código precisa dele para funcionar</td><td><code>picocolors</code>: <code>relatorio.js</code> faz <code>require</code></td></tr>
+                  <tr><td><code>devDependencies</code></td><td>Ferramenta usada durante o desenvolvimento</td><td><code>nodemon</code>: reinicia o script ao salvar</td></tr>
+                </tbody>
+              </table>
+              <p class="pequeno">
+                <strong>Direta</strong>: declarada por você (2). <strong>Transitiva</strong>: exigida por
+                uma dependência sua. Instalar <code>nodemon</code> trouxe <strong>28 pacotes</strong>.
+              </p>
+              <p class="pergunta pequeno"><strong>Pergunta</strong>Se você apagar <code>nodemon</code> do manifesto, <code>chokidar</code> continua necessário?</p>
+            </div>
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ npm ls --depth=0</span>
+04-dependencias-scripts@1.0.0 ~/modulo-2/etapas/04-dependencias-scripts
+├── nodemon@3.1.14
+└── picocolors@1.1.1
+<span class="cmd">$ ls node_modules | wc -l</span>
+      29
+<span class="cmd">$ npm explain chokidar</span>
+chokidar@3.6.0 dev
+node_modules/chokidar
+  chokidar@"^3.5.2" from nodemon@3.1.14
+  node_modules/nodemon
+    dev nodemon@"^3.1.14" from the root project</code></pre>
+                <figcaption>Saídas reais · <a href="capturas/terminal/b4-ls-depth0.txt">npm ls</a> · <a href="capturas/terminal/b4-contagem-node-modules.txt">contagem</a> · <a href="capturas/terminal/b4-explain-chokidar.txt">npm explain</a></figcaption>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        <!-- 43 -->
+        <section class="slide" data-n="43" data-tipo="demonstracao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Ferramenta local e scripts: <code>npm run dev</code></h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da ferramenta e dos scripts">
+                <button role="tab" id="s43-t1" aria-controls="s43-p1" aria-selected="true">1 · Instalar</button>
+                <button role="tab" id="s43-t2" aria-controls="s43-p2" aria-selected="false">2 · Scripts</button>
+                <button role="tab" id="s43-t3" aria-controls="s43-p3" aria-selected="false">3 · Executar</button>
+                <button role="tab" id="s43-t4" aria-controls="s43-p4" aria-selected="false">Alternativa nativa</button>
+              </div>
+              <div role="tabpanel" id="s43-p1" aria-labelledby="s43-t1">
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm install --save-dev nodemon</span>
+
+added 28 packages, and audited 30 packages in 2s
+
+5 packages are looking for funding
+  run `npm fund` for details
+
+<span class="erro">3 high severity vulnerabilities</span>
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.</code></pre>
+                  <figcaption>Saída real · <a href="capturas/terminal/b4-install-nodemon.txt">arquivo</a>. <strong>Compare:</strong> 1 ferramenta, 28 pacotes; aviso de auditoria (discutido nas notas).</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s43-p2" aria-labelledby="s43-t2" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm pkg get scripts</span>   (após editar o package.json)
+{
+  "start": "node relatorio.js",
+  "dev": "nodemon relatorio.js",
+  "dev:nativo": "node --watch relatorio.js"
+}
+<span class="cmd">$ npm run</span>
+Lifecycle scripts included in 04-dependencias-scripts@1.0.0:
+  start
+    node relatorio.js
+available via `npm run`:
+  dev
+    nodemon relatorio.js
+  dev:nativo
+    node --watch relatorio.js</code></pre>
+                  <figcaption>Saídas reais · <a href="capturas/terminal/b4-pkg-set.txt">npm pkg</a> (os scripts foram gravados com <code>npm pkg set</code>; no editor, o resultado é o mesmo) · <a href="capturas/terminal/b4-npm-run-lista.txt">npm run</a></figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s43-p3" aria-labelledby="s43-t3" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm run dev</span>
+
+&gt; 04-dependencias-scripts@1.0.0 dev
+&gt; nodemon relatorio.js
+
+[nodemon] 3.1.14
+[nodemon] starting `node relatorio.js`
+Relatório da Todo List
+…
+2 de 5 concluídas
+[nodemon] clean exit - waiting for changes before restart
+[nodemon] restarting due to changes...
+[nodemon] starting `node relatorio.js`
+…
+^C</code></pre>
+                  <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-npm-run-dev.txt">arquivo</a>. Registro automatizado: <code>relatorio.js</code> foi salvo 3 s depois e a execução interrompida após 7 s, equivalente a <kbd>Ctrl</kbd>+<kbd>C</kbd>.</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s43-p4" aria-labelledby="s43-t4" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm run dev:nativo</span>
+
+&gt; 04-dependencias-scripts@1.0.0 dev:nativo
+&gt; node --watch relatorio.js
+
+Relatório da Todo List
+…
+Completed running 'relatorio.js'. Waiting for file changes before restarting...
+Change detected in '~/modulo-2/etapas/04-dependencias-scripts/relatorio.js'
+Restarting 'relatorio.js'
+…
+^C</code></pre>
+                  <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-npm-run-dev-nativo.txt">arquivo</a>. Mesmo registro automatizado (salvo após 3 s, interrompido após 7 s). Zero pacotes instalados.</figcaption>
+                </figure>
+              </div>
+            </figure>
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>3 min demonstração + 5 min reprodução</dd>
+                <dt>Resultado esperado</dt><dd><code>npm run dev</code> reinicia o relatório ao salvar; <kbd>Ctrl</kbd>+<kbd>C</kbd> libera o terminal</dd>
+              </dl>
+              <ol class="passos pequeno">
+                <li><code>npm install --save-dev nodemon</code></li>
+                <li>Acrescente <code>start</code>, <code>dev</code> e <code>dev:nativo</code> em <code>scripts</code>.</li>
+                <li>Rode <code>npm run dev</code>, altere uma tarefa em <code>tarefas.json</code>, salve.</li>
+              </ol>
+              <p class="pergunta pequeno"><strong>Pergunta</strong>Por que o terminal fica ocupado com <code>dev</code> e não com <code>start</code>?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 44 -->
+        <section class="slide" data-n="44" data-tipo="explicacao" data-tempo="8 min">
+          <header class="slide-topo">
+            <h2>Versão exata, faixa e lockfile</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <p class="pequeno"><strong>SemVer</strong>: <code>MAJOR.MINOR.PATCH</code> — incompatível · nova função compatível · correção.</p>
+              <table class="tabela">
+                <thead><tr><th>No manifesto</th><th>Aceita</th></tr></thead>
+                <tbody>
+                  <tr><td><code>"1.1.1"</code></td><td>só 1.1.1</td></tr>
+                  <tr><td><code>"~1.1.1"</code></td><td>≥ 1.1.1 e &lt; 1.2.0</td></tr>
+                  <tr><td><code>"^1.1.1"</code></td><td>≥ 1.1.1 e &lt; 2.0.0</td></tr>
+                  <tr><td><code>"^0.27.2"</code></td><td>≥ 0.27.2 e &lt; <strong>0.28.0</strong></td></tr>
+                  <tr><td><code>"^0.0.4"</code></td><td>só 0.0.4 (&lt; 0.0.5)</td></tr>
+                </tbody>
+              </table>
+              <p class="caixa pequeno"><code>^</code> não muda o primeiro número <strong>diferente de zero</strong>. Em <code>0.x</code>, isso é bem mais restrito.</p>
+            </div>
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ npm view picocolors version &amp;&amp; npm ls picocolors</span>
+1.1.1
+04-dependencias-scripts@1.0.0 ~/modulo-2/etapas/04-dependencias-scripts
+└── picocolors@1.1.1</code></pre>
+                <figcaption>Saída real · <a href="capturas/terminal/b4-exata.txt">arquivo</a> · versão publicada e versão instalada em 21/10/2026</figcaption>
+              </figure>
+              <div class="grade-2 pequeno">
+                <div class="caixa"><h3>Manifesto</h3><p>Requisito: “aceito qualquer 1.x a partir de 1.1.1”.</p></div>
+                <div class="caixa"><h3>Lockfile</h3><p>Resolução: “instalei 1.1.1, deste endereço, com este hash”.</p></div>
+              </div>
+              <p class="pergunta pequeno"><strong>Preveja</strong>Se sair a 1.2.0 amanhã, o que <code>npm install</code> e <code>npm ci</code> fazem nesta pasta?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 45 -->
+        <section class="slide" data-n="45" data-tipo="investigacao" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Leia a mensagem antes de pedir ajuda</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ npm run inicio</span>
+<span class="erro">npm error Missing script: "inicio"</span>
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run
+npm error A complete log of this run can be found in: ~/.npm/_logs/2026-10-21T19_06_08_632Z-debug-0.log</code></pre>
+                <figcaption>Saída real · <a href="capturas/terminal/b4-script-inexistente.txt">arquivo</a></figcaption>
+              </figure>
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ node relatorio.js</span>   (sem node_modules)
+…
+<span class="erro">Error: Cannot find module 'picocolors'</span>
+…</code></pre>
+                <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-antes-de-instalar.txt">arquivo</a></figcaption>
+              </figure>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Sintoma</th><th>Quem reclamou</th><th>Primeira verificação</th></tr></thead>
+                <tbody>
+                  <tr><td>Missing script</td><td>…</td><td>…</td></tr>
+                  <tr><td>Cannot find module</td><td>…</td><td>…</td></tr>
+                </tbody>
+              </table>
+              <details class="dica"><summary>Dica</summary><p>Veja o prefixo da linha de erro: <code>npm error</code> ou o carregador de módulos do Node?</p></details>
+              <details class="solucao">
+                <summary>Mostrar solução (após a tentativa)</summary>
+                <p>Missing script: o npm não achou o nome em <code>scripts</code> → <code>npm run</code> lista os nomes. Cannot find module: o Node não achou o pacote em <code>node_modules</code> → <code>ls node_modules</code> e o manifesto.</p>
+              </details>
+            </div>
+          </div>
+        </section>
+
+        <!-- 46 -->
+        <section class="slide" data-n="46" data-tipo="ia" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Duas hipóteses, uma verificação, uma mudança</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="prompt-ia">
+              <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+              <p class="prompt-texto">
+                Meu script é <mark>[nome e comando do script]</mark>, meu manifesto relevante é
+                <mark>[trecho do package.json]</mark> e o erro é <mark>[mensagem completa]</mark>.
+                Liste duas causas possíveis e a evidência que distingue cada uma. Peça que eu
+                execute uma verificação antes de sugerir instalação ou atualização.
+              </p>
+            </div>
+            <div class="pilha">
+              <div class="caixa pequeno">
+                <h3>Não aceite como resposta automática</h3>
+                <ul>
+                  <li><code>npm install -g …</code></li>
+                  <li><code>npm audit fix --force</code></li>
+                  <li>apagar o lockfile “para resolver”</li>
+                </ul>
+              </div>
+              <p class="caixa caixa-destaque pequeno">Teste <strong>uma</strong> mudança por vez e registre a evidência antes e depois.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 47 -->
+        <section class="slide" data-n="47" data-tipo="pratica" data-tempo="12 min">
+          <header class="slide-topo">
+            <h2>Restaurar a cópia com <code>npm ci</code></h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da restauração">
+                <button role="tab" id="s47-t1" aria-controls="s47-p1" aria-selected="true">1 · Sem node_modules</button>
+                <button role="tab" id="s47-t2" aria-controls="s47-p2" aria-selected="false">2 · npm ci</button>
+                <button role="tab" id="s47-t3" aria-controls="s47-p3" aria-selected="false">3 · Restaurado</button>
+                <button role="tab" id="s47-t4" aria-controls="s47-p4" aria-selected="false">Erro: fora de sincronia</button>
+              </div>
+              <div role="tabpanel" id="s47-p1" aria-labelledby="s47-t1">
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ rm -rf node_modules &amp;&amp; npm start</span>
+
+&gt; 04-dependencias-scripts@1.0.0 start
+&gt; node relatorio.js
+…
+<span class="erro">Error: Cannot find module 'picocolors'</span>
+…</code></pre>
+                  <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-remover-node-modules.txt">arquivo</a>. No Windows (PowerShell): <code>Remove-Item -Recurse node_modules</code>, ou apague pelo explorador de arquivos.</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s47-p2" aria-labelledby="s47-t2" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm ci</span>
+
+added 30 packages, and audited 31 packages in 818ms
+
+5 packages are looking for funding
+  run `npm fund` for details
+
+3 high severity vulnerabilities
+…
+npm warn allow-scripts 1 package has install scripts not yet covered by allowScripts:
+npm warn allow-scripts   fsevents@2.3.3 (install: (install scripts present))
+…</code></pre>
+                  <figcaption>Saída real (trecho) · <a href="capturas/terminal/b4-npm-ci.txt">arquivo</a>. <strong>Aceitável:</strong> tempo e o aviso <code>allow-scripts</code> (npm 11; <code>fsevents</code> é opcional e só existe no macOS).</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s47-p3" aria-labelledby="s47-t3" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm start</span>
+
+&gt; 04-dependencias-scripts@1.0.0 start
+&gt; node relatorio.js
+
+Relatório da Todo List
+[x] Criar o package.json
+[x] Instalar uma dependência
+[ ] Comparar manifesto e lockfile
+[ ] Criar scripts no package.json
+[ ] Restaurar o ambiente com npm ci
+2 de 5 concluídas</code></pre>
+                  <figcaption>Saída real · <a href="capturas/terminal/b4-npm-start-restaurado.txt">arquivo</a>. <strong>Compare</strong> com o slide 40: mesmo comportamento.</figcaption>
+                </figure>
+              </div>
+              <div role="tabpanel" id="s47-p4" aria-labelledby="s47-t4" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code><span class="cmd">$ npm pkg set dependencies.picocolors="1.0.1" &amp;&amp; npm ci</span>
+npm error code EUSAGE
+npm error
+<span class="erro">npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync.</span> Please update your lock file with `npm install` before continuing.
+npm error
+npm error Invalid: lock file's picocolors@1.1.1 does not satisfy picocolors@1.0.1
+…</code></pre>
+                  <figcaption>Saída real (truncada: em seguida o npm imprime a ajuda completa do comando) · <a href="capturas/terminal/b4-ci-incoerente.txt">arquivo</a>. O manifesto foi restaurado depois do registro.</figcaption>
+                </figure>
+              </div>
+            </figure>
+            <div class="atividade">
+              <dl>
+                <dt>Tempo</dt><dd>12 min, individual</dd>
+                <dt>Pré-requisitos</dt><dd>Uma <strong>cópia</strong> da pasta de treino com <code>package-lock.json</code></dd>
+                <dt>Resultado esperado</dt><dd><code>npm start</code> volta a funcionar só com <code>npm ci</code></dd>
+              </dl>
+              <ol class="passos pequeno">
+                <li>Apague <code>node_modules</code> da cópia; rode <code>npm start</code> e leia o erro.</li>
+                <li><code>npm ci</code> e de novo <code>npm start</code>.</li>
+                <li>Feche o ciclo do slide 37: qual hipótese se confirmou?</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <!-- 48 -->
+        <section class="slide" data-n="48" data-tipo="verificacao" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Verificação individual, sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Manifesto da pasta de treino (trecho)</span></div>
+                <pre><code>"scripts": {
+  "start": "node relatorio.js",
+  "dev": "nodemon relatorio.js",
+  "dev:nativo": "node --watch relatorio.js"
+},
+"type": "commonjs",
+"dependencies": { "picocolors": "^1.1.1" },
+"devDependencies": { "nodemon": "^3.1.14" }</code></pre>
+              </div>
+              <ol class="passos pequeno">
+                <li>Qual pacote o código usa ao executar? Qual é só ferramenta?</li>
+                <li>Que versões <code>^1.1.1</code> aceita? Qual está instalada, e onde isso está escrito?</li>
+                <li>Que comando restaura uma cópia sem <code>node_modules</code>?</li>
+              </ol>
+            </div>
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Variação</dt><dd>Crie o script <code>relatorio:nativo</code> para <code>relatorio-nativo.js</code>. Antes de executar, escreva o comando e a saída esperada.</dd>
+                  <dt>Evidência</dt><dd>Relatório impresso pelo novo script</dd>
+                </dl>
+              </div>
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ npm relatorio:nativo</span>
+<span class="erro">Unknown command: "relatorio:nativo"</span>
+
+To see a list of supported npm commands, run:
+  npm help</code></pre>
+                <figcaption>Saída real · <a href="capturas/terminal/b4-npm-sem-run.txt">arquivo</a> · explique por que faltou <code>run</code></figcaption>
+              </figure>
+              <details class="solucao">
+                <summary>Comparação opcional: npm × Yarn</summary>
+                <p>Mesmo <code>package.json</code>; lockfile próprio (<code>yarn.lock</code>); <code>yarn add</code> ≈ <code>npm install &lt;pacote&gt;</code>. Um gerenciador por projeto. Velocidade só com medição controlada.</p>
+              </details>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

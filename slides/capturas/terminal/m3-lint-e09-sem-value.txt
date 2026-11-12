@@ -1,0 +1,12 @@
+# Registro real · 04/11/2026 · macOS · Node 24.19.0 · Vue 3.5.44 · Vite 8.3.5 · ESLint 10 + eslint-plugin-vue (configuração gerada pelo create-vue)
+# Etapa 09-template-reatividade — defeito provocado de propósito: concluidas.value += 1 trocado por concluidas += 1
+
+$ npx eslint src
+
+~/modulo-2/etapas/09-template-reatividade/src/App.vue
+  13:33  error  Must use `.value` to read or write the value wrapped by `ref()`  vue/no-ref-as-operand
+
+✖ 1 problem (1 error, 0 warnings)
+  1 error and 0 warnings potentially fixable with the `--fix` option.
+
+(código de saída: 1)

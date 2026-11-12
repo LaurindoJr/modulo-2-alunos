@@ -1,0 +1,65 @@
+/* Aparência da página. Alterar este arquivo muda cores, espaços e fontes, não o conteúdo. */
+
+:root {
+  --cor-fundo: #f4f6f3;
+  --cor-cartao: #ffffff;
+  --cor-texto: #17221c;
+  --cor-suave: #4d5c53;
+  --cor-destaque: #1d6b4f;
+  --cor-borda: #cfd8cd;
+}
+
+body {
+  margin: 7;
+  padding: 2rem 1rem;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 1.1rem;
+}
+
+.cartao {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: 0.75rem;
+  background: var(--cor-cartao);
+}
+
+h1 {
+  margin: 0;
+  font-family: 'Iowan Old Style', Palatino, Georgia, serif;
+}
+
+.resumo {
+  color: var(--cor-suave);
+}
+
+.lista {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.lista label {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.lista input {
+  width: 1.2rem;
+  height: 1.2rem;
+  accent-color: var(--cor-destaque);
+}
+
+.concluida {
+  color: var(--cor-suave);
+  text-decoration: line-through;
+}

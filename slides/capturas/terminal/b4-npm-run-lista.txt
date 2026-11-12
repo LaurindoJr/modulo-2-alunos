@@ -1,0 +1,9 @@
+~/modulo-2/etapas/04-dependencias-scripts $ npm run
+Lifecycle scripts included in 04-dependencias-scripts@1.0.0:
+  start
+    node relatorio.js
+available via `npm run`:
+  dev
+    nodemon relatorio.js
+  dev:nativo
+    node --watch relatorio.js

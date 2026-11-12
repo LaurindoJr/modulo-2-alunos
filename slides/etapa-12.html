@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 12 · Watchers e ciclo de vida</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="12">
+    <div class="janela">
+      <main class="palco" aria-label="Módulo 3, etapa 12: watchers e ciclo de vida">
+        <!-- 109 -->
+        <section class="slide" data-n="109" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Desafio: lembrar o tema escolhido e focar o campo ao abrir</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">Prático 3 da unidade (tema claro/escuro), corrigido e ligado ao Vue: o estado muda, um <strong>efeito</strong> acontece fora do template.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Efeito com <code>watch</code></td><td>Tema salvo e mantido após recarregar</td></tr>
+                  <tr><td>Agir quando o DOM existe</td><td>Cursor no campo “Nova tarefa” ao abrir</td></tr>
+                  <tr><td>Distinguir <code>computed</code> e <code>watch</code></td><td>Um exemplo de cada na Todo List</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              Na etapa 11, se você escolhesse um tema e recarregasse a página, a escolha
+              continuaria? O que precisaria acontecer a cada mudança?
+            </div>
+          </div>
+        </section>
+
+        <!-- 110 -->
+        <section class="slide" data-n="110" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2><code>computed</code> calcula; <code>watch</code> executa efeitos</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <table class="tabela">
+              <thead><tr><th></th><th><code>computed</code></th><th><code>watch</code></th></tr></thead>
+              <tbody>
+                <tr><td>Para quê</td><td>Calcular um valor a partir do estado</td><td>Fazer algo quando o estado muda</td></tr>
+                <tr><td>Devolve</td><td>Um valor (somente leitura)</td><td>Nada; executa uma função</td></tr>
+                <tr><td>Exemplo</td><td><code>visiveis</code>, <code>concluidas</code></td><td>Gravar no <code>localStorage</code>; mudar o <code>&lt;html&gt;</code></td></tr>
+                <tr><td>Opções</td><td>—</td><td><code>immediate</code> (já na criação), <code>deep</code> (mudanças internas)</td></tr>
+              </tbody>
+            </table>
+            <div class="bloco-codigo">
+              <div class="bloco-codigo-topo"><span>App.vue · tema</span></div>
+              <pre><code>const temaSalvo = lerTemaSalvo()           // utils/tema.js
+if (temaSalvo) aplicarTema(temaSalvo)
+const temaEscuro = ref((temaSalvo ?? temaDoSistema()) === 'escuro')
+
+// quando temaEscuro MUDA → efeito fora do template
+watch(temaEscuro, (escuro) =&gt; {
+  const tema = escuro ? 'escuro' : 'claro'
+  aplicarTema(tema)   // data-tema no &lt;html&gt;
+  salvarTema(tema)    // localStorage, com try/catch
+})</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 111 -->
+        <section class="slide" data-n="111" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>O tema muda, é salvo e volta depois de recarregar</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 12">
+                <button role="tab" id="s111-t1" aria-controls="s111-p1" aria-selected="true">1 · Botão</button>
+                <button role="tab" id="s111-t2" aria-controls="s111-p2" aria-selected="false">2 · Tema escuro</button>
+                <button role="tab" id="s111-t3" aria-controls="s111-p3" aria-selected="false">3 · Depois de recarregar</button>
+              </div>
+              <div role="tabpanel" id="s111-p1" aria-labelledby="s111-t1">
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>App.vue · cabeçalho</span></div>
+                  <pre><code>&lt;button type="button" class="botao alternar-tema"
+  :aria-pressed="temaEscuro"
+  @click="temaEscuro = !temaEscuro"&gt;
+  &lt;span aria-hidden="true"&gt;{{ temaEscuro ? '☾' : '☀' }}&lt;/span&gt;
+  Tema escuro
+&lt;/button&gt;</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s111-p2" aria-labelledby="s111-t2" hidden>
+                <img src="capturas/telas/m3-e12-escuro.png" alt="Etapa 12 em tema escuro, com o botão Tema escuro pressionado" class="recorte" />
+                <p class="legenda">Tela real após o clique: fundo <code>#101713</code>, botão com <code>aria-pressed="true"</code>.</p>
+              </div>
+              <div role="tabpanel" id="s111-p3" aria-labelledby="s111-t3" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code>antes do clique   aria-pressed="false"
+depois do clique  aria-pressed="true"   &lt;html data-tema="escuro"&gt;
+localStorage      todo-list:tema = "escuro"
+recarregado       aria-pressed="true"   &lt;html data-tema="escuro"&gt;</code></pre>
+                  <figcaption>Valores reais lidos no navegador automatizado · etapa 12 (build) · 04/11/2026</figcaption>
+                </figure>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa pequeno">DevTools › <strong>Application</strong> › Local Storage: a chave <code>todo-list:tema</code>. Apague-a e recarregue: volta a seguir o sistema.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>Ao recarregar, o cursor já está em “Nova tarefa”. Quem fez isso, e em que momento?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 112 -->
+        <section class="slide" data-n="112" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: lembrar também a busca</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>1</dt><dd>Crie <code>CHAVE_BUSCA</code> e inicialize <code>busca</code> com o valor salvo (ou <code>''</code>).</dd>
+                  <dt>2</dt><dd>Com <code>watch(busca, …)</code>, grave a cada mudança, com <code>try/catch</code>.</dd>
+                  <dt>Evidência</dt><dd>Digite, recarregue: a busca e a lista filtrada continuam.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>Copie o desenho de <code>lerTemaSalvo</code>/<code>salvarTema</code>: ler no início, gravar no <code>watch</code>.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>const CHAVE_BUSCA = 'todo-list:busca'
+
+function lerBusca() {
+  try {
+    return localStorage.getItem(CHAVE_BUSCA) ?? ''
+  } catch {
+    return ''
+  }
+}
+
+const busca = ref(lerBusca())
+
+watch(busca, (valor) =&gt; {
+  try {
+    localStorage.setItem(CHAVE_BUSCA, valor)
+  } catch {
+    // sem armazenamento: a busca vale só nesta aba
+  }
+})</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 113 -->
+        <section class="slide" data-n="113" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Ciclo de vida: o DOM só existe depois de montar</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="diagrama">
+              <svg viewBox="0 0 1000 250" role="img" aria-labelledby="d113-t d113-d">
+                <title id="d113-t">Ciclo de vida de um componente</title>
+                <desc id="d113-d">setup executa primeiro, com o DOM ainda inexistente; depois o componente é montado e onMounted roda; mudanças de estado geram atualizações; ao sair, onUnmounted roda.</desc>
+                <rect class="no" x="10" y="70" width="210" height="110" rx="14" />
+                <text x="115" y="115" text-anchor="middle" font-weight="700">setup</text>
+                <text x="115" y="148" text-anchor="middle" class="texto-suave">ref de template: null</text>
+                <rect class="no-destaque" x="270" y="70" width="210" height="110" rx="14" />
+                <text x="375" y="115" text-anchor="middle" font-weight="700">onMounted</text>
+                <text x="375" y="148" text-anchor="middle" class="texto-suave">DOM pronto: focar</text>
+                <rect class="no" x="530" y="70" width="210" height="110" rx="14" />
+                <text x="635" y="115" text-anchor="middle" font-weight="700">atualizações</text>
+                <text x="635" y="148" text-anchor="middle" class="texto-suave">estado muda</text>
+                <rect class="no" x="790" y="70" width="200" height="110" rx="14" />
+                <text x="890" y="115" text-anchor="middle" font-weight="700">onUnmounted</text>
+                <text x="890" y="148" text-anchor="middle" class="texto-suave">limpar recursos</text>
+                <path class="seta" d="M220 125 H262" /><polygon class="ponta" points="268,125 252,116 252,134" />
+                <path class="seta" d="M480 125 H522" /><polygon class="ponta" points="528,125 512,116 512,134" />
+                <path class="seta" d="M740 125 H782" /><polygon class="ponta" points="788,125 772,116 772,134" />
+                <path class="seta" d="M600 70 C600 20, 670 20, 670 62" /><polygon class="ponta" points="670,68 662,52 678,52" />
+                <text x="500" y="225" text-anchor="middle" class="texto-suave">ordem observada no Console: setup → campo no setup: null → montado</text>
+              </svg>
+            </figure>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>App.vue</span></div>
+                <pre><code>const campoTitulo = useTemplateRef('campoTitulo')
+// aqui campoTitulo.value ainda é null
+
+onMounted(() =&gt; {
+  campoTitulo.value?.focus()
+})</code></pre>
+              </div>
+              <p class="caixa pequeno">No template: <code>&lt;input ref="campoTitulo" …&gt;</code>. Foco automático só quando o campo é a ação principal da página.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 114 -->
+        <section class="slide" data-n="114" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: focar antes de montar</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>alteração provocada</span></div>
+                <pre><code>campoTitulo.value.focus()   // direto no setup
+onMounted(() =&gt; {})</code></pre>
+              </div>
+              <figure class="saida-real">
+                <pre style="max-height: none"><code>[Vue warn]: Unhandled error during execution of setup function
+  at &lt;App&gt;
+<span class="erro">Uncaught TypeError: Cannot read properties of null
+(reading 'focus')</span></code></pre>
+                <figcaption>Console real · página em branco · <a href="capturas/navegador/m3-e12-foco-setup.txt">arquivo</a></figcaption>
+              </figure>
+            </div>
+            <div class="pilha">
+              <ol class="passos pequeno">
+                <li>“setup function” na mensagem: o erro aconteceu antes da montagem.</li>
+                <li>“null (reading 'focus')”: o elemento ainda não existia.</li>
+                <li>Correção: mover para o <code>onMounted</code>.</li>
+              </ol>
+              <details class="solucao"><summary>Mostrar solução</summary><p>Tudo que depende do DOM do componente vai para o <code>onMounted</code>. O <code>?.</code> em <code>campoTitulo.value?.focus()</code> protege o caso raro em que o elemento não foi desenhado (por exemplo, dentro de um <code>v-if</code> falso).</p></details>
+            </div>
+          </div>
+        </section>
+
+        <!-- 115 -->
+        <section class="slide" data-n="115" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: o diagrama do ciclo de vida e o padrão do botão alternável</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="prompt-ia">
+              <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+              <p class="prompt-texto">
+                Neste componente Vue 3 com <code>&lt;script setup&gt;</code>, decida para cada trecho se
+                ele deveria estar num <code>computed</code>, num <code>watch</code> ou num
+                <code>onMounted</code>, justificando: <mark>[cole o script do App.vue]</mark>. Use
+                como referência as páginas Watchers e Lifecycle Hooks da documentação oficial.
+              </p>
+            </div>
+            <div class="caixa pequeno">
+              <h3>Onde procurar</h3>
+              <ul>
+                <li><a href="https://vuejs.org/guide/essentials/lifecycle.html#lifecycle-diagram">Lifecycle Diagram</a></li>
+                <li><a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">WAI-ARIA APG — Button</a> (toggle com <code>aria-pressed</code>)</li>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/light-dark">MDN — light-dark()</a></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 116 -->
+        <section class="slide" data-n="116" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="atividade">
+              <dl>
+                <dt>1</dt><dd>“Mostrar quantas tarefas estão atrasadas”: <code>computed</code> ou <code>watch</code>?</dd>
+                <dt>2</dt><dd>“Enviar um aviso ao servidor quando a lista mudar”: <code>computed</code> ou <code>watch</code>?</dd>
+                <dt>3</dt><dd>Por que <code>campoTitulo.value</code> é <code>null</code> no setup?</dd>
+              </dl>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

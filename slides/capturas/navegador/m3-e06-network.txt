@@ -1,0 +1,12 @@
+# Registro real · 04/11/2026 · macOS · Node 24.19.0 · Chromium (Chrome for Testing) automatizado
+# Etapa 06-dom-imperativo servida com: node ../ferramentas/servidor-local.mjs (porta 8088) · página recarregada
+
+Requisição                          Status  Tipo         Content-Type
+http://localhost:8088/              200     document     text/html; charset=utf-8
+http://localhost:8088/estilos.css   200     stylesheet   text/css; charset=utf-8
+http://localhost:8088/app.js        200     script       text/javascript; charset=utf-8
+
+# Terminal do servidor (mesmo carregamento):
+200 GET /
+200 GET /estilos.css
+200 GET /app.js

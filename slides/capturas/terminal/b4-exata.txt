@@ -1,0 +1,4 @@
+~/modulo-2/etapas/04-dependencias-scripts $ npm view picocolors version && npm ls picocolors
+1.1.1
+04-dependencias-scripts@1.0.0 ~/modulo-2/etapas/04-dependencias-scripts
+└── picocolors@1.1.1

@@ -1,0 +1,7 @@
+> (conteúdo de ambiente.js colado no Console de uma página local)
+console   → object
+Math      → object
+document  → object
+window    → object
+process   → não existe aqui
+fetch     → function

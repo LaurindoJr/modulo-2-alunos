@@ -1,0 +1,11 @@
+# Registro real · 04/11/2026 · macOS · Node 24.19.0 · Vue 3.5.44 · Vite 8.3.5 · ESLint 10 + eslint-plugin-vue (configuração gerada pelo create-vue)
+# Etapa 13-componentes-props-eventos — defeito provocado de propósito: emit('alternar', …) trocado por tarefa.concluida = !tarefa.concluida em TarefaItem.vue
+
+$ npx eslint src
+
+~/modulo-2/etapas/13-componentes-props-eventos/src/components/TarefaItem.vue
+  14:67  error  Unexpected mutation of "tarefa" prop  vue/no-mutating-props
+
+✖ 1 problem (1 error, 0 warnings)
+
+(código de saída: 1)

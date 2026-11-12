@@ -1,0 +1,8 @@
+~/modulo-2/etapas/todo-list $ npm run preview
+
+> todo-list@0.0.0 preview
+> vite preview
+
+  ➜  Local:   http://localhost:4173/
+  ➜  Network: use --host to expose
+^C

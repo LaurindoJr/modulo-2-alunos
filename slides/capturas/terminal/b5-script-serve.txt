@@ -1,0 +1,6 @@
+~/modulo-2/etapas/todo-list $ npm run serve
+npm error Missing script: "serve"
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run
+npm error A complete log of this run can be found in: ~/.npm/_logs/2026-10-21T19_17_13_171Z-debug-0.log

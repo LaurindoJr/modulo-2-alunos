@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 14 · v-model e slots</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="14">
+    <div class="janela">
+      <main class="palco" aria-label="Módulo 3, etapa 14: v-model em componente, slots e revisão">
+        <!-- 125 -->
+        <section class="slide" data-n="125" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Desafio: componentes com <code>v-model</code> e com slots</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">Prático 5 (botão que alterna e emite evento), corrigido, e a última peça do conceito “componentes, props, eventos e <strong>slots</strong>”. Termina com a revisão do módulo.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td><code>v-model</code> num componente</td><td><code>AlternarTema</code> e filtros sincronizados com o <code>App</code></td></tr>
+                  <tr><td>Slots</td><td>Título e subtítulo enviados ao <code>PainelCartao</code></td></tr>
+                  <tr><td>Prop × slot</td><td>Um exemplo de cada na Todo List</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              <code>&lt;AlternarTema v-model="temaEscuro" /&gt;</code>: que prop e que evento o
+              componente filho precisa ter para isso funcionar?
+            </div>
+          </div>
+        </section>
+
+        <!-- 126 -->
+        <section class="slide" data-n="126" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2><code>v-model</code> = prop + evento; slot = conteúdo vindo do pai</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>No pai, estas duas linhas são equivalentes</span></div>
+                <pre><code>&lt;AlternarTema v-model="temaEscuro" /&gt;
+
+&lt;AlternarTema :model-value="temaEscuro"
+  @update:model-value="(valor) =&gt; (temaEscuro = valor)" /&gt;</code></pre>
+              </div>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>No filho</span></div>
+                <pre><code>const escuro = defineModel({
+  type: Boolean,
+  required: true,
+})
+// ler escuro.value  = ler a prop
+// escrever          = emitir o evento</code></pre>
+              </div>
+              <p class="pequeno">Com nome: <code>v-model:busca</code> ↔ <code>defineModel('busca')</code>.</p>
+            </div>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>PainelCartao.vue · template</span></div>
+                <pre><code>&lt;section class="painel" :aria-labelledby="idTitulo"&gt;
+  &lt;header&gt;
+    &lt;h1 :id="idTitulo"&gt;
+      &lt;!-- slot nomeado, com conteúdo de reserva --&gt;
+      &lt;slot name="titulo"&gt;Todo List&lt;/slot&gt;
+    &lt;/h1&gt;
+    &lt;slot name="subtitulo" /&gt;
+  &lt;/header&gt;
+  &lt;!-- slot padrão --&gt;
+  &lt;slot /&gt;
+&lt;/section&gt;</code></pre>
+              </div>
+              <p class="caixa caixa-destaque pequeno"><strong>Prop</strong> passa <em>dados</em> que o filho exibe do seu jeito (<code>tarefa</code>). <strong>Slot</strong> passa <em>pedaços de interface</em> que o pai monta (o subtítulo com o resumo).</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 127 -->
+        <section class="slide" data-n="127" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2><code>AlternarTema</code> e <code>PainelCartao</code> na Todo List</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 14">
+                <button role="tab" id="s127-t1" aria-controls="s127-p1" aria-selected="true">1 · AlternarTema.vue</button>
+                <button role="tab" id="s127-t2" aria-controls="s127-p2" aria-selected="false">2 · Uso no App</button>
+                <button role="tab" id="s127-t3" aria-controls="s127-p3" aria-selected="false">3 · Resultado</button>
+              </div>
+              <div role="tabpanel" id="s127-p1" aria-labelledby="s127-t1">
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>components/AlternarTema.vue</span></div>
+                  <pre><code>&lt;script setup&gt;
+const escuro = defineModel({ type: Boolean, required: true })
+&lt;/script&gt;
+
+&lt;template&gt;
+  &lt;button type="button" class="alternar-tema"
+    :aria-pressed="escuro" @click="escuro = !escuro"&gt;
+    &lt;span aria-hidden="true"&gt;{{ escuro ? '☾' : '☀' }}&lt;/span&gt;
+    Tema escuro
+  &lt;/button&gt;
+&lt;/template&gt;</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s127-p2" aria-labelledby="s127-t2" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>App.vue · template (trecho)</span></div>
+                  <pre><code>&lt;AlternarTema v-model="temaEscuro" /&gt;
+
+&lt;PainelCartao&gt;
+  &lt;template #titulo&gt;Minhas tarefas&lt;/template&gt;
+  &lt;template #subtitulo&gt;
+    &lt;p class="subtitulo"&gt;{{ concluidas }} de {{ tarefas.length }} concluídas&lt;/p&gt;
+  &lt;/template&gt;
+  &lt;TarefaForm … /&gt;
+  &lt;TarefaFiltros v-model:busca="busca" v-model:situacao="situacao" /&gt;
+  &lt;ul&gt; … &lt;/ul&gt;
+&lt;/PainelCartao&gt;</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s127-p3" aria-labelledby="s127-t3" hidden>
+                <img src="capturas/telas/m3-e14-final.png" alt="Etapa 14: cabeçalho com marca Todo List e botão Tema escuro; painel Minhas tarefas com formulário, busca, filtros e quatro tarefas" class="recorte" />
+                <p class="legenda">Tela real: estado final do Módulo 3.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa pequeno">Vue DevTools: selecione <code>AlternarTema</code>, veja a prop <code>modelValue</code>; clique e veja <code>update:modelValue</code> na Timeline.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>Remova o <code>&lt;template #titulo&gt;</code>. O que aparece no lugar?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 128 -->
+        <section class="slide" data-n="128" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: <code>TarefaFiltros</code> com dois <code>v-model</code></h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Ponto de partida</dt><dd>A sua cópia da etapa 13. A pasta da etapa 14 já traz a solução.</dd>
+                  <dt>Tarefa</dt><dd>Mova os <strong>campos</strong> de busca e situação (HTML e CSS) do <code>App</code> para <code>TarefaFiltros.vue</code>, com <code>defineModel('busca')</code> e <code>defineModel('situacao')</code>.</dd>
+                  <dt>No App</dt><dd><code>&lt;TarefaFiltros v-model:busca="busca" v-model:situacao="situacao" /&gt;</code></dd>
+                  <dt>Evidência</dt><dd>Busca e situação continuam filtrando juntas; o estado continua no <code>App</code>.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>Os rádios podem ser gerados com <code>v-for</code> sobre uma lista de opções <code>{ valor, rotulo }</code>.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>const busca = defineModel('busca', { type: String, default: '' })
+const situacao = defineModel('situacao', { type: String, default: 'todas' })
+const SITUACOES = [
+  { valor: 'todas', rotulo: 'Todas' },
+  { valor: 'pendentes', rotulo: 'Pendentes' },
+  { valor: 'concluidas', rotulo: 'Concluídas' },
+]</code></pre>
+              <pre><code>&lt;input id="busca" v-model="busca" type="search" /&gt;
+&lt;label v-for="opcao in SITUACOES" :key="opcao.valor"&gt;
+  &lt;input v-model="situacao" type="radio" :value="opcao.valor" /&gt;
+  {{ opcao.rotulo }}
+&lt;/label&gt;</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 129 -->
+        <section class="slide" data-n="129" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Por que o prático 5 original não sincroniza com o pai</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="bloco-codigo">
+              <div class="bloco-codigo-topo"><span>Original (trecho)</span></div>
+              <pre><code>const props = defineProps({
+  initialValue: { type: Boolean, default: false },
+})
+const emit = defineEmits(['update:modelValue'])
+const isActive = ref(props.initialValue) // cópia local
+
+function toggle() {
+  isActive.value = !isActive.value
+  emit('update:modelValue', isActive.value)
+}</code></pre>
+            </div>
+            <div class="pilha">
+              <ul class="pequeno">
+                <li>O pai, com <code>v-model</code>, envia <code>modelValue</code> — que o filho não declarou. <code>initialValue</code> fica em <code>false</code>.</li>
+                <li>Se o pai mudar o valor por outro caminho, a cópia local não acompanha.</li>
+                <li>Botão sem <code>aria-pressed</code>: o estado não é anunciado.</li>
+              </ul>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Corrigido</span></div>
+                <pre><code>const ligado = defineModel({ type: Boolean, default: false })
+// &lt;button :aria-pressed="ligado" @click="ligado = !ligado"&gt;</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 130 -->
+        <section class="slide" data-n="130" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: o <code>v-model</code> com nome trocado</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>App.vue · alteração provocada</span></div>
+                <pre><code>&lt;TarefaFiltros v-model:procura="busca" v-model:situacao="situacao" /&gt;</code></pre>
+              </div>
+              <p class="pequeno">Sintoma: digitar na busca não filtra mais. Nenhum erro, nenhum aviso.</p>
+              <ol class="passos pequeno">
+                <li>Vue DevTools › <code>TarefaFiltros</code>: <code>procura</code> aparece como atributo solto, não como prop.</li>
+                <li>Compare o nome do <code>v-model:…</code> com o de <code>defineModel('…')</code>.</li>
+              </ol>
+            </div>
+            <div class="pilha">
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>Sem a prop <code>busca</code> vinda do pai, <code>defineModel('busca')</code> passa a guardar o valor só dentro do filho.</p></details>
+                <details class="solucao"><summary>Mostrar solução</summary><p>Nome do <code>v-model</code> e de <code>defineModel</code> precisam coincidir: <code>v-model:busca</code> ↔ <code>defineModel('busca')</code>. Volte para <code>busca</code>.</p></details>
+              </div>
+              <p class="caixa pequeno">Mesma família do evento com nome errado (etapa 13): contrato entre pai e filho quebrado em silêncio.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 131 -->
+        <section class="slide" data-n="131" data-tipo="integracao" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Revisão do Módulo 3 em desafios</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <table class="tabela">
+              <thead><tr><th>Desafio</th><th>Etapa</th></tr></thead>
+              <tbody>
+                <tr><td>Explicar, com o Network, de onde vêm HTML, CSS e JS</td><td>06</td></tr>
+                <tr><td>Mostrar o defeito de sincronia e por que o Vue o elimina</td><td>06, 07</td></tr>
+                <tr><td>Seguir <code>index.html → main.js → App.vue</code></td><td>08</td></tr>
+                <tr><td>Dizer onde usar <code>.value</code> e onde não</td><td>09</td></tr>
+                <tr><td>Explicar por que <code>:key</code> usa o id</td><td>10</td></tr>
+                <tr><td>Diferenciar <code>computed</code> e <code>watch</code> com exemplos</td><td>11, 12</td></tr>
+                <tr><td>Desenhar a árvore com props, eventos, <code>v-model</code> e slots</td><td>13, 14</td></tr>
+              </tbody>
+            </table>
+            <div class="pilha">
+              <div class="caixa pequeno">
+                <h3>Próximos passos</h3>
+                <p>15 TypeScript + Pinia · 16 API · 17 rotas · 18 testes — o projeto completo (<code>projeto/</code>).</p>
+              </div>
+              <div class="caixa pequeno">
+                <h3>Para pesquisar sozinho</h3>
+                <ul>
+                  <li><a href="https://vuejs.org/guide/components/provide-inject.html">Provide / Inject</a></li>
+                  <li><a href="https://vuejs.org/guide/scaling-up/state-management.html">State Management</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 132 -->
+        <section class="slide" data-n="132" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação final do Módulo 3, sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Variação</dt><dd>Crie um <code>ContadorTarefas.vue</code> que recebe <code>total</code> e <code>concluidas</code> por props e mostra o resumo com um slot opcional para um ícone.</dd>
+                  <dt>Justifique</dt><dd>Por que props aqui, e não <code>v-model</code>?</dd>
+                  <dt>Consulta</dt><dd>Documentação oficial; sem IA</dd>
+                </dl>
+              </div>
+              <div class="pergunta pequeno">
+                <strong>Reflexão sobre a IA</strong>
+                Cite uma sugestão que você rejeitou neste módulo e a evidência que usou.
+              </div>
+            </div>
+            <table class="tabela">
+              <thead><tr><th>Critério (0–2)</th><th>2 pontos quando…</th></tr></thead>
+              <tbody>
+                <tr><td>Camadas e DOM</td><td>Explica request/response e o defeito de sincronia com evidência</td></tr>
+                <tr><td>Reatividade</td><td>Usa <code>ref</code>/<code>.value</code> e explica por que a tela acompanha</td></tr>
+                <tr><td>Template e diretivas</td><td>Lista com <code>:key</code> estável, condicionais e eventos corretos</td></tr>
+                <tr><td>Derivados e efeitos</td><td>Escolhe entre <code>computed</code> e <code>watch</code> e justifica</td></tr>
+                <tr><td>Componentes</td><td>Props, eventos, <code>v-model</code> e slots com um dono para o estado</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

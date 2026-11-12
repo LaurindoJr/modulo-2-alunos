@@ -1,0 +1,4 @@
+pausa em app.js:27 → i = 0; lista.length = 4; (i < lista.length - 1) = true
+pausa em app.js:27 → i = 1; lista.length = 4; (i < lista.length - 1) = true
+pausa em app.js:27 → i = 2; lista.length = 4; (i < lista.length - 1) = true
+o laço termina: com i = 3, a condição 3 < 3 é falsa — o índice 3 (4ª tarefa) nunca é desenhado

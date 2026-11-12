@@ -1,0 +1,5 @@
+# Registro real · 04/11/2026 · macOS · Node 24.19.0 · Vue 3.5.44 · Vite 8.3.5 · Chromium (Chrome for Testing) automatizado
+# Etapa 08-projeto-sfc — defeito provocado de propósito: src/main.js: .mount('#app') trocado por .mount('#App') · npm run dev
+# Mensagens do Console (sem as mensagens do websocket do Vite):
+
+[Vue warn]: Failed to mount app: mount target selector "#App" returned null.

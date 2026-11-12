@@ -1,0 +1,6 @@
+# Registro real · 04/11/2026 · macOS · Node 24.19.0 · Vue 3.5.44 · Vite 8.3.5 · Chromium (Chrome for Testing) automatizado
+# Etapa 11-formularios-computed — defeito provocado de propósito: src/App.vue: busca.value = busca.value.trim() dentro do computed visiveis · digitado “criar tarefas” na busca
+# Mensagens do Console (sem as mensagens do websocket do Vite):
+
+(nenhuma mensagem no Console)
+Valor do campo de busca depois de digitar “criar tarefas”: "criartarefas"

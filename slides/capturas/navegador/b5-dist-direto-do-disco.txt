@@ -1,0 +1,7 @@
+GET file://~/modulo-2/etapas/05-vue-inicial/dist/index.html → 200 OK · text/html
+GET file:///assets/index-CsxmxGsD.js → falhou: net::ERR_FILE_NOT_FOUND
+GET file:///assets/index-DPF0c5U5.css → falhou: net::ERR_FILE_NOT_FOUND
+GET file:///favicon.ico → falhou: net::ERR_FILE_NOT_FOUND
+[console.error] Failed to load resource: net::ERR_FILE_NOT_FOUND (index-CsxmxGsD.js:1)
+[console.error] Failed to load resource: net::ERR_FILE_NOT_FOUND (index-DPF0c5U5.css:1)
+[console.error] Failed to load resource: net::ERR_FILE_NOT_FOUND (favicon.ico:1)

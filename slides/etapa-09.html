@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 09 · Template e reatividade</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="9">
+    <div class="janela">
+      <main class="palco" aria-label="Módulo 3, etapa 09: template e reatividade">
+        <!-- 85 -->
+        <section class="slide" data-n="85" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Desafio: valores que, ao mudar, mudam a tela</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">O <code>App.vue</code> estático da etapa 08 ganha <strong>estado</strong>. Prático 1 da unidade (contador), aplicado à Todo List.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Ler e escrever um <code>ref</code></td><td><code>.value</code> no script; nada no template</td></tr>
+                  <tr><td>Ligar atributo e evento ao estado</td><td>Botão desabilita sozinho no fim; barra acompanha</td></tr>
+                  <tr><td>Observar o estado</td><td>Valor mudando no Vue DevTools</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              <code>concluidas</code> começa em 2 e o total é 4. Depois de dois cliques em “Concluir
+              próxima”, o que mostram o resumo, a barra e o botão?
+            </div>
+          </div>
+        </section>
+
+        <!-- 86 -->
+        <section class="slide" data-n="86" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Sintaxe do template: <code>{{ }}</code>, <code>:</code> e <code>@</code></h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <table class="tabela">
+              <thead><tr><th>Sintaxe</th><th>Nome</th><th>Nesta etapa</th></tr></thead>
+              <tbody>
+                <tr><td><code>{{ expr }}</code></td><td>Interpolação</td><td><code>{{ concluidas }} de {{ TOTAL }}</code></td></tr>
+                <tr><td><code>:attr="expr"</code></td><td><code>v-bind</code></td><td><code>:disabled="concluidas === TOTAL"</code></td></tr>
+                <tr><td><code>:class="{ nome: cond }"</code></td><td>Classe condicional</td><td><code>:class="{ concluida: concluidas &gt;= 1 }"</code></td></tr>
+                <tr><td><code>@evento="f"</code></td><td><code>v-on</code></td><td><code>@click="concluirProxima"</code></td></tr>
+                <tr><td><code>ref(valor)</code></td><td>Estado reativo</td><td><code>const concluidas = ref(2)</code></td></tr>
+              </tbody>
+            </table>
+            <div class="pilha">
+              <div class="caixa pequeno">
+                <h3>Expressão sim, comando não</h3>
+                <p>Vale: <code>{{ concluidas === TOTAL ? 'tudo pronto!' : `faltam ${TOTAL - concluidas}` }}</code></p>
+                <p>Não vale: <code>{{ if (ok) { … } }}</code>, <code>{{ let x = 1 }}</code></p>
+              </div>
+              <div class="caixa caixa-destaque pequeno">
+                <h3><code>.value</code>: onde sim, onde não</h3>
+                <p>No <code>&lt;script&gt;</code>: <code>concluidas.value += 1</code>. No template: <code>{{ concluidas }}</code> — o Vue desembrulha.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 87 -->
+        <section class="slide" data-n="87" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2><code>ref</code> em ação: código, tela e Vue DevTools</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 09">
+                <button role="tab" id="s87-t1" aria-controls="s87-p1" aria-selected="true">1 · Script</button>
+                <button role="tab" id="s87-t2" aria-controls="s87-p2" aria-selected="false">2 · Template</button>
+                <button role="tab" id="s87-t3" aria-controls="s87-p3" aria-selected="false">3 · Depois de 1 clique</button>
+                <button role="tab" id="s87-t4" aria-controls="s87-p4" aria-selected="false">4 · DevTools</button>
+              </div>
+              <div role="tabpanel" id="s87-p1" aria-labelledby="s87-t1">
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>App.vue · &lt;script setup&gt;</span></div>
+                  <pre><code>import { ref } from 'vue'
+
+const titulo = ref('Minhas tarefas')
+const concluidas = ref(2)
+const TOTAL = 4 // constante comum: não precisa ser reativa
+
+function concluirProxima() {
+  if (concluidas.value &lt; TOTAL) concluidas.value += 1
+}</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s87-p2" aria-labelledby="s87-t2" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>App.vue · &lt;template&gt; (trecho)</span></div>
+                  <pre><code>&lt;h1&gt;{{ titulo }}&lt;/h1&gt;
+&lt;p class="resumo" :class="{ completo: concluidas === TOTAL }"&gt;
+  {{ concluidas }} de {{ TOTAL }} concluídas
+&lt;/p&gt;
+&lt;progress :value="concluidas" :max="TOTAL"&gt;&lt;/progress&gt;
+&lt;button :disabled="concluidas === TOTAL" @click="concluirProxima"&gt;
+  Concluir próxima
+&lt;/button&gt;</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s87-p3" aria-labelledby="s87-t3" hidden>
+                <img src="capturas/telas/m3-e09-reativo.png" alt="Etapa 09 após um clique: 3 de 4 concluídas, barra de progresso em três quartos, três tarefas riscadas" class="recorte" />
+                <p class="legenda">Tela real após um clique: resumo, barra e classes das tarefas mudaram juntos.</p>
+              </div>
+              <div role="tabpanel" id="s87-p4" aria-labelledby="s87-t4" hidden>
+                <img src="capturas/telas/m3-e09-devtools.png" data-pendente="Vue DevTools (botão flutuante no rodapé da página) › Components › App selecionado, mostrando concluidas: 3 depois de um clique em Concluir próxima." alt="Vue DevTools com o componente App e o valor de concluidas" class="recorte" />
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa pequeno">O Vue DevTools já vem configurado pelo create-vue: botão flutuante no rodapé da página em <code>npm run dev</code>.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>Você não escreveu nenhum código para atualizar a barra. Por que ela mudou?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 88 -->
+        <section class="slide" data-n="88" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: “Desfazer” e um título que reage</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>1</dt><dd>Botão “Desfazer”: <code>concluidas.value -= 1</code>, desabilitado quando <code>concluidas === 0</code>.</dd>
+                  <dt>2</dt><dd>O <code>&lt;h1&gt;</code> mostra <code>titulo</code> + “ ✓” quando tudo estiver concluído — <strong>sem</strong> criar outro <code>ref</code>.</dd>
+                  <dt>Evidência</dt><dd>Os dois botões se habilitam e desabilitam nos extremos; o título muda sozinho.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica 1</summary><p>Copie o botão “Concluir próxima” e troque a função e a condição do <code>:disabled</code>.</p></details>
+                <details class="dica"><summary>Dica 2</summary><p>O título é uma expressão: <code>titulo</code> mais um texto que depende de uma comparação.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>function desfazer() {
+  if (concluidas.value &gt; 0) concluidas.value -= 1
+}</code></pre>
+              <pre><code>&lt;h1&gt;{{ titulo }}{{ concluidas === TOTAL ? ' ✓' : '' }}&lt;/h1&gt;
+&lt;button type="button" class="botao"
+  :disabled="concluidas === 0" @click="desfazer"&gt;Desfazer&lt;/button&gt;</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 89 -->
+        <section class="slide" data-n="89" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Como o Vue sabe o que atualizar</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="diagrama">
+              <svg viewBox="0 0 1000 300" role="img" aria-labelledby="d89-t d89-d">
+                <title id="d89-t">Ciclo da reatividade</title>
+                <desc id="d89-d">Ao desenhar, o template lê concluidas.value e a dependência é registrada. Uma escrita em concluidas.value agenda uma atualização, que redesenha só o que dependia dele.</desc>
+                <rect class="no-destaque" x="20" y="110" width="240" height="90" rx="14" />
+                <text x="140" y="150" text-anchor="middle" font-weight="700">concluidas</text>
+                <text x="140" y="180" text-anchor="middle" class="texto-suave">ref · .value</text>
+                <rect class="no" x="380" y="20" width="260" height="90" rx="14" />
+                <text x="510" y="60" text-anchor="middle" font-weight="700">desenhar</text>
+                <text x="510" y="90" text-anchor="middle" class="texto-suave">lê → registra dependência</text>
+                <rect class="no" x="380" y="200" width="260" height="90" rx="14" />
+                <text x="510" y="240" text-anchor="middle" font-weight="700">escrever</text>
+                <text x="510" y="270" text-anchor="middle" class="texto-suave">concluidas.value += 1</text>
+                <rect class="no" x="760" y="110" width="220" height="90" rx="14" />
+                <text x="870" y="150" text-anchor="middle" font-weight="700">DOM</text>
+                <text x="870" y="180" text-anchor="middle" class="texto-suave">só o que dependia</text>
+                <path class="seta" d="M260 140 L372 75" /><polygon class="ponta" points="378,72 360,72 368,88" />
+                <path class="seta-destaque" d="M372 240 L268 180" /><polygon class="ponta-destaque" points="262,177 272,192 280,178" />
+                <path class="seta" d="M640 65 L752 130" /><polygon class="ponta" points="758,134 741,132 750,117" />
+                <text x="870" y="235" text-anchor="middle" class="texto-suave">atualização em lote</text>
+                <text x="870" y="262" text-anchor="middle" class="texto-suave">(próximo “tick”)</text>
+              </svg>
+            </figure>
+            <div class="pilha">
+              <p class="caixa caixa-destaque pequeno"><strong>Modelo:</strong> ao desenhar, o Vue <em>lê</em> <code>concluidas.value</code> e anota quem depende dele. Quando alguém <em>escreve</em> um valor novo, o Vue agenda um redesenho só dessas partes.</p>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Experimento: o DOM muda em lote</span></div>
+                <pre><code>concluidas.value += 1
+console.log(resumo.textContent) // antigo
+await nextTick()
+console.log(resumo.textContent) // novo</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 90 -->
+        <section class="slide" data-n="90" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: esquecer o <code>.value</code></h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="cmd">$ npx eslint src</span>
+src/App.vue
+  13:33  <span class="erro">error</span>  Must use `.value` to read or write the value
+               wrapped by `ref()`  vue/no-ref-as-operand</code></pre>
+                <figcaption>Lint real · <code>concluidas.value += 1</code> → <code>concluidas += 1</code> · <a href="capturas/terminal/m3-lint-e09-sem-value.txt">arquivo</a></figcaption>
+              </figure>
+              <figure class="saida-real">
+                <pre style="max-height: none"><code>[Vue warn]: Unhandled error during execution of native event handler
+<span class="erro">Uncaught TypeError: Assignment to constant variable.</span></code></pre>
+                <figcaption>Console real, ao clicar · resumo continua “2 de 4” · <a href="capturas/navegador/m3-e09-sem-value.txt">arquivo</a></figcaption>
+              </figure>
+            </div>
+            <div class="pilha">
+              <ol class="passos pequeno">
+                <li>Lint primeiro: ele aponta linha e coluna antes de rodar.</li>
+                <li>Sem lint, o erro só aparece no clique.</li>
+                <li>Pior caso: <code>if (concluidas &lt; TOTAL)</code> compara o <em>objeto</em> ref com um número — sem erro, o botão só para de funcionar.</li>
+              </ol>
+              <details class="solucao"><summary>Mostrar solução</summary><p>No <code>&lt;script&gt;</code>, sempre <code>concluidas.value</code>. A regra <code>vue/no-ref-as-operand</code> já vem na configuração do create-vue: rode <code>npm run lint</code>.</p></details>
+            </div>
+          </div>
+        </section>
+
+        <!-- 91 -->
+        <section class="slide" data-n="91" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: <code>ref</code>, <code>reactive</code> e a documentação</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="prompt-ia">
+              <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+              <p class="prompt-texto">
+                No Vue 3 com <code>&lt;script setup&gt;</code>, explique a diferença entre
+                <code>ref</code> e <code>reactive</code> usando este código:
+                <mark>[cole o script do seu App.vue]</mark>. Diga por que no template escrevo
+                <code>{{ concluidas }}</code> e no script <code>concluidas.value</code>. Cite a seção
+                da documentação oficial que confirma cada afirmação.
+              </p>
+            </div>
+            <div class="caixa pequeno">
+              <h3>Onde procurar</h3>
+              <ul>
+                <li><a href="https://vuejs.org/guide/essentials/reactivity-fundamentals.html">Reactivity Fundamentals</a> (“Limitations of reactive()”)</li>
+                <li><a href="https://vuejs.org/guide/essentials/template-syntax.html">Template Syntax</a> (“Using JavaScript Expressions”)</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 92 -->
+        <section class="slide" data-n="92" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="atividade">
+              <dl>
+                <dt>1</dt><dd>Escreva o atributo que desabilita um botão quando <code>total</code> é zero.</dd>
+                <dt>2</dt><dd><code>{{ if (ok) 'sim' }}</code> funciona? Reescreva com uma expressão.</dd>
+                <dt>3</dt><dd>Onde <code>.value</code> é obrigatório?</dd>
+              </dl>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+~/modulo-2/etapas/03-node-tarefas $ node titulo-da-pagina.js
+Antes de acessar document
+~/modulo-2/etapas/03-node-tarefas/titulo-da-pagina.js:5
+console.log(`Título da página: ${document.title}`)
+                                 ^
+
+ReferenceError: document is not defined
+    at Object.<anonymous> (~/modulo-2/etapas/03-node-tarefas/titulo-da-pagina.js:5:34)
+    at Module._compile (node:internal/modules/cjs/loader:1872:14)
+    at Object..js (node:internal/modules/cjs/loader:2003:10)
+    at Module.load (node:internal/modules/cjs/loader:1594:32)
+    at Module._load (node:internal/modules/cjs/loader:1396:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.19.0

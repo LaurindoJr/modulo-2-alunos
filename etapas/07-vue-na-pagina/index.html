@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List — etapa 07</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="estilos.css" />
+  </head>
+  <body>
+    <main class="cartao">
+      <!-- Fora do Vue: HTML comum, igual ao da etapa 06 -->
+      <h1>Minhas tarefas</h1>
+
+      <!-- Dentro do Vue: este trecho é o TEMPLATE. O Vue o lê e passa a controlá-lo. -->
+      <section id="app" v-cloak>
+        <p class="resumo">{{ tarefas.length }} tarefas · {{ contarConcluidas() }} concluídas</p>
+
+        <form class="formulario" novalidate @submit.prevent="adicionar">
+          <label for="nova-tarefa">Nova tarefa</label>
+          <div class="formulario-linha">
+            <input
+              id="nova-tarefa"
+              v-model.trim="titulo"
+              type="text"
+              maxlength="80"
+              autocomplete="off"
+              placeholder="Ex.: montar o Vue na página"
+              :aria-invalid="mensagem ? 'true' : 'false'"
+              aria-describedby="erro-tarefa"
+            />
+            <button type="submit" class="botao botao-principal">Adicionar</button>
+          </div>
+          <p id="erro-tarefa" class="erro" role="alert">{{ mensagem }}</p>
+        </form>
+
+        <ul class="lista">
+          <li
+            v-for="tarefa in tarefas"
+            :key="tarefa.id"
+            class="tarefa"
+            :class="{ concluida: tarefa.concluida }"
+          >
+            <label class="tarefa-rotulo">
+              <input type="checkbox" :checked="tarefa.concluida" @change="alternar(tarefa.id)" />
+              <span>{{ tarefa.titulo }}</span>
+            </label>
+            <button
+              type="button"
+              class="botao"
+              :aria-label="'Remover tarefa: ' + tarefa.titulo"
+              @click="remover(tarefa.id)"
+            >
+              Remover
+            </button>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <!-- 1º o Vue (cria a variável global Vue); 2º o nosso código, que usa essa variável -->
+    <script src="vendor/vue.global.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

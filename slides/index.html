@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Módulos 2 e 3 · Slides</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+    <style>
+      body {
+        overflow: auto;
+      }
+
+      .indice {
+        max-width: 68rem;
+        margin: 0 auto;
+        padding: 2.5rem 1rem 3rem;
+        font-size: 17px;
+      }
+
+      .indice h1 {
+        margin: 0 0 0.3rem;
+        font-family: var(--fonte-titulo);
+        font-size: clamp(2rem, 1.4rem + 2.5vw, 3.2rem);
+        line-height: 1.1;
+      }
+
+      .indice h2 {
+        margin: 2.2rem 0 0.8rem;
+        font-family: var(--fonte-titulo);
+        font-size: 1.5rem;
+      }
+
+      .indice .lead {
+        max-width: 48rem;
+        font-size: 1.1rem;
+      }
+
+      .blocos {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .bloco-cartao {
+        display: grid;
+        gap: 0.5rem;
+        align-content: start;
+        padding: 1rem 1.1rem;
+        border: 1px solid var(--borda);
+        border-radius: 0.6rem;
+        background: var(--superficie);
+        box-shadow: var(--sombra);
+      }
+
+      .bloco-cartao h3 {
+        margin: 0;
+        font-size: 1.15rem;
+      }
+
+      .bloco-cartao a.abrir {
+        justify-self: start;
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.4rem;
+        background: var(--primaria);
+        color: var(--palco);
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .bloco-cartao a.abrir:hover {
+        background: var(--primaria-forte);
+      }
+
+      .bloco-num {
+        color: var(--texto-suave);
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .legenda-tipos {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        font-size: 24px;
+      }
+
+      .indice table {
+        font-size: 0.95rem;
+      }
+
+      .indice .caixa {
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="indice">
+      <p class="bloco-num">Módulos 2 e 3 · Desenvolvimento web frontend</p>
+      <h1>Todo List: do arquivo HTML aos componentes Vue</h1>
+      <p class="lead">
+        132 slides sobre a mesma Todo List. Módulo 2: ambiente, ferramentas e dependências, em
+        cinco blocos de 100 minutos. Módulo 3: do DOM ao Vue, parte por parte, em nove etapas de
+        40 minutos. Cada slide alterna demonstração, previsão, explicação, prática, consulta à IA e
+        verificação sem IA.
+      </p>
+
+      <h2>Módulo 2 · Ambientes de desenvolvimento e dependências</h2>
+      <ol class="blocos">
+        <li class="bloco-cartao">
+          <span class="bloco-num">Bloco 1 · slides 1–12</span>
+          <h3>Ambientes e primeiro contato</h3>
+          <p>Onde se edita, executa, observa e publica. Página estática da Todo List.</p>
+          <p class="pequeno suave">Etapa <code>01-pagina-estatica</code></p>
+          <a class="abrir" href="bloco-1.html">Abrir bloco 1</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Bloco 2 · slides 13–24</span>
+          <h3>Editor, navegador e erros</h3>
+          <p>Elements, Console, breakpoint e Network para localizar três defeitos controlados.</p>
+          <p class="pequeno suave">Etapa <code>02-erros-controlados</code></p>
+          <a class="abrir" href="bloco-2.html">Abrir bloco 2</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Bloco 3 · slides 25–36</span>
+          <h3>JavaScript no navegador e no Node</h3>
+          <p>Linguagem, engine e runtime; terminal, PATH, pasta atual e módulos.</p>
+          <p class="pequeno suave">Etapa <code>03-node-tarefas</code></p>
+          <a class="abrir" href="bloco-3.html">Abrir bloco 3</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Bloco 4 · slides 37–48</span>
+          <h3>Dependências e scripts</h3>
+          <p>Manifesto, lockfile, dependências diretas e transitivas, scripts e <code>npm ci</code>.</p>
+          <p class="pequeno suave">Etapa <code>04-dependencias-scripts</code></p>
+          <a class="abrir" href="bloco-4.html">Abrir bloco 4</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Bloco 5 · slides 49–60</span>
+          <h3>Ambiente Vue e desafios</h3>
+          <p>create-vue, Vite, estrutura do projeto, build, preview e diagnóstico.</p>
+          <p class="pequeno suave">Etapa <code>05-vue-inicial</code></p>
+          <a class="abrir" href="bloco-5.html">Abrir bloco 5</a>
+        </li>
+      </ol>
+
+      <h2>Módulo 3 · Linguagens e frameworks frontend, com foco no Vue</h2>
+      <p>
+        Cada etapa tem 8 slides e segue o mesmo caminho: o que o dev frontend precisa
+        <strong>conhecer</strong>, <strong>executar</strong>, <strong>entender</strong> (com um erro
+        real investigado) e <strong>pesquisar</strong> (documentação oficial e IA com verificação).
+        Checklist completo em <a href="../materiais/mapa-dev-frontend-modulo-3.md">mapa-dev-frontend-modulo-3.md</a>.
+      </p>
+      <ol class="blocos">
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 06 · slides 61–68 · 40 min</span>
+          <h3>A web em três camadas e o DOM</h3>
+          <p>Cliente e servidor, HTML/CSS/JS, Flexbox, estado → <code>render()</code> e o defeito de sincronia.</p>
+          <p class="pequeno suave">Pasta <code>etapas/06-dom-imperativo</code></p>
+          <a class="abrir" href="etapa-06.html">Abrir etapa 06</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 07 · slides 69–76 · 40 min</span>
+          <h3>Frameworks e Vue na página</h3>
+          <p>Ferramentas por papel, os 13 conceitos da Aula 3 e Vue montado em parte da página, sem build.</p>
+          <p class="pequeno suave">Pasta <code>etapas/07-vue-na-pagina</code></p>
+          <a class="abrir" href="etapa-07.html">Abrir etapa 07</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 08 · slides 77–84 · 40 min</span>
+          <h3>Anatomia do projeto e do <code>.vue</code></h3>
+          <p><code>index.html → main.js → App.vue</code>, SFC, estilo global × <code>scoped</code>, o que o Vite faz.</p>
+          <p class="pequeno suave">Pasta <code>etapas/08-projeto-sfc</code></p>
+          <a class="abrir" href="etapa-08.html">Abrir etapa 08</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 09 · slides 85–92 · 40 min</span>
+          <h3>Template e reatividade</h3>
+          <p><code>{{ }}</code>, <code>:</code>, <code>@</code>, <code>ref</code> e <code>.value</code>; como o Vue sabe o que atualizar.</p>
+          <p class="pequeno suave">Pasta <code>etapas/09-template-reatividade</code></p>
+          <a class="abrir" href="etapa-09.html">Abrir etapa 09</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 10 · slides 93–100 · 40 min</span>
+          <h3>Listas, condicionais e eventos</h3>
+          <p><code>v-for</code> e <code>:key</code>, <code>v-if</code> × <code>v-show</code>, <code>:class</code>, eventos com argumento.</p>
+          <p class="pequeno suave">Pasta <code>etapas/10-listas-eventos</code></p>
+          <a class="abrir" href="etapa-10.html">Abrir etapa 10</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 11 · slides 101–108 · 40 min</span>
+          <h3>Formulários e <code>computed</code></h3>
+          <p><code>v-model</code> e modificadores, validação acessível, valores derivados com cache.</p>
+          <p class="pequeno suave">Pasta <code>etapas/11-formularios-computed</code></p>
+          <a class="abrir" href="etapa-11.html">Abrir etapa 11</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 12 · slides 109–116 · 40 min</span>
+          <h3>Watchers e ciclo de vida</h3>
+          <p><code>watch</code> para efeitos, tema salvo, <code>onMounted</code> e refs de template.</p>
+          <p class="pequeno suave">Pasta <code>etapas/12-watchers-ciclo-de-vida</code></p>
+          <a class="abrir" href="etapa-12.html">Abrir etapa 12</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 13 · slides 117–124 · 40 min</span>
+          <h3>Componentes: props e eventos</h3>
+          <p>Árvore de componentes, <code>defineProps</code>, <code>defineEmits</code>, um dono para o estado.</p>
+          <p class="pequeno suave">Pasta <code>etapas/13-componentes-props-eventos</code></p>
+          <a class="abrir" href="etapa-13.html">Abrir etapa 13</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 14 · slides 125–132 · 40 min</span>
+          <h3><code>v-model</code> em componente e slots</h3>
+          <p><code>defineModel</code>, slots nomeados e de reserva, revisão do módulo em desafios.</p>
+          <p class="pequeno suave">Pasta <code>etapas/14-v-model-slots</code></p>
+          <a class="abrir" href="etapa-14.html">Abrir etapa 14</a>
+        </li>
+      </ol>
+
+      <h2>Como usar</h2>
+      <div class="grade-2" style="font-size: 1rem">
+        <table class="tabela">
+          <tbody>
+            <tr><td><kbd>→</kbd> <kbd>PageDown</kbd> <kbd>Espaço</kbd></td><td>Próximo slide (passa para o bloco seguinte no fim)</td></tr>
+            <tr><td><kbd>←</kbd> <kbd>PageUp</kbd></td><td>Slide anterior</td></tr>
+            <tr><td><kbd>L</kbd></td><td>Modo leitura: todos os slides em sequência (revisão, impressão, celular)</td></tr>
+            <tr><td><kbd>T</kbd></td><td>Tema escuro</td></tr>
+            <tr><td><kbd>?</kbd></td><td>Ajuda</td></tr>
+          </tbody>
+        </table>
+        <div class="pilha">
+          <p class="legenda-tipos" aria-label="Tipos de slide">
+            <span class="selo selo-demonstracao">Demonstração</span>
+            <span class="selo selo-previsao">Previsão</span>
+            <span class="selo selo-explicacao">Explicação</span>
+            <span class="selo selo-pratica">Prática</span>
+            <span class="selo selo-investigacao">Investigação</span>
+            <span class="selo selo-ia">Consulta à IA</span>
+            <span class="selo selo-verificacao">Verificação sem IA</span>
+            <span class="selo selo-integracao">Integração</span>
+          </p>
+          <p class="legenda-tipos" aria-label="Partes do caminho do Módulo 3">
+            <span class="selo-parte selo-parte-conhecer">Conhecer</span>
+            <span class="selo-parte selo-parte-executar">Executar</span>
+            <span class="selo-parte selo-parte-entender">Entender</span>
+            <span class="selo-parte selo-parte-pesquisar">Pesquisar</span>
+          </p>
+          <p class="caixa">
+            Os slides funcionam offline, abertos direto do disco. Instalações de pacotes e o uso de
+            IA exigem internet. Nenhum slide executa Node, npm ou comandos do sistema: as saídas de
+            terminal mostradas são <strong>registros reais</strong> feitos em 21/10/2026 (Módulo 2)
+            e 04/11/2026 (Módulo 3), em macOS com Node 24.19.0 e npm 11.17.0, identificados na
+            legenda.
+          </p>
+        </div>
+      </div>
+
+      <h2>Capturas</h2>
+      <p>
+        Telas de página e registros de Console, Network e breakpoint foram feitos no Chrome 155; saídas de
+        terminal, com os comandos reais. Algumas telas do VS Code e do DevTools são mostradas ao vivo
+        em aula. Lista completa em <a href="capturas/LEIAME.md">capturas/LEIAME.md</a>.
+      </p>
+
+      <h2>Pacote</h2>
+      <ul>
+        <li><strong>Projeto de referência</strong> — demonstrado em aula pelo professor (visão geral do produto final)</li>
+        <li><a href="../etapas/README.md">etapas/</a> — construção guiada em 14 etapas numeradas: 01–05 (Módulo 2) e 06–14 (Módulo 3)</li>
+        <li><a href="../materiais/">materiais/</a> — roteiro de instalação, registro de investigação com IA, exercícios revisados e rubrica</li>
+        <li><a href="../README.md">README do pacote</a> — versões verificadas, decisões e pendências</li>
+      </ul>
+
+      <h2>Referências técnicas</h2>
+      <ul class="pequeno">
+        <li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works">MDN — How the web works</a> · <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview">Overview of HTTP</a> · <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction">Introduction to the DOM</a> · <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Execution_model">JavaScript execution model</a></li>
+        <li><a href="https://code.visualstudio.com/docs">VS Code</a> · <a href="https://eslint.org/docs/latest/">ESLint</a> · <a href="https://developer.chrome.com/docs/devtools">Chrome DevTools</a></li>
+        <li><a href="https://v8.dev/docs">V8</a> · <a href="https://nodejs.org/en/learn/getting-started/introduction-to-nodejs">Introduction to Node.js</a> · <a href="https://nodejs.org/en/learn/getting-started/differences-between-nodejs-and-the-browser">Node.js × navegador</a> · <a href="https://nodejs.org/api/modules.html">CommonJS</a> · <a href="https://nodejs.org/api/esm.html">ES Modules</a> · <a href="https://nodejs.org/api/packages.html">Packages</a> · <a href="https://nodejs.org/en/about/previous-releases">Ciclo de versões</a></li>
+        <li><a href="https://docs.npmjs.com/cli/configuring-npm/package-json">npm package.json</a> · <a href="https://docs.npmjs.com/cli/configuring-npm/package-lock-json">package-lock.json</a> · <a href="https://docs.npmjs.com/cli/using-npm/scripts">scripts</a> · <a href="https://docs.npmjs.com/cli/commands/npm-ci/">npm ci</a> · <a href="https://semver.org/">SemVer 2.0.0</a></li>
+        <li><a href="https://vuejs.org/guide/quick-start.html">Vue — Quick Start</a> · <a href="https://vuejs.org/guide/scaling-up/tooling.html">Tooling</a> · <a href="https://vite.dev/guide/">Vite — guia</a> · <a href="https://vite.dev/guide/build.html">build</a></li>
+        <li>Módulo 3: <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox">MDN — Flexbox</a> · <a href="https://vuejs.org/guide/introduction.html">Vue — Introduction</a> · <a href="https://vuejs.org/guide/essentials/template-syntax.html">Template Syntax</a> · <a href="https://vuejs.org/guide/essentials/reactivity-fundamentals.html">Reactivity</a> · <a href="https://vuejs.org/guide/essentials/list.html">List Rendering</a> · <a href="https://vuejs.org/guide/essentials/forms.html">Forms</a> · <a href="https://vuejs.org/guide/essentials/computed.html">Computed</a> · <a href="https://vuejs.org/guide/essentials/watchers.html">Watchers</a> · <a href="https://vuejs.org/guide/essentials/lifecycle.html">Lifecycle</a> · <a href="https://vuejs.org/guide/components/props.html">Props</a> · <a href="https://vuejs.org/guide/components/events.html">Events</a> · <a href="https://vuejs.org/guide/components/v-model.html">Component v-model</a> · <a href="https://vuejs.org/guide/components/slots.html">Slots</a></li>
+      </ul>
+    </main>
+  </body>
+</html>

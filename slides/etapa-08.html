@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 08 · Projeto e SFC</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="8">
+    <div class="janela">
+      <main class="palco" aria-label="Módulo 3, etapa 08: anatomia do projeto Vue e do arquivo .vue">
+        <!-- 77 -->
+        <section class="slide" data-n="77" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Desafio: ler o projeto Vue arquivo por arquivo</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">O projeto criado no Módulo 2 (etapa 05) já funciona. Hoje você explica <strong>como</strong>: quem o navegador recebe, onde o Vue começa e o que o Vite faz com um arquivo <code>.vue</code>.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Seguir <code>index.html → main.js → App.vue</code></td><td>Cada seta explicada com uma linha de código</td></tr>
+                  <tr><td>Distinguir estilo global e <code>scoped</code></td><td>As duas regras apontadas no Elements</td></tr>
+                  <tr><td>Ler um aviso do Vue</td><td>Tela em branco diagnosticada pelo Console</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              Abra o <code>index.html</code> do projeto. Onde está a lista de tarefas? Se ela não
+              está lá, de onde vem?
+            </div>
+          </div>
+        </section>
+
+        <!-- 78 -->
+        <section class="slide" data-n="78" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Quem carrega quem: do <code>index.html</code> ao <code>App.vue</code></h2>
+          </header>
+          <div class="slide-corpo pilha">
+            <figure class="diagrama">
+              <svg viewBox="0 0 1400 230" role="img" aria-labelledby="d78-t d78-d">
+                <title id="d78-t">Cadeia de carregamento do projeto Vue</title>
+                <desc id="d78-d">index.html carrega main.js; main.js importa App.vue e main.css e chama createApp(App).mount('#app'); App.vue tem script, template e style.</desc>
+                <rect class="no" x="20" y="40" width="300" height="150" rx="14" />
+                <text x="170" y="90" text-anchor="middle" font-weight="700">index.html</text>
+                <text x="170" y="125" text-anchor="middle" class="texto-suave">&lt;div id="app"&gt; vazia</text>
+                <text x="170" y="155" text-anchor="middle" class="texto-suave">carrega /src/main.js</text>
+                <rect class="no" x="420" y="40" width="380" height="150" rx="14" />
+                <text x="610" y="90" text-anchor="middle" font-weight="700">src/main.js</text>
+                <text x="610" y="125" text-anchor="middle" class="texto-suave">import App · import main.css</text>
+                <text x="610" y="155" text-anchor="middle" class="texto-suave">createApp(App).mount('#app')</text>
+                <rect class="no-destaque" x="900" y="20" width="480" height="190" rx="14" />
+                <text x="1140" y="62" text-anchor="middle" font-weight="700">src/App.vue (SFC)</text>
+                <text x="1140" y="102" text-anchor="middle">&lt;script setup&gt; · comportamento</text>
+                <text x="1140" y="138" text-anchor="middle">&lt;template&gt; · estrutura</text>
+                <text x="1140" y="174" text-anchor="middle">&lt;style scoped&gt; · apresentação</text>
+                <path class="seta" d="M320 115 H410" /><polygon class="ponta" points="416,115 400,106 400,124" />
+                <path class="seta-destaque" d="M800 115 H890" /><polygon class="ponta-destaque" points="896,115 880,106 880,124" />
+              </svg>
+            </figure>
+            <table class="tabela">
+              <thead><tr><th>Arquivo</th><th>Quem usa</th><th>Papel</th></tr></thead>
+              <tbody>
+                <tr><td><code>vite.config.js</code></td><td>Vite (Node)</td><td>Plugin que entende <code>.vue</code>, Vue DevTools, atalho <code>@</code> → <code>src</code></td></tr>
+                <tr><td><code>src/assets/main.css</code></td><td>Navegador</td><td>Estilo <strong>global</strong>: tokens de cor (claro/escuro), espaços, botões</td></tr>
+                <tr><td><code>package.json</code></td><td>npm</td><td><code>vue</code> em <code>dependencies</code>; <code>vite</code> em <code>devDependencies</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 79 -->
+        <section class="slide" data-n="79" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Três observações com <code>npm run dev</code></h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Observações no projeto em execução">
+                <button role="tab" id="s79-t1" aria-controls="s79-p1" aria-selected="true">1 · #app vazia × cheia</button>
+                <button role="tab" id="s79-t2" aria-controls="s79-p2" aria-selected="false">2 · HMR</button>
+                <button role="tab" id="s79-t3" aria-controls="s79-p3" aria-selected="false">3 · App.vue no Network</button>
+              </div>
+              <div role="tabpanel" id="s79-p1" aria-labelledby="s79-t1">
+                <div class="grade-2">
+                  <div class="bloco-codigo">
+                    <div class="bloco-codigo-topo"><span>index.html (arquivo)</span></div>
+                    <pre><code>&lt;div id="app"&gt;&lt;/div&gt;</code></pre>
+                  </div>
+                  <div class="bloco-codigo">
+                    <div class="bloco-codigo-topo"><span>Elements (DOM)</span></div>
+                    <pre><code>&lt;div id="app" data-v-app=""&gt;
+  &lt;main data-v-7a7a37b1 class="cartao"&gt;
+    &lt;h1 data-v-7a7a37b1&gt;Minhas tarefas&lt;/h1&gt; …</code></pre>
+                  </div>
+                </div>
+              </div>
+              <div role="tabpanel" id="s79-p2" aria-labelledby="s79-t2" hidden>
+                <img src="capturas/telas/m3-e08-sfc.png" alt="Página da etapa 08: Minhas tarefas com quatro tarefas escritas no template, duas riscadas" class="recorte" />
+                <p class="legenda">Altere o texto de uma tarefa no <code>App.vue</code> e salve <strong>sem recarregar</strong>: a página muda sozinha (<em>Hot Module Replacement</em>).</p>
+              </div>
+              <div role="tabpanel" id="s79-p3" aria-labelledby="s79-t3" hidden>
+                <figure class="saida-real">
+                  <pre style="max-height: none"><code>GET /src/App.vue  →  200  Content-Type: text/javascript
+
+function _sfc_render(_ctx, _cache) {
+  return (_openBlock(), _createElementBlock("main", _hoisted_1, [
+    _createStaticVNode("&lt;h1 data-v-7a7a37b1&gt;Minhas tarefas&lt;/h1&gt;…")
+  ]))
+}
+export default _export_sfc(_sfc_main, [['render', _sfc_render],
+  ['__scopeId', "data-v-7a7a37b1"]])</code></pre>
+                  <figcaption>Resposta real do Vite (trechos) · etapa 08 · Vite 8.3.5 · <a href="capturas/navegador/m3-e08-app-vue-transformado.txt">arquivo</a></figcaption>
+                </figure>
+              </div>
+            </figure>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Terminal</span><button type="button" class="copiar">Copiar</button></div>
+                <pre><code>cd etapas/08-projeto-sfc
+npm ci
+npm run dev</code></pre>
+              </div>
+              <p class="pergunta pequeno"><strong>Observe</strong>O navegador pediu <code>App.vue</code> e recebeu JavaScript. Quem fez a troca?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 80 -->
+        <section class="slide" data-n="80" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: estilo global × estilo <code>scoped</code></h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>1</dt><dd>No <code>&lt;style scoped&gt;</code> do <code>App.vue</code>, acrescente <code>h1 { color: var(--cor-primaria) }</code>.</dd>
+                  <dt>2</dt><dd>Em <code>src/assets/main.css</code>, mude <code>--cor-primaria</code>. O que acontece com o título?</dd>
+                  <dt>3</dt><dd>No Elements, selecione o <code>&lt;h1&gt;</code> e compare as duas regras no painel Styles.</dd>
+                  <dt>Evidência</dt><dd>A regra do <code>App.vue</code> tem <code>[data-v-…]</code>; a do <code>main.css</code>, não.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p><code>main.css</code> é importado no <code>main.js</code>: vale para a página toda. O <code>scoped</code> vale só para os elementos daquele componente.</p></details>
+                <details class="solucao"><summary>Mostrar solução (após a tentativa)</summary><p>A regra aparece como <code>h1[data-v-7a7a37b1]</code>. O Vite acrescenta o atributo nos elementos do componente e no seletor — por isso ela não alcança <code>h1</code> de outros componentes.</p></details>
+              </div>
+            </div>
+            <div class="bloco-codigo">
+              <div class="bloco-codigo-topo"><span>src/main.js (completo)</span></div>
+              <pre><code>// Ponto de entrada do JavaScript: o index.html carrega este arquivo.
+import { createApp } from 'vue'
+
+import App from './App.vue'    // componente raiz (.vue → JS pelo Vite)
+import './assets/main.css'     // estilo GLOBAL: vale para a página inteira
+
+// Cria a aplicação e a monta no &lt;div id="app"&gt; do index.html.
+createApp(App).mount('#app')</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 81 -->
+        <section class="slide" data-n="81" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>O navegador não entende <code>.vue</code>: o Vite traduz</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="diagrama">
+              <svg viewBox="0 0 1000 300" role="img" aria-labelledby="d81-t d81-d">
+                <title id="d81-t">Transformação de um SFC</title>
+                <desc id="d81-d">App.vue passa pelo Vite com o plugin do Vue e vira um módulo JavaScript com função de renderização e CSS com atributo data-v; o navegador executa esse JavaScript.</desc>
+                <rect class="no" x="20" y="90" width="230" height="120" rx="14" />
+                <text x="135" y="140" text-anchor="middle" font-weight="700">App.vue</text>
+                <text x="135" y="175" text-anchor="middle" class="texto-suave">script · template · style</text>
+                <rect class="no-destaque" x="340" y="70" width="290" height="160" rx="14" />
+                <text x="485" y="122" text-anchor="middle" font-weight="700">Vite + plugin-vue</text>
+                <text x="485" y="157" text-anchor="middle" class="texto-suave">roda no Node,</text>
+                <text x="485" y="185" text-anchor="middle" class="texto-suave">no seu computador</text>
+                <rect class="no" x="720" y="40" width="260" height="100" rx="14" />
+                <text x="850" y="82" text-anchor="middle" font-weight="700">módulo JS</text>
+                <text x="850" y="115" text-anchor="middle" class="texto-suave">_sfc_render(…)</text>
+                <rect class="no" x="720" y="160" width="260" height="100" rx="14" />
+                <text x="850" y="202" text-anchor="middle" font-weight="700">CSS</text>
+                <text x="850" y="235" text-anchor="middle" class="texto-suave">h1[data-v-7a7a37b1]</text>
+                <path class="seta" d="M250 150 H330" /><polygon class="ponta" points="336,150 320,141 320,159" />
+                <path class="seta-destaque" d="M630 130 L712 95" /><polygon class="ponta-destaque" points="718,92 700,90 707,107" />
+                <path class="seta-destaque" d="M630 170 L712 205" /><polygon class="ponta-destaque" points="718,208 707,193 700,210" />
+              </svg>
+            </figure>
+            <div class="pilha">
+              <p class="caixa caixa-destaque pequeno"><strong>Modelo:</strong> navegador pede <code>index.html</code> → executa <code>main.js</code> → <code>createApp(App)</code> → <code>mount('#app')</code> → a função de renderização desenha o DOM dentro da div.</p>
+              <table class="tabela">
+                <thead><tr><th><code>npm run dev</code></th><th><code>npm run build</code></th></tr></thead>
+                <tbody>
+                  <tr><td>Traduz cada arquivo quando o navegador pede</td><td>Traduz tudo uma vez e gera <code>dist/</code></td></tr>
+                  <tr><td>HMR e avisos do Vue</td><td>Arquivos otimizados, sem avisos</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 82 -->
+        <section class="slide" data-n="82" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: tela em branco, sem erro de sintaxe</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <figure class="saida-real">
+              <pre style="max-height: none"><code><span class="erro">[Vue warn]: Failed to mount app: mount target selector
+"#App" returned null.</span></code></pre>
+              <figcaption>Console real · <code>.mount('#app')</code> trocado por <code>.mount('#App')</code> · <code>npm run dev</code> · <a href="capturas/navegador/m3-e08-mount.txt">arquivo</a></figcaption>
+            </figure>
+            <div class="pilha">
+              <ol class="passos pequeno">
+                <li>Provoque a troca em <code>src/main.js</code> e salve.</li>
+                <li>Sintoma: página em branco. O build e o lint passam.</li>
+                <li>Evidência: a mensagem diz <em>qual seletor</em> e <em>o que voltou</em>.</li>
+              </ol>
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>“returned null” = <code>document.querySelector('#App')</code> não encontrou nada. Compare com o <code>id</code> do <code>index.html</code>.</p></details>
+                <details class="solucao"><summary>Mostrar solução (após a tentativa)</summary><p>Seletores CSS diferenciam maiúsculas em ids: <code>#App</code> ≠ <code>#app</code>. Volte para <code>#app</code>.</p></details>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 83 -->
+        <section class="slide" data-n="83" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: confira a IA com a resposta real do Vite</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="prompt-ia">
+              <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+              <p class="prompt-texto">
+                Explique o que acontece com um arquivo <code>.vue</code> entre o editor e o navegador
+                num projeto create-vue com Vite. Esta é a resposta real que o navegador recebeu ao
+                pedir <code>/src/App.vue</code>: <mark>[cole o início da aba Response do Network]</mark>.
+                Aponte, nesse trecho, onde estão o template e o <code>scoped</code>. Não invente
+                arquivos que não estão no trecho.
+              </p>
+            </div>
+            <div class="caixa pequeno">
+              <h3>Onde procurar</h3>
+              <ul>
+                <li><a href="https://vuejs.org/guide/scaling-up/sfc.html">Vue — SFC (“How does it work”)</a></li>
+                <li><a href="https://vite.dev/guide/features.html#hot-module-replacement">Vite — HMR</a></li>
+                <li><a href="https://vuejs.org/api/sfc-css-features.html">SFC CSS Features</a></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 84 -->
+        <section class="slide" data-n="84" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="atividade">
+              <dl>
+                <dt>1</dt><dd>Qual arquivo chama <code>createApp</code>, e onde a aplicação é montada?</dd>
+                <dt>2</dt><dd>Uma regra em <code>&lt;style scoped&gt;</code> alcança o <code>h1</code> de outro componente? Por quê?</dd>
+                <dt>3</dt><dd>Página em branco e Console com “returned null”: o que conferir primeiro?</dd>
+              </dl>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

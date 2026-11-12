@@ -1,0 +1,6 @@
+~/modulo-2/etapas/02-erros-controlados $ PORTA=8088 node ../ferramentas/servidor-local.mjs
+Servindo ~/modulo-2/etapas/02-erros-controlados
+Abra http://localhost:8088/ no navegador. Ctrl+C encerra o servidor.
+200 GET /
+404 GET /estilo.css
+200 GET /app.js

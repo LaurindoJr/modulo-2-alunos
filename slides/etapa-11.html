@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 11 · Formulários e computed</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="11">
+    <div class="janela">
+      <main class="palco" aria-label="Módulo 3, etapa 11: formulários e propriedades computadas">
+        <!-- 101 -->
+        <section class="slide" data-n="101" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Desafio: criar tarefas com validação e filtrar a lista</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">Práticos 2 (lista com filtro) e 4 (validação) da unidade, refeitos dentro da Todo List.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Formulário com <code>v-model</code></td><td>Cria a tarefa sem recarregar a página</td></tr>
+                  <tr><td>Validação acessível</td><td>Mensagem + <code>aria-invalid="true"</code> para vazio, repetido, curto</td></tr>
+                  <tr><td>Valores derivados com <code>computed</code></td><td>Busca e situação filtram juntas; resumo certo</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              Com <code>v-model.trim</code>, o usuário digita “&nbsp;&nbsp;revisar&nbsp;&nbsp;”. Que
+              valor chega ao <code>ref</code>? E se faltar o <code>.prevent</code> no
+              <code>@submit</code>?
+            </div>
+          </div>
+        </section>
+
+        <!-- 102 -->
+        <section class="slide" data-n="102" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2><code>v-model</code> liga campo e estado; <code>computed</code> deriva valores</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <table class="tabela">
+              <thead><tr><th>Recurso</th><th>O que faz</th><th>Na Todo List</th></tr></thead>
+              <tbody>
+                <tr><td><code>v-model</code></td><td>Liga campo ↔ <code>ref</code> nos dois sentidos</td><td><code>novoTitulo</code>, <code>busca</code></td></tr>
+                <tr><td><code>v-model</code> em rádio</td><td>Mesmo princípio, outro campo</td><td><code>situacao</code></td></tr>
+                <tr><td><code>.trim</code> · <code>.number</code> · <code>.lazy</code></td><td>Modificadores do <code>v-model</code></td><td><code>v-model.trim="novoTitulo"</code></td></tr>
+                <tr><td><code>@submit.prevent</code></td><td>Envio sem recarregar</td><td><code>adicionar()</code></td></tr>
+                <tr><td><code>computed(() =&gt; …)</code></td><td>Valor derivado, com cache</td><td><code>concluidas</code>, <code>visiveis</code></td></tr>
+              </tbody>
+            </table>
+            <div class="bloco-codigo">
+              <div class="bloco-codigo-topo"><span>App.vue · &lt;script setup&gt; (trecho)</span></div>
+              <pre><code>const busca = ref('')
+const situacao = ref('todas')
+
+// recalcula só quando tarefas, busca ou situacao mudam
+const visiveis = computed(() =&gt; {
+  const termo = busca.value.trim().toLowerCase()
+  return tarefas.value.filter((tarefa) =&gt;
+    combinaSituacao(tarefa) &amp;&amp;
+    tarefa.titulo.toLowerCase().includes(termo),
+  )
+})</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- 103 -->
+        <section class="slide" data-n="103" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Formulário que valida antes de criar</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 11">
+                <button role="tab" id="s103-t1" aria-controls="s103-p1" aria-selected="true">1 · Template</button>
+                <button role="tab" id="s103-t2" aria-controls="s103-p2" aria-selected="false">2 · Validação</button>
+                <button role="tab" id="s103-t3" aria-controls="s103-p3" aria-selected="false">3 · Regras</button>
+              </div>
+              <div role="tabpanel" id="s103-p1" aria-labelledby="s103-t1">
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>App.vue · formulário</span></div>
+                  <pre><code>&lt;form novalidate @submit.prevent="adicionar"&gt;
+  &lt;label for="nova-tarefa"&gt;Nova tarefa&lt;/label&gt;
+  &lt;input id="nova-tarefa" v-model.trim="novoTitulo"
+    :aria-invalid="mensagem ? 'true' : 'false'"
+    aria-describedby="erro-tarefa" /&gt;
+  &lt;button type="submit"&gt;Adicionar&lt;/button&gt;
+  &lt;p id="erro-tarefa" role="alert"&gt;{{ mensagem }}&lt;/p&gt;
+&lt;/form&gt;</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s103-p2" aria-labelledby="s103-t2" hidden>
+                <img src="capturas/telas/m3-e11-validacao.png" alt="Etapa 11: campo com borda vermelha e a mensagem Já existe uma tarefa com esse título" class="recorte" />
+                <p class="legenda">Tela real: título repetido (maiúsculas não importam) → mensagem e borda de erro.</p>
+              </div>
+              <div role="tabpanel" id="s103-p3" aria-labelledby="s103-t3" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>App.vue · validar</span></div>
+                  <pre><code>function validar(titulo) {
+  if (titulo === '') return 'Escreva um título para a tarefa.'
+  if (titulo.length &gt; TITULO_MAXIMO) return `Use no máximo ${TITULO_MAXIMO} caracteres.`
+  const repetida = tarefas.value.some(
+    (t) =&gt; t.titulo.toLowerCase() === titulo.toLowerCase())
+  if (repetida) return 'Já existe uma tarefa com esse título.'
+  return ''
+}</code></pre>
+                </div>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa pequeno"><code>aria-describedby</code> liga a mensagem ao campo; <code>role="alert"</code> faz o leitor de tela anunciá-la.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>Combine busca “com” e situação “Pendentes”. Quem recalcula a lista?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 104 -->
+        <section class="slide" data-n="104" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: pendentes com <code>computed</code> e uma regra nova</h2>
+          </header>
+          <div class="slide-corpo pilha">
+            <div class="grade-2">
+              <div class="atividade">
+                <dl>
+                  <dt>1</dt><dd>Crie <code>pendentes</code> com <code>computed</code> e mostre no resumo.</dd>
+                  <dt>2</dt><dd>Em <code>validar</code>, acrescente “mínimo de 3 caracteres”.</dd>
+                  <dt>Evidência</dt><dd>“ab” mostra a mensagem nova; o resumo exibe pendentes corretas ao concluir.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p><code>pendentes</code> pode ser calculado a partir de <code>tarefas.value.length</code> e de <code>concluidas.value</code>.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <div class="grade-2">
+                <pre><code>const pendentes = computed(
+  () =&gt; tarefas.value.length - concluidas.value)
+
+// em validar, depois do teste de vazio:
+if (titulo.length &lt; 3) return 'Use pelo menos 3 caracteres.'</code></pre>
+                <pre><code>{{ concluidas }} de {{ tarefas.length }} concluídas
+· {{ pendentes }} pendentes</code></pre>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 105 -->
+        <section class="slide" data-n="105" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2><code>v-model</code> por dentro e por que <code>computed</code> não é método</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>v-model num campo de texto equivale a</span></div>
+                <pre><code>&lt;input :value="novoTitulo"
+       @input="novoTitulo = $event.target.value" /&gt;</code></pre>
+              </div>
+              <p class="caixa caixa-destaque pequeno"><strong>Modelo:</strong> o valor <em>desce</em> do estado para o campo (<code>:value</code>) e <em>sobe</em> do campo para o estado (<code>@input</code>). O <code>.trim</code> limpa no caminho de subida.</p>
+            </div>
+            <table class="tabela">
+              <thead><tr><th></th><th><code>computed</code></th><th>método no template</th></tr></thead>
+              <tbody>
+                <tr><td>Quando roda</td><td>Só quando o que ele lê muda</td><td>A cada redesenho do componente</td></tr>
+                <tr><td>Digitar na busca</td><td><code>concluidas</code> não recalcula</td><td><code>contarConcluidas()</code> roda de novo</td></tr>
+                <tr><td>Uso</td><td>Valores derivados</td><td>Ações (clique, envio)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 106 -->
+        <section class="slide" data-n="106" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: um defeito silencioso e um aviso</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <h3 class="pequeno">1 · Efeito dentro do <code>computed</code></h3>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>no início do computed visiveis</span></div>
+                <pre><code>busca.value = busca.value.trim()</code></pre>
+              </div>
+              <figure class="saida-real">
+                <pre style="max-height: none"><code>Console: nenhuma mensagem   npx eslint src: nada
+npm run lint: <span class="erro">25:3 error vue(no-side-effects-in-computed-properties)</span>
+Digitado: "criar tarefas"  →  campo: <span class="erro">"criartarefas"</span></code></pre>
+                <figcaption>Registro real · <a href="capturas/navegador/m3-e11-efeito-computed.txt">Console</a> · <a href="capturas/terminal/m3-lint-e11-efeito-computed.txt">lint</a></figcaption>
+              </figure>
+            </div>
+            <div class="pilha">
+              <h3 class="pequeno">2 · Escrever num <code>computed</code></h3>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>no template</span></div>
+                <pre><code>&lt;input v-model="concluidas" /&gt;</code></pre>
+              </div>
+              <figure class="saida-real">
+                <pre style="max-height: none"><code><span class="erro">[Vue warn] Write operation failed: computed value is readonly</span></code></pre>
+                <figcaption>Console real ao digitar “7” · resumo não muda · <a href="capturas/navegador/m3-e11-vmodel-computed.txt">arquivo</a></figcaption>
+              </figure>
+              <details class="solucao"><summary>Mostrar explicação</summary><p>1: o <code>computed</code> altera o estado que ele mesmo lê — o espaço digitado é apagado a cada tecla. O navegador não avisa, porque o código é válido; só o <code>npm run lint</code> (pelo oxlint) e o teste revelam. 2: <code>computed</code> é leitura. Para executar efeitos quando algo muda, existe <code>watch</code> (etapa 12).</p></details>
+            </div>
+          </div>
+        </section>
+
+        <!-- 107 -->
+        <section class="slide" data-n="107" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: validação acessível e boas práticas do <code>computed</code></h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="prompt-ia">
+              <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+              <p class="prompt-texto">
+                Revise a acessibilidade deste formulário Vue: <mark>[cole o &lt;form&gt;]</mark>.
+                Verifique rótulo, <code>aria-invalid</code>, <code>aria-describedby</code> e o anúncio
+                da mensagem de erro. Para cada sugestão, cite a página da MDN ou do WAI-ARIA que a
+                justifica. Não troque a validação por biblioteca externa.
+              </p>
+            </div>
+            <div class="caixa pequeno">
+              <h3>Onde procurar</h3>
+              <ul>
+                <li><a href="https://vuejs.org/guide/essentials/computed.html#best-practices">Computed — Best Practices</a> (“Getters should be side-effect free”)</li>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-invalid">MDN — aria-invalid</a></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 108 -->
+        <section class="slide" data-n="108" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="atividade">
+              <dl>
+                <dt>1</dt><dd>Reescreva <code>v-model="busca"</code> com <code>:value</code> e <code>@input</code>.</dd>
+                <dt>2</dt><dd>“Total de tarefas atrasadas”: <code>ref</code> atualizado à mão ou <code>computed</code>?</dd>
+                <dt>3</dt><dd>O que acontece sem o <code>.prevent</code> no <code>@submit</code>?</dd>
+              </dl>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

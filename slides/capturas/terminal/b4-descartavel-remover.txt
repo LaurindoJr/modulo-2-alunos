@@ -1,0 +1,20 @@
+~/modulo-2/etapas/04-dependencias-scripts $ npm uninstall dayjs && npm pkg get dependencies
+
+removed 1 package, and audited 31 packages in 601ms
+
+5 packages are looking for funding
+  run `npm fund` for details
+
+3 high severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+npm warn allow-scripts 1 package has install scripts not yet covered by allowScripts:
+npm warn allow-scripts   fsevents@2.3.3 (install: (install scripts present))
+npm warn allow-scripts
+npm warn allow-scripts Run `npm approve-scripts --allow-scripts-pending` to review, or `npm approve-scripts <pkg>` to allow.
+{
+  "picocolors": "^1.1.1"
+}

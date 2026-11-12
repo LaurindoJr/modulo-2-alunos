@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 07 · Vue na página</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="7">
+    <div class="janela">
+      <main class="palco" aria-label="Módulo 3, etapa 07: frameworks e Vue direto na página">
+        <!-- 69 -->
+        <section class="slide" data-n="69" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Desafio: a mesma Todo List, sem nenhum <code>render()</code></h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">Hoje o Vue entra numa <strong>parte</strong> da página da etapa 06 — sem npm, sem build — e passa a desenhar a lista.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Classificar ferramentas pelo papel</td><td>Vite, Nuxt, Tailwind e Vue cada um na sua categoria</td></tr>
+                  <tr><td>Montar o Vue em <code>#app</code></td><td>Lista desenhada pelo template, não por <code>createElement</code></td></tr>
+                  <tr><td>Ação nova só mudando o estado</td><td>“Concluir todas” atualiza lista e resumo</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              Se apagarmos toda chamada de <code>render()</code>, a lista ainda atualiza? O que
+              precisaria existir para que sim?
+            </div>
+          </div>
+        </section>
+
+        <!-- 70 -->
+        <section class="slide" data-n="70" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Ferramentas por papel — e o que “Vue é progressivo” quer dizer</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <table class="tabela">
+              <thead><tr><th>Papel</th><th>Exemplos</th><th>O que faz</th></tr></thead>
+              <tbody>
+                <tr><td>Framework de UI</td><td>Vue, Angular, Svelte; React (se define como <em>biblioteca</em>)</td><td>Componentes, template, reatividade</td></tr>
+                <tr><td>Meta-framework</td><td>Nuxt (Vue), Next.js (React)</td><td>Rotas por arquivo, renderização no servidor, convenções</td></tr>
+                <tr><td>Componentes / CSS</td><td>Vuetify, Bootstrap, Tailwind CSS</td><td>Aparência e peças prontas; não cuidam do estado</td></tr>
+                <tr><td>Build</td><td>Vite, webpack</td><td>Servidor de desenvolvimento e pacote de produção</td></tr>
+              </tbody>
+            </table>
+            <div class="pilha">
+              <p class="caixa caixa-destaque pequeno"><strong>Progressivo:</strong> dá para começar renderizando só uma parte de uma página existente (hoje) e crescer até uma aplicação com build, componentes e rotas.</p>
+              <blockquote class="caixa pequeno">
+                “Minha visão para o Vue é dar a qualquer pessoa uma barreira de entrada baixa, uma boa base e espaço para crescer.”
+                <br /><span class="suave">— Evan You, criador do Vue (GitHub ReadME, tradução livre)</span>
+              </blockquote>
+            </div>
+          </div>
+        </section>
+
+        <!-- 71 -->
+        <section class="slide" data-n="71" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Vue numa parte da página, em três passos</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Passos para montar o Vue na página">
+                <button role="tab" id="s71-t1" aria-controls="s71-p1" aria-selected="true">1 · Carregar</button>
+                <button role="tab" id="s71-t2" aria-controls="s71-p2" aria-selected="false">2 · Estado e montagem</button>
+                <button role="tab" id="s71-t3" aria-controls="s71-p3" aria-selected="false">3 · Template</button>
+                <button role="tab" id="s71-t4" aria-controls="s71-p4" aria-selected="false">4 · Resultado</button>
+              </div>
+              <div role="tabpanel" id="s71-p1" aria-labelledby="s71-t1">
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>index.html · fim do body</span></div>
+                  <pre><code>&lt;script src="vendor/vue.global.js"&gt;&lt;/script&gt;  &lt;!-- cria a variável global Vue --&gt;
+&lt;script src="app.js"&gt;&lt;/script&gt;              &lt;!-- nosso código, que usa Vue --&gt;</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s71-p2" aria-labelledby="s71-t2" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>app.js (trecho)</span></div>
+                  <pre><code>const { createApp, ref } = Vue
+
+createApp({
+  setup() {
+    const tarefas = ref([ … ])            // estado REATIVO
+    function remover(id) {
+      tarefas.value = tarefas.value.filter((t) =&gt; t.id !== id)
+    }                                     // sem render()
+    return { tarefas, remover }           // o que o template usa
+  },
+}).mount('#app')                          // só o elemento #app</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s71-p3" aria-labelledby="s71-t3" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>index.html · dentro de &lt;section id="app"&gt;</span></div>
+                  <pre><code>&lt;p class="resumo"&gt;{{ tarefas.length }} tarefas · {{ contarConcluidas() }} concluídas&lt;/p&gt;
+&lt;li v-for="tarefa in tarefas" :key="tarefa.id" :class="{ concluida: tarefa.concluida }"&gt;
+  … {{ tarefa.titulo }} …
+  &lt;button @click="remover(tarefa.id)"&gt;Remover&lt;/button&gt;
+&lt;/li&gt;</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s71-p4" aria-labelledby="s71-t4" hidden>
+                <img src="capturas/telas/m3-e07-vue.png" alt="Todo List da etapa 07, igual à da etapa 06, agora desenhada pelo Vue" class="recorte" />
+                <p class="legenda">Tela real: idêntica à etapa 06 — o que mudou foi <strong>quem</strong> desenha.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa pequeno">Abra <code>etapas/07-vue-na-pagina/index.html</code> direto do disco: o build global funciona via <code>file://</code>.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>O <code>&lt;h1&gt;</code> está fora de <code>#app</code>. O Vue consegue atualizá-lo?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 72 -->
+        <section class="slide" data-n="72" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: “Concluir todas” mudando só o estado</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Tarefa</dt><dd>Função <code>concluirTodas</code> no <code>setup</code>, devolvida no <code>return</code>, e um botão com <code>@click="concluirTodas"</code>.</dd>
+                  <dt>Compare</dt><dd>Com a sua solução da etapa 06: o que você <strong>não</strong> precisou escrever?</dd>
+                  <dt>Evidência</dt><dd>Lista e resumo atualizados sem chamada de redesenho.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>O botão precisa estar <strong>dentro</strong> de <code>&lt;section id="app"&gt;</code> para o <code>@click</code> funcionar.</p></details>
+                <details class="solucao">
+                  <summary>Mostrar solução (após a tentativa)</summary>
+                  <pre><code>function concluirTodas() {
+  tarefas.value = tarefas.value.map((t) =&gt; ({ ...t, concluida: true }))
+}
+return { …, concluirTodas }</code></pre>
+                </details>
+              </div>
+            </div>
+            <table class="tabela">
+              <thead><tr><th>Etapa 06 (JS puro)</th><th>Etapa 07 (Vue)</th></tr></thead>
+              <tbody>
+                <tr><td><code>querySelector</code> para cada elemento</td><td>nada: o template referencia o estado</td></tr>
+                <tr><td><code>createElement</code>, <code>textContent</code></td><td><code>v-for</code> e <code>{{ }}</code></td></tr>
+                <tr><td><code>addEventListener</code></td><td><code>@click</code>, <code>@change</code>, <code>@submit.prevent</code></td></tr>
+                <tr><td><code>render()</code> após cada ação</td><td>nada: o Vue percebe a mudança</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 73 -->
+        <section class="slide" data-n="73" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Imperativo × declarativo: quem atualiza a tela agora</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>06 · você diz COMO mudar a tela</span></div>
+                <pre><code>function remover(id) {
+  tarefas = tarefas.filter((t) =&gt; t.id !== id)
+  render() // recria a lista e o resumo
+}</code></pre>
+              </div>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>07 · você declara O QUE a tela é</span></div>
+                <pre><code>function remover(id) {
+  tarefas.value = tarefas.value.filter((t) =&gt; t.id !== id)
+}
+// template: v-for="tarefa in tarefas" e {{ tarefas.length }}</code></pre>
+              </div>
+            </div>
+            <div class="pilha">
+              <p class="caixa caixa-destaque pequeno"><strong>Modelo:</strong> o template é uma descrição da tela em função do estado. Quando o estado muda, o Vue compara o antes e o depois e altera só o necessário.</p>
+              <div class="caixa pequeno">
+                <h3>Evidência: o foco fica</h3>
+                <p>Marque uma caixa com <kbd>Tab</kbd> e <kbd>Espaço</kbd>. Na 06 o foco vai para o <code>&lt;body&gt;</code>; na 07 continua na caixa — o Vue atualizou o elemento existente.</p>
+              </div>
+              <p class="caixa pequeno"><strong>Limite:</strong> template escrito no HTML é lido pelo navegador antes do Vue (por isso <code>v-cloak</code>) e nomes com maiúsculas viram minúsculas. Arquivos <code>.vue</code> + build resolvem — etapa 08.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 74 -->
+        <section class="slide" data-n="74" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: um nome errado no template</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <figure class="saida-real">
+              <pre style="max-height: none"><code>[Vue warn]: Property "contarConcluida" was accessed during
+render but is not defined on instance.
+  at &lt;App&gt;
+[Vue warn]: Unhandled error during execution of render function
+  at &lt;App&gt;</code></pre>
+              <figcaption>Console real · <code>{{ contarConcluidas() }}</code> trocado por <code>{{ contarConcluida() }}</code> · Vue 3.5.44 (build de desenvolvimento) · <a href="capturas/navegador/m3-e07-typo.txt">arquivo</a></figcaption>
+            </figure>
+            <div class="pilha">
+              <ol class="passos pequeno">
+                <li>Provoque: troque o nome no <code>index.html</code> e recarregue.</li>
+                <li>Leia a <strong>primeira</strong> mensagem: qual propriedade? Em que componente?</li>
+                <li>Procure o nome no <code>return</code> do <code>setup</code>.</li>
+              </ol>
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>“accessed during render but is not defined” = o template usou um nome que o <code>setup</code> não devolveu.</p></details>
+                <details class="solucao"><summary>Mostrar solução (após a tentativa)</summary><p>O <code>setup</code> devolve <code>contarConcluidas</code> (com “s”). Corrija o template. O mesmo aviso aparece quando se esquece de pôr uma função nova no <code>return</code>.</p></details>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 75 -->
+        <section class="slide" data-n="75" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: os 13 conceitos da Aula 3 e onde cada um é estudado</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <table class="tabela">
+              <thead><tr><th>Conceito (Aula 3)</th><th>Etapa</th><th>Página oficial</th></tr></thead>
+              <tbody>
+                <tr><td>Template syntax · Reatividade</td><td>09</td><td>Template Syntax · Reactivity Fundamentals</td></tr>
+                <tr><td>Diretivas</td><td>10, 11</td><td>List · Conditional · Event Handling</td></tr>
+                <tr><td>Instância e ciclo de vida</td><td>08, 12</td><td>Creating an Application · Lifecycle</td></tr>
+                <tr><td>Computed e watchers</td><td>11, 12</td><td>Computed Properties · Watchers</td></tr>
+                <tr><td>Formulários e validação</td><td>11</td><td>Form Input Bindings</td></tr>
+                <tr><td>Componentes, props, eventos, slots</td><td>13, 14</td><td>Components In-Depth</td></tr>
+                <tr><td>Estado · API · Rotas · Testes</td><td>15–18</td><td>Pinia · Router · Testing</td></tr>
+                <tr><td>Build e deploy · Performance</td><td>Módulo 2</td><td>Vite · Tooling</td></tr>
+              </tbody>
+            </table>
+            <div class="prompt-ia">
+              <div class="bloco-codigo-topo"><span>Prompt para a IA</span><button type="button" class="copiar">Copiar</button></div>
+              <p class="prompt-texto">Classifique pelo papel (framework de UI, meta-framework, componentes/CSS, build): <mark>[Vite, Nuxt, Tailwind CSS, Vue, Vuetify, Next.js]</mark>. Para cada um, cite o endereço do site oficial onde ele se descreve. Não ordene por popularidade.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 76 -->
+        <section class="slide" data-n="76" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="atividade">
+              <dl>
+                <dt>1</dt><dd>Vite, Nuxt e Tailwind: qual é o papel de cada um?</dd>
+                <dt>2</dt><dd>O que <code>.mount('#app')</code> decide?</dd>
+                <dt>3</dt><dd>Por que o defeito de sincronia da etapa 06 não acontece aqui?</dd>
+              </dl>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

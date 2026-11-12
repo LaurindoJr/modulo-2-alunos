@@ -1,0 +1,4 @@
+<ul id="lista"> contém 3 <li>:
+  <li> Instalar o Node.js
+  <li> Abrir a pasta do projeto no editor
+  <li> Inspecionar a página no DevTools

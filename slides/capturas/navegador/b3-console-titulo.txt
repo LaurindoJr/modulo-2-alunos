@@ -1,0 +1,4 @@
+> (conteúdo de titulo-da-pagina.js colado no Console de uma página local)
+Antes de acessar document
+Título da página: Todo List — etapa 01
+Depois de acessar document
