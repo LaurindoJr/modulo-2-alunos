@@ -1,0 +1,8 @@
+{
+  "tarefas": [
+    { "id": 1, "titulo": "Mostrar o estado de carregamento", "concluida": true },
+    { "id": 2, "titulo": "Tratar o erro com try/catch e await", "concluida": false },
+    { "id": 3, "titulo": "Separar lista vazia de falha na API", "concluida": false },
+    { "id": 4, "titulo": "Oferecer um botao para tentar de novo", "concluida": false }
+  ]
+}

@@ -1,5 +1,7 @@
 // Navegação e recursos dos slides dos Módulos 2 e 3. Sem dependências; funciona aberto do disco.
-// Módulo 2: blocos 1–5 (slides 1–60). Módulo 3: etapas 06–14 (slides 61–132), um arquivo por etapa.
+// Módulo 2: blocos 1–5 (slides 1–60). Módulo 3: etapas 06–14 (slides 61–132).
+// Unidade 5: etapas 15–17 (133–156). Unidade 6: 18–20 (157–180). Unidade 7: 21–23 (181–204).
+// Um arquivo por bloco ou etapa.
 // Teclas: ←/→ (ou PageUp/PageDown/Espaço) navegam · N notas · L modo leitura · T tema · ? ajuda
 
 ;(function () {
@@ -8,6 +10,9 @@
   const MODULOS = {
     2: { rotulo: 'Bloco', ultimoSlide: 60 },
     3: { rotulo: 'Etapa', ultimoSlide: 132 },
+    5: { rotulo: 'Etapa', ultimoSlide: 156 },
+    6: { rotulo: 'Etapa', ultimoSlide: 180 },
+    7: { rotulo: 'Etapa', ultimoSlide: 204 },
   }
   const LARGURA_PALCO = 1600
   const ALTURA_PALCO = 900
@@ -27,6 +32,15 @@
     { n: 12, modulo: 3, nome: 'Watchers e ciclo de vida', arquivo: 'etapa-12.html' },
     { n: 13, modulo: 3, nome: 'Props e eventos', arquivo: 'etapa-13.html' },
     { n: 14, modulo: 3, nome: 'v-model e slots', arquivo: 'etapa-14.html' },
+    { n: 15, modulo: 5, nome: 'Telas sem roteador', arquivo: 'etapa-15.html' },
+    { n: 16, modulo: 5, nome: 'Vue Router', arquivo: 'etapa-16.html' },
+    { n: 17, modulo: 5, nome: 'Rotas dinâmicas', arquivo: 'etapa-17.html' },
+    { n: 18, modulo: 6, nome: 'Dados de uma API', arquivo: 'etapa-18.html' },
+    { n: 19, modulo: 6, nome: 'Carregando e erro', arquivo: 'etapa-19.html' },
+    { n: 20, modulo: 6, nome: 'CRUD e serviços', arquivo: 'etapa-20.html' },
+    { n: 21, modulo: 7, nome: 'A primeira store', arquivo: 'etapa-21.html' },
+    { n: 22, modulo: 7, nome: 'State, getters, actions', arquivo: 'etapa-22.html' },
+    { n: 23, modulo: 7, nome: 'Várias stores', arquivo: 'etapa-23.html' },
   ]
   const ROTULOS = {
     abertura: 'Abertura',
@@ -53,7 +67,7 @@
   const modulo = MODULOS[blocoAtual.modulo]
   const blocosDoModulo = BLOCOS.filter((b) => b.modulo === blocoAtual.modulo)
   const rotuloBloco = (n) =>
-    blocoAtual.modulo === 3 ? `${modulo.rotulo} ${String(n).padStart(2, '0')}` : `${modulo.rotulo} ${n}`
+    blocoAtual.modulo === 2 ? `${modulo.rotulo} ${n}` : `${modulo.rotulo} ${String(n).padStart(2, '0')}`
   const slides = Array.from(document.querySelectorAll('.slide'))
   const palco = document.querySelector('.palco')
   let atual = 0
@@ -135,7 +149,7 @@
       return `<li class="${estado}"><span class="caixinha" aria-hidden="true">${marca}</span>${b.n === bloco ? b.nome : ''}</li>`
     }).join('')
     rodape.innerHTML = `
-      <ol class="trilha" aria-label="Progresso da Todo List no Módulo ${blocoAtual.modulo}: ${rotuloBloco(bloco)}, ${blocosDoModulo.indexOf(blocoAtual) + 1} de ${blocosDoModulo.length}">${trilha}</ol>
+      <ol class="trilha" aria-label="Progresso da Todo List na ${blocoAtual.modulo >= 5 ? `Unidade ${blocoAtual.modulo}` : `Módulo ${blocoAtual.modulo}`}: ${rotuloBloco(bloco)}, ${blocosDoModulo.indexOf(blocoAtual) + 1} de ${blocosDoModulo.length}">${trilha}</ol>
       <div class="rodape-info"><span data-info="tipo"></span><span data-info="tempo"></span><span data-info="numero"></span></div>`
     palco.append(rodape)
   }

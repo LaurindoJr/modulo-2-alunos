@@ -1,0 +1,8 @@
+{
+  "tarefas": [
+    { "id": 1, "titulo": "Criar tarefa com POST", "concluida": true },
+    { "id": 2, "titulo": "Concluir com PATCH", "concluida": false },
+    { "id": 3, "titulo": "Remover com DELETE", "concluida": false },
+    { "id": 4, "titulo": "Juntar tudo numa camada de servico", "concluida": false }
+  ]
+}

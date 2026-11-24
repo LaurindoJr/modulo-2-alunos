@@ -1,0 +1,8 @@
+{
+  "tarefas": [
+    { "id": 1, "titulo": "Subir a API com json-server", "concluida": true },
+    { "id": 2, "titulo": "Buscar as tarefas com axios.get", "concluida": false },
+    { "id": 3, "titulo": "Ler a requisição no painel Network", "concluida": false },
+    { "id": 4, "titulo": "Descobrir o que aparece antes dos dados chegarem", "concluida": false }
+  ]
+}

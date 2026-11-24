@@ -38,7 +38,7 @@ Abra `http://localhost:8088/` e o painel **Network** (recarregue com ele aberto)
 
 - **Cliente e servidor:** o navegador pede (*request*) e recebe (*response*) `index.html`; ao ler
   o HTML, pede `estilos.css` e `app.js`. O frontend é **entregue** por um servidor, mas
-  **executa** no navegador. Backend é o código que executa no servidor (no projeto completo, o
+  **executa** no navegador. Backend é o código que executa no servidor (a partir da etapa 18, o
   json-server responde `GET /tarefas` com JSON).
 - **Três camadas:** HTML = estrutura, CSS = apresentação, JS = comportamento.
 - **DOM:** a árvore de objetos que o navegador monta a partir do HTML. O JavaScript altera o DOM,

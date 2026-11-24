@@ -1,0 +1,30 @@
+# Etapa 18 — painel Network, filtro Fetch/XHR, em http://localhost:5173
+# A API do json-server roda em http://localhost:3000 (npm run api).
+
+# 1. Carregamento da aplicação
+GET http://localhost:3000/tarefas → 200 OK · application/json
+
+# 2. Navegar para o Resumo e voltar para a Lista
+(nenhuma requisição)
+A busca está em App.vue, com onMounted — não dentro da view. Se estivesse na
+ListaView, ir e voltar refaria o GET a cada visita.
+
+# Resposta (aba Response), encurtada:
+[
+  { "id": "1", "titulo": "Subir a API com json-server", "concluida": true },
+  { "id": "2", "titulo": "Buscar as tarefas com axios.get", "concluida": false }
+]
+
+# ATENÇÃO ao "id": ele vem entre aspas. O json-server devolve os ids como TEXTO.
+# É por isso que a TarefaView compara String(item.id) === String(route.params.id)
+# em vez do Number() que usávamos na etapa 17.
+
+# 3. Com a API desligada (Ctrl+C no terminal do npm run api)
+GET http://localhost:3000/tarefas → (failed) net::ERR_CONNECTION_REFUSED
+
+Console:
+  Failed to load resource: net::ERR_CONNECTION_REFUSED
+  Uncaught (in promise) Network Error
+
+Na tela: "Nenhuma tarefa cadastrada."  ← a tela mente: não é que não haja
+tarefas; é que não foi possível perguntar. A etapa 19 conserta isso.

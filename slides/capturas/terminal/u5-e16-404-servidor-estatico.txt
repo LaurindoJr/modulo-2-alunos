@@ -1,0 +1,36 @@
+$ cd etapas/16-vue-router
+$ npm run build
+
+> todo-list@0.0.0 build
+> vite build
+
+vite v8.3.5 building client environment for production...
+✓ 44 modules transformed.
+dist/index.html                   0.62 kB │ gzip:  0.42 kB
+dist/assets/index-*.css           7.15 kB │ gzip:  1.95 kB
+dist/assets/index-*.js          100.15 kB │ gzip: 38.54 kB
+✓ built in 268ms
+
+# Servindo a pasta dist/ com o servidor do curso (o mesmo das etapas 01, 02 e 06),
+# que entrega arquivos e nada mais — como um servidor estático de produção.
+$ cd dist
+$ node ../../ferramentas/servidor-local.mjs
+
+# Noutro terminal:
+$ curl -s -o /dev/null -w "%{http_code} %{content_type}\n" http://localhost:8088/
+200 text/html; charset=utf-8
+
+$ curl -s -o /dev/null -w "%{http_code} %{content_type}\n" http://localhost:8088/resumo
+404 text/plain; charset=utf-8
+
+$ curl -s http://localhost:8088/resumo
+Arquivo não encontrado: /resumo
+
+# O endereço /resumo só existe DENTRO da aplicação. O servidor procurou um arquivo
+# chamado "resumo" na pasta dist/ e não achou. No npm run dev isso não acontece
+# porque o Vite devolve o index.html para qualquer caminho.
+#
+# Saída 1: configurar o servidor para devolver index.html em caminhos desconhecidos.
+# Saída 2: trocar createWebHistory por createWebHashHistory — verificado: o endereço
+#          vira http://localhost:8088/#/resumo, o servidor só vê "/" e responde 200,
+#          porque o que vem depois do # nunca é enviado.

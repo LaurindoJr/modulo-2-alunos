@@ -1,0 +1,8 @@
+{
+  "tarefas": [
+    { "id": 1, "titulo": "Instalar o Pinia e criar a primeira store", "concluida": true },
+    { "id": 2, "titulo": "Transformar o composable em defineStore", "concluida": false },
+    { "id": 3, "titulo": "Usar storeToRefs ao desestruturar", "concluida": false },
+    { "id": 4, "titulo": "Inspecionar a store no Vue DevTools", "concluida": false }
+  ]
+}

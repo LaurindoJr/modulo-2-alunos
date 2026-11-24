@@ -1,0 +1,22 @@
+# Etapa 16 — painel Network, filtro "Doc", em http://localhost:5173
+# Medido com navegação automatizada; só requisições de DOCUMENTO estão listadas.
+
+# 1. Carregamento inicial da aplicação
+GET http://localhost:5173/ → 200 OK · text/html
+
+# 2. Clique em "Resumo" (RouterLink), endereço vai para /resumo
+(nenhuma requisição de documento)
+
+# 3. Clique em "Lista" (RouterLink), endereço volta para /
+(nenhuma requisição de documento)
+
+# 4. Botão Voltar e botão Avançar do navegador
+(nenhuma requisição de documento)
+
+Total de documentos pedidos nas quatro navegações: 0.
+A página foi carregada UMA vez; quem troca a tela é o JavaScript.
+
+# 5. F5 com o endereço em /resumo
+GET http://localhost:5173/resumo → 200 OK · text/html
+O servidor de desenvolvimento do Vite devolve o index.html para qualquer caminho.
+Em produção isso não é automático — ver u5-e16-404-servidor-estatico.txt.

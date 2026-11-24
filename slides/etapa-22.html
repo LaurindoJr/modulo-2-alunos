@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 22 · State, getters e actions</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="22">
+    <div class="janela">
+      <main class="palco" aria-label="Unidade 7, etapa 22: state, getters e actions">
+        <!-- 189 -->
+        <section class="slide" data-n="189" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>As três partes de uma store</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">Toda store tem <strong>state</strong> (os dados), <strong>getters</strong> (o que se deduz deles) e <strong>actions</strong> (o que os muda). Vocês já escreveram as três sem saber os nomes. Hoje os nomes entram — e com eles o <code>$patch</code>, o <code>$reset</code> que não existe, e uma medição.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Getter derivado de getter</td><td><code>pendentes</code> usa <code>concluidas</code> e aparece no Resumo</td></tr>
+                  <tr><td>Cache</td><td>Medição: getter 0 execuções, função 5, nas mesmas 5 teclas</td></tr>
+                  <tr><td><code>$patch</code></td><td>Uma entrada só na linha do tempo do DevTools</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              O material original mostra um getter que recebe parâmetro:
+              <code>addAmount: (state) =&gt; (amount) =&gt; state.count + amount</code>. Esse resultado
+              é guardado em cache, como os outros getters?
+            </div>
+          </div>
+        </section>
+
+        <!-- 190 -->
+        <section class="slide" data-n="190" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Duas sintaxes, a mesma store</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Parte</th><th>Setup store (nossa)</th><th>Options store (material)</th></tr></thead>
+                <tbody>
+                  <tr><td>state</td><td><code>const x = ref(0)</code></td><td><code>state: () =&gt; ({ x: 0 })</code></td></tr>
+                  <tr><td>getter</td><td><code>computed(() =&gt; x.value * 2)</code></td><td><code>getters: { d: (s) =&gt; s.x * 2 }</code></td></tr>
+                  <tr><td>action</td><td><code>function somar() { x.value++ }</code></td><td><code>actions: { somar() { this.x++ } }</code></td></tr>
+                </tbody>
+              </table>
+              <p class="caixa pequeno">Na setup store não existe <code>this</code>: os <code>ref</code> estão ali mesmo. Na options store o <code>this</code> é a própria store.</p>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Getter que usa outro getter</span></div>
+                <pre><code>const concluidas = computed(() =&gt; tarefas.value.filter(t =&gt; t.concluida).length)
+const pendentes  = computed(() =&gt; tarefas.value.length - concluidas.value)</code></pre>
+              </div>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Método</th><th>O que faz</th></tr></thead>
+                <tbody>
+                  <tr><td><code>$patch({…})</code></td><td>Muda vários campos; <strong>uma</strong> entrada no DevTools</td></tr>
+                  <tr><td><code>$reset()</code></td><td>Volta ao estado inicial — <strong>só em options store</strong></td></tr>
+                  <tr><td><code>$subscribe(fn)</code></td><td>Roda a cada mudança de estado (etapa 23)</td></tr>
+                  <tr><td><code>$onAction(fn)</code></td><td>Roda a cada action chamada</td></tr>
+                </tbody>
+              </table>
+              <p class="caixa caixa-destaque pequeno">Os métodos com <code>$</code> são da store, não do seu código. Use-os <strong>de fora</strong>: dentro da setup store os refs estão à mão e não precisam de intermediário.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 191 -->
+        <section class="slide" data-n="191" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>A linha do tempo: quem mudou o quê</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 22">
+                <button role="tab" id="s191-t1" aria-controls="s191-p1" aria-selected="true">1 · Timeline</button>
+                <button role="tab" id="s191-t2" aria-controls="s191-p2" aria-selected="false">2 · $patch</button>
+                <button role="tab" id="s191-t3" aria-controls="s191-p3" aria-selected="false">3 · Cache medido</button>
+              </div>
+              <div role="tabpanel" id="s191-p1" aria-labelledby="s191-t1">
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Vue DevTools › Timeline › Pinia</span></div>
+                  <pre><code>🍍 carregar        tarefas: [] → Array(4)
+🍍 adicionar       tarefas: Array(4) → Array(5)
+🍍 alternar        tarefas: Array(5) → Array(5)
+🍍 remover         tarefas: Array(5) → Array(4)</code></pre>
+                </div>
+                <p class="legenda">Cada action vira uma entrada, com o antes e o depois. Era isso que o composable não dava.</p>
+              </div>
+              <div role="tabpanel" id="s191-p2" aria-labelledby="s191-t2" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Dois botões, dois caminhos</span></div>
+                  <pre><code>// de fora da store, numa tacada só
+store.$patch({ busca: '', situacao: 'todas' })
+
+// pela action
+function limparFiltros() {
+  busca.value = ''
+  situacao.value = 'todas'
+}</code></pre>
+                </div>
+                <p class="legenda">O <code>$patch</code> aparece como <strong>uma</strong> entrada; a action aparece com o nome dela. Os dois chegam ao mesmo lugar.</p>
+              </div>
+              <div role="tabpanel" id="s191-p3" aria-labelledby="s191-t3" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Medido com console.log, na tela da Lista</span></div>
+                  <pre><code>                 Ao carregar   5 letras na busca   Concluir 1
+GETTER concluidas      1              0                 1
+FUNÇÃO contarPor()     1              5                 2</code></pre>
+                </div>
+                <p class="legenda">A busca não é tarefa: o getter não recalcula. A função roda a cada redesenho.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa pequeno">No painel Pinia dá para <strong>editar</strong> o estado e ver a tela responder. É o jeito mais rápido de testar um caso difícil de reproduzir — uma lista vazia, um erro, um carregando que não termina.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>Por que o getter rodou <strong>duas</strong> vezes ao concluir uma tarefa, e não uma?</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#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" target="_blank" rel="noopener">Playground: o placar das execuções e a linha do tempo</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 192 -->
+        <section class="slide" data-n="192" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: getters, action e <code>$patch</code></h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Ponto de partida</dt><dd>A sua cópia da etapa 21. A pasta da etapa 22 já traz a solução.</dd>
+                  <dt>1</dt><dd>Getter <code>pendentes</code>, usando <code>concluidas</code>. Mostre no Resumo.</dd>
+                  <dt>2</dt><dd>Função <code>contarPor(situacao)</code> na store, devolvendo o total daquela situação.</dd>
+                  <dt>3</dt><dd>Na Lista, dois botões de limpar filtros: um com <code>store.$patch</code>, outro com uma action.</dd>
+                  <dt>4</dt><dd>Compare os dois na Timeline do DevTools.</dd>
+                  <dt>Evidência</dt><dd>O Resumo mostra pendentes; os dois botões limpam; a Timeline mostra as entradas.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica 1</summary><p>Um getter pode ler outro: <code>tarefas.value.length - concluidas.value</code>. Não repita o <code>filter</code>.</p></details>
+                <details class="dica"><summary>Dica 2</summary><p><code>contarPor</code> é uma função comum, não um <code>computed</code>. Isso é intencional — o slide 194 explica.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>const pendentes = computed(() =&gt; tarefas.value.length - concluidas.value)
+
+function contarPor(situacaoPedida) {
+  if (situacaoPedida === 'pendentes') return pendentes.value
+  if (situacaoPedida === 'concluidas') return concluidas.value
+  return tarefas.value.length
+}</code></pre>
+              <pre><code>&lt;button @click="store.$patch({ busca: '', situacao: 'todas' })"&gt;
+  Limpar filtros ($patch)
+&lt;/button&gt;
+&lt;button @click="limparFiltros"&gt;Limpar filtros (action)&lt;/button&gt;</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 193 -->
+        <section class="slide" data-n="193" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Quem pode mudar o estado?</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Tudo isto é permitido pelo Pinia</span></div>
+                <pre><code>store.busca = 'teste'                    // direto
+store.$patch({ busca: 'teste' })         // em lote
+store.limparFiltros()                    // pela action
+
+const { busca } = storeToRefs(store)
+busca.value = 'teste'                    // pelo ref</code></pre>
+              </div>
+              <p class="caixa caixa-destaque pequeno">O Pinia <strong>não</strong> proíbe mudar o estado de fora. Diferente do Vuex, não há “mutations” obrigatórias. A disciplina é combinada, não imposta.</p>
+            </div>
+            <div class="pilha">
+              <p class="pequeno">O critério prático:</p>
+              <table class="tabela">
+                <thead><tr><th>Situação</th><th>Como mudar</th></tr></thead>
+                <tbody>
+                  <tr><td>Tem regra, validação ou requisição</td><td><strong>action</strong></td></tr>
+                  <tr><td>Campo ligado a um <code>v-model</code></td><td>direto (o ref do <code>storeToRefs</code>) |</td></tr>
+                  <tr><td>Vários campos de uma vez</td><td><code>$patch</code></td></tr>
+                </tbody>
+              </table>
+              <p class="caixa pequeno">Por que preferir action quando há regra: ela aparece <strong>com nome</strong> na linha do tempo. Uma alteração direta aparece como “mudou”, sem dizer quem foi nem por quê. Quando o número estiver errado às onze da noite, o nome é o que você vai querer ter.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 194 -->
+        <section class="slide" data-n="194" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: o <code>$reset</code> que não existe</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Console — saída real</span></div>
+                <pre><code>&gt; typeof store.$reset
+'function'                    ← o método EXISTE
+
+&gt; store.$reset()
+Uncaught Error: 🍍: Store "tarefas" is built using the
+setup syntax and does not implement $reset().</code></pre>
+              </div>
+              <p class="caixa pequeno">Repare que ele <strong>existe</strong> e falha. Não é “método não encontrado”: é o Pinia avisando que, nesta sintaxe, ele não tem como saber o que é o estado inicial.</p>
+            </div>
+            <div class="pilha">
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>Numa options store, o <code>state</code> é uma <strong>função</strong>: <code>state: () =&gt; ({ … })</code>. O Pinia pode chamá-la de novo quando quiser. Na setup store, quem criou os refs foi o nosso código, numa função que já terminou.</p></details>
+                <details class="solucao"><summary>As duas saídas</summary>
+                  <ol class="pequeno">
+                    <li>Escrever a sua <code>reiniciar()</code> — o que fazemos.</li>
+                    <li>Usar a options store, se o <code>$reset</code> for importante no seu caso.</li>
+                  </ol>
+                  <p class="pequeno">Vantagem de escrever à mão: fica <strong>explícito</strong> o que “estado inicial” quer dizer. Nem sempre é tudo — reiniciar as tarefas não deveria reiniciar o tema.</p>
+                </details>
+              </div>
+              <p class="caixa caixa-destaque pequeno">Guardem o padrão: quando uma biblioteca oferece conveniência, ela precisa saber algo sobre o seu código. A options store conta mais para o Pinia, e recebe mais de volta. Não é melhor nem pior — é uma troca.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#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" target="_blank" rel="noopener">Playground: as duas sintaxes e o $reset</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 195 -->
+        <section class="slide" data-n="195" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: getters com parâmetro</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="prompt-ia">
+              <div class="prompt-ia-topo"><span>Prompt</span></div>
+              <pre><code>No Pinia, vi este padrão de getter que recebe parâmetro:
+
+  getters: {
+    porId: (state) => (id) => state.itens.find(i => i.id === id)
+  }
+
+Explique, citando a documentação oficial:
+1. se o resultado é guardado em cache, e por quê;
+2. o que isso custa numa lista grande;
+3. quando vale a pena mesmo assim.
+
+Meu projeto usa setup store.</code></pre>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>A resposta deve dizer</th><th>Sinal de resposta ruim</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Não</strong> há cache: o getter devolve uma função</td><td>Diz que o Pinia memoiza por argumento</td></tr>
+                  <tr><td>Roda a cada leitura, em todo redesenho</td><td>Não fala do custo</td></tr>
+                  <tr><td>Vale quando o cálculo é barato e o parâmetro varia</td><td>Condena ou recomenda sem critério</td></tr>
+                  <tr><td>Em setup store, é só uma função comum</td><td>Insiste na sintaxe de options store</td></tr>
+                </tbody>
+              </table>
+              <div class="caixa pequeno">
+                <h3>Onde conferir</h3>
+                <ul>
+                  <li><a href="https://pinia.vuejs.org/core-concepts/getters.html#Passing-arguments-to-getters">Pinia — Passing arguments to getters</a></li>
+                </ul>
+                <p>A própria documentação avisa, nessa seção, que o resultado deixa de ser guardado.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 196 -->
+        <section class="slide" data-n="196" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <ol class="passos">
+              <li>Na setup store, o que é state, o que é getter e o que é action?</li>
+              <li>Por que um “getter com parâmetro” não tem cache?</li>
+              <li>Quando usar <code>$patch</code> em vez de mudar o campo direto?</li>
+            </ol>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

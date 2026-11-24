@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 15 · Telas sem roteador</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="15">
+    <div class="janela">
+      <main class="palco" aria-label="Unidade 5, etapa 15: telas sem roteador e o limite da troca à mão">
+        <!-- 133 -->
+        <section class="slide" data-n="133" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Duas telas, um endereço só</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">A Todo List ganha uma segunda tela: o <strong>Resumo</strong>. Hoje a troca é feita à mão, com um <code>ref</code> e um <code>v-if</code> — exatamente como a etapa 06 desenhou a lista à mão antes de conhecer o Vue. Funciona. E é por funcionar que o limite fica visível.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Duas telas</td><td>Lista e Resumo alternam sem recarregar</td></tr>
+                  <tr><td>Os dados sobrevivem</td><td>Criar uma tarefa, ir ao Resumo e voltar: ela continua lá</td></tr>
+                  <tr><td>O limite</td><td>Três coisas que quebram sem roteador, ditas de cor</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              Você abre o Resumo e aperta <kbd>F5</kbd>. Qual tela aparece? E se você copiar o
+              endereço e mandar para um colega, o que ele vê?
+            </div>
+          </div>
+        </section>
+
+        <!-- 134 -->
+        <section class="slide" data-n="134" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Roteamento no servidor × roteamento no cliente</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th></th><th>No servidor</th><th>No cliente (SPA)</th></tr></thead>
+                <tbody>
+                  <tr><td>Quem decide</td><td>O servidor, a cada pedido</td><td>O JavaScript, já carregado</td></tr>
+                  <tr><td>O que chega</td><td>Uma página HTML nova</td><td>Nada: a página já está aqui</td></tr>
+                  <tr><td>A tela</td><td>Pisca e recarrega</td><td>Troca na hora</td></tr>
+                  <tr><td>Primeira visita</td><td>Rápida</td><td>Mais lenta (baixa o app inteiro)</td></tr>
+                  <tr><td>Endereço</td><td>Sempre certo, de graça</td><td>Só se alguém cuidar disso</td></tr>
+                </tbody>
+              </table>
+              <p class="caixa caixa-destaque pequeno">Um portal como o <code>portal.fgv.br/graduacao</code> é roteamento no servidor: outro endereço, outro pedido, outra resposta. Uma <strong>SPA</strong> carrega um documento só e troca o conteúdo por dentro.</p>
+            </div>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>App.vue · a troca à mão</span></div>
+                <pre><code>const tela = ref('lista')
+
+&lt;button @click="tela = 'lista'"&gt;Lista&lt;/button&gt;
+&lt;button @click="tela = 'sobre'"&gt;Resumo&lt;/button&gt;
+
+&lt;ListaView v-if="tela === 'lista'" … /&gt;
+&lt;SobreView v-else … /&gt;</code></pre>
+              </div>
+              <table class="tabela">
+                <thead><tr><th>Pasta</th><th>Papel</th></tr></thead>
+                <tbody>
+                  <tr><td><code>components/</code></td><td>Peças reaproveitáveis: <code>TarefaItem</code>, <code>PainelCartao</code></td></tr>
+                  <tr><td><code>views/</code></td><td>Telas inteiras, uma por endereço: <code>ListaView</code>, <code>SobreView</code></td></tr>
+                </tbody>
+              </table>
+              <p class="pequeno">Mesma tecnologia nas duas pastas — um <code>.vue</code> é um <code>.vue</code>. O que muda é o papel, e a pasta serve para deixar isso óbvio para quem lê.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 135 -->
+        <section class="slide" data-n="135" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>As duas telas funcionando — e o que não funciona</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 15">
+                <button role="tab" id="s135-t1" aria-controls="s135-p1" aria-selected="true">1 · Lista</button>
+                <button role="tab" id="s135-t2" aria-controls="s135-p2" aria-selected="false">2 · Resumo</button>
+                <button role="tab" id="s135-t3" aria-controls="s135-p3" aria-selected="false">3 · O que quebra</button>
+              </div>
+              <div role="tabpanel" id="s135-p1" aria-labelledby="s135-t1">
+                <img src="capturas/telas/u5-e15-lista.png" alt="Etapa 15: topo com Todo List, abas Lista e Resumo, e o painel de tarefas" class="recorte" />
+                <p class="legenda">Endereço: <code>http://localhost:5173/</code></p>
+              </div>
+              <div role="tabpanel" id="s135-p2" aria-labelledby="s135-t2" hidden>
+                <img src="capturas/telas/u5-e15-resumo.png" alt="Etapa 15: tela Resumo com total, concluídas, pendentes e barra de progresso" class="recorte" />
+                <p class="legenda">Endereço: <code>http://localhost:5173/</code> — <strong>o mesmo</strong>.</p>
+              </div>
+              <div role="tabpanel" id="s135-p3" aria-labelledby="s135-t3" hidden>
+                <table class="tabela">
+                  <thead><tr><th>Ação</th><th>O que acontece</th></tr></thead>
+                  <tbody>
+                    <tr><td>Olhar o endereço</td><td>Não muda ao trocar de tela</td></tr>
+                    <tr><td><kbd>F5</kbd> no Resumo</td><td>Volta para a Lista</td></tr>
+                    <tr><td>Botão Voltar</td><td>Sai da aplicação</td></tr>
+                    <tr><td>Enviar o link do Resumo</td><td>Não existe link para enviar</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa pequeno">Crie uma tarefa na Lista, vá ao Resumo e volte: ela continua lá. O <code>v-if</code> <strong>destrói</strong> a view, mas os dados moram no <code>App</code> — é a lição da etapa 13 (quem é dono do estado) pagando dividendo.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#eNq9Vdtu2zgQ/ZWBUEAS4Ejp5WVdxajRdp9SpNhtn6o+MNLYJkqRKi9CA8P/vkNSFycBki6w2DwEpObKM+eMj8m274vBYbKGpDKN5r0Fg9b1m1ryrlfawhE07uAEO606SMk3nU3X3Fg2Gooy3Ip7Dn+hcZ2aPeJ1dKllWcIW0DRKHBi0DCwKBrW7vMQ/wHWhbKM61xVwA5INuGet0iCDx2sFht0i/HQIPgx/UXUsatkoaWxMdeVTZKnwfaX5WPHGwIfth5u/oVOadcB+Or4CqaBnfIlmFMjMmOBb+tFY1zINWllkHUqr0u/55KxxTwW0mrwXC5OKMtH3zOZwtZk9i4EJh0XvzIEstazKiPzGt1hZ7HrBLNINoKJ3hwMdb521SsK7RvDmx1WdjG8c31cnmzCAqox+z0UZdavRR8WhPAoDY+8EUkDH9J7LC4E7u4aXr/pfFDMmqZPjMUJ9OtUJpYg9l1PT1UFDGV5F50iW4YLv5i6uzrqH9Yi6t8aT/xgxpG/xUCexv/D3jlALttE/IvoCB5pQTsFlbGIk4XCBwuDvlln6PrzZvOeNUNAiDLz1TDXh0WZdlWQMTkpsKsGpxk75LJlYAc+By3nmvsgPvCMbJ/wINkGYVaXgm6qkYE+Cs8EnK0hmOT2nzRUo+Uk5abH1x6+yi5cHmo2c7LXqPbFb3HGJn/0tO06EX8NWa3a3Gpm7hj+dbCwn+pyIpjHkY8etIU0E7IMMgqxIIqROuL55v72etLwGozovUSbJdF/fLRIqLlzals3K08w0Th4mMaVRtvP7siwIKTyiiE1maQBqvYCQ5rkPmXF4OmiBq3avLl++gZ3jD7oLCZ8S6eH15kt476hAuofv7gEr7MSKM+bdI4VdSOFEzMFl7yyl6FSLgjwnhCiWOmjwoESLPnvL99wiMLFXYasBAvHO70cirod+UcTDnfACaajZONLVPIT87fk8Ur8sgsvZrnjE2mXFP0nb/4exT/MmtvpvibNE/afMmbbwRJ0+0GHcawLl3h6IG+OXzORTTWVIbS39D/t84AP6X7VQ/9LPv2HT+Iuq7B9N7PQPBhe45w==" target="_blank" rel="noopener">Playground: a view destruída, os dados intactos</a></p>
+              <p class="pergunta pequeno"><strong>Observe</strong>Por que os dados sobrevivem à troca de tela, mas a escolha da tela não sobrevive ao F5?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 136 -->
+        <section class="slide" data-n="136" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: a tela <code>SobreView</code></h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Ponto de partida</dt><dd>A sua cópia da etapa 14. A pasta da etapa 15 já traz a solução.</dd>
+                  <dt>1</dt><dd>Crie <code>src/views/</code> e mova o painel inteiro do <code>App.vue</code> para <code>ListaView.vue</code>, recebendo o que precisa por props e <code>v-model</code>.</dd>
+                  <dt>2</dt><dd>Crie <code>SobreView.vue</code>: total, concluídas, pendentes e a barra de progresso (<code>role="progressbar"</code> com <code>aria-valuenow</code>).</dd>
+                  <dt>3</dt><dd>No <code>App</code>, o <code>ref</code> <code>tela</code> e os dois botões.</dd>
+                  <dt>Evidência</dt><dd>Concluir uma tarefa na Lista muda o percentual no Resumo.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica 1</summary><p>O percentual é derivado: <code>computed</code>, nunca <code>ref</code>. Cuidado com a lista vazia — divisão por zero.</p></details>
+                <details class="dica"><summary>Dica 2</summary><p>A barra é uma <code>div</code> dentro de outra, com <code>:style="{ width: `${percentual}%` }"</code>.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>const pendentes = computed(() =&gt; props.tarefas.length - props.concluidas)
+
+const percentual = computed(() =&gt; {
+  if (props.tarefas.length === 0) return 0
+  return Math.round((props.concluidas / props.tarefas.length) * 100)
+})</code></pre>
+              <pre><code>&lt;div class="barra" role="progressbar" :aria-valuenow="percentual"
+  aria-valuemin="0" aria-valuemax="100"
+  aria-label="Percentual de tarefas concluídas"&gt;
+  &lt;div class="barra-cheia" :style="{ width: `${percentual}%` }"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 137 -->
+        <section class="slide" data-n="137" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>O endereço é estado — e é o único que sobrevive</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Onde o estado mora</th><th>Sobrevive ao F5?</th><th>Vai num link?</th></tr></thead>
+                <tbody>
+                  <tr><td><code>ref</code> (memória da aba)</td><td>Não</td><td>Não</td></tr>
+                  <tr><td><code>localStorage</code> (etapa 12)</td><td>Sim</td><td>Não</td></tr>
+                  <tr><td><strong>Endereço</strong></td><td>Sim</td><td><strong>Sim</strong></td></tr>
+                </tbody>
+              </table>
+              <p class="caixa caixa-destaque pequeno">O endereço é o único lugar de estado que você pode <strong>copiar e colar num WhatsApp</strong>. É isso que um roteador compra para vocês.</p>
+            </div>
+            <div class="pilha">
+              <p class="pequeno">O que merece ir para o endereço, numa aplicação de verdade:</p>
+              <ul class="pequeno">
+                <li>Em que tela estou — <code>/resumo</code></li>
+                <li>Qual item estou vendo — <code>/tarefa/3</code> (etapa 17)</li>
+                <li>Filtros e busca — <code>/?situacao=pendentes</code></li>
+                <li>Página da listagem — <code>/?pagina=2</code></li>
+              </ul>
+              <p class="caixa pequeno">O que <strong>não</strong> vai: senha, token, nada que não possa aparecer no histórico do navegador, num print ou no registro do servidor.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 138 -->
+        <section class="slide" data-n="138" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: para onde o botão Voltar leva?</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <ol class="passos pequeno">
+                <li>Abra a aplicação e clique em <strong>Resumo</strong>.</li>
+                <li>Aperte o botão <strong>Voltar</strong> do navegador.</li>
+                <li>Olhe o endereço antes e depois.</li>
+              </ol>
+              <p class="caixa pequeno"><strong>Sintoma:</strong> o Voltar não volta para a Lista — ele sai da aplicação, para a página que você estava antes (ou para a aba em branco). Nenhum erro aparece.</p>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Console — rode antes e depois de trocar de aba</span></div>
+                <pre><code>&gt; history.length
+2
+// clicar em Resumo, depois em Lista
+&gt; history.length
+2    ← não mexeu
+
+// na etapa 16, com roteador, o mesmo teste:
+// 2 → 3 → 4   (uma entrada por navegação)</code></pre>
+              </div>
+              <p class="legenda">O número de partida varia conforme o que você abriu antes na aba; o que importa é se ele <strong>sobe</strong>.</p>
+            </div>
+            <div class="pilha">
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>O navegador só guarda no histórico aquilo que <em>ele</em> viu acontecer. Trocar um <code>ref</code> é coisa de dentro do JavaScript: o navegador não ficou sabendo.</p></details>
+                <details class="solucao"><summary>Mostrar explicação</summary><p>Clicar nas abas <strong>não cria entradas no histórico</strong>, porque nenhuma navegação aconteceu — só uma variável mudou. Para o navegador, a sessão inteira é uma página só. Quem cria essas entradas é a <strong>History API</strong>, e é exatamente o que o Vue Router usa na etapa 16.</p></details>
+              </div>
+              <p class="caixa caixa-destaque pequeno">Usuário não lê documentação: ele aperta Voltar. Uma aplicação que perde o trabalho dele nesse botão é uma aplicação quebrada, mesmo que nenhum erro apareça no Console.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#eNqFU11r2zAU/SsXM0gCidSvdSy4JqUvG3QwyujLtAfFuUnc2JKQ5DQl83/vteTmo13YSyJdnXPuuR/eJkVltPWjShr25LRKxpBshQIQ3YsTFAqRNrausb2LZOm9cWPOTSlfGEWfHNN2wenEbK18USFDV42mVj87tCQtkuGByMjq2qM91qqVWS1Yriu+R0yu2DX7zGeF8wfR09oTAvEZrr3WpRtJU5xK8QE4uaZMV7wsppzUeaFmuAnarXQjVJMMIbk1pq227VLqclsYDw59bTKhYrtgCwv0d7W1qPx35bxUOUIDc6sr6BG1d4DMLUqPD6GkYXf7gZW2L9+oXvobQny8L9Tq7fxY4PMQatfxDrW77uxT3JOM7N4ZDzd25OEBXV3pHSJeO4hQuaYCIIrCzZHdfliJZbQ5/pf3/iAMJbDdGH7HCW3BSL8cQ4/3qGJNLhQ1atw5bYbvUTY4OsZ2piP4D/02A6E+dr0/YNKYO608bnx7ZNS0fqyGCCmPA8zaSlOPFa2yx6zVTJVcZ9FJuh8AeH0jEi6SLJhN+f4pg7+n4LEAIkXXR6yOMwXnX0okdCXtolCjEudU5vmF2RAPaREtivrsDL9omsJ2C59CEWxel+VP6hM0Tcqn0TmP1sPZ7BLU3msFk7ws8hWl6T6iqcxX/QGlEPXF+dczeNSll5akAvw/5Lm2z9LOAv92LVU0KC0EsYv3Kq6SZZlBXy60lYAb6iCG9Wl580tb5HpAEwmoWEh0ny4t8Hjar3+IpPxgZu23uVvv8HXuHtPlZfYLS9ntWMrpfsBtmfu1P0V9G947bvMKJULL2Q==" target="_blank" rel="noopener">Playground: o mesmo app, agora com histórico</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 139 -->
+        <section class="slide" data-n="139" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: SPA, History API e o que perguntar à IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="prompt-ia">
+              <div class="prompt-ia-topo"><span>Prompt</span></div>
+              <pre><code>Tenho uma aplicação Vue 3 com &lt;script setup&gt; que troca de tela com
+um ref e v-if. O endereço do navegador não muda, o F5 volta para a
+primeira tela e o botão Voltar sai da aplicação.
+
+Explique, citando a documentação oficial:
+1. que mecanismo do navegador faz o endereço mudar sem recarregar;
+2. o que eu ganho e o que eu perco ao adotar um roteador;
+3. um caso em que NÃO vale a pena usar roteador.
+
+Não escreva código ainda. Cite as páginas que usou.</code></pre>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>A resposta deve dizer</th><th>Sinal de resposta ruim</th></tr></thead>
+                <tbody>
+                  <tr><td>History API (<code>pushState</code>, <code>popstate</code>)</td><td>Só fala de <code>window.location</code>, que recarrega</td></tr>
+                  <tr><td>Ganha: link, F5, Voltar, favoritos</td><td>Só cita “organização do código”</td></tr>
+                  <tr><td>Perde: mais um pacote, configuração do servidor</td><td>Diz que não há custo nenhum</td></tr>
+                  <tr><td>Não vale: uma tela só, ou um widget dentro de outra página</td><td>“Sempre use roteador”</td></tr>
+                </tbody>
+              </table>
+              <div class="caixa pequeno">
+                <h3>Onde conferir</h3>
+                <ul>
+                  <li><a href="https://developer.mozilla.org/pt-BR/docs/Web/API/History_API">MDN — History API</a></li>
+                  <li><a href="https://router.vuejs.org/introduction.html">Vue Router — Introduction</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 140 -->
+        <section class="slide" data-n="140" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <ol class="passos">
+              <li>Cite <strong>três</strong> coisas que deixam de funcionar quando se troca de tela sem roteador.</li>
+              <li>Criei uma tarefa, fui ao Resumo e voltei: a tarefa continua lá. Por quê?</li>
+              <li>Qual a diferença entre um arquivo em <code>components/</code> e um em <code>views/</code>?</li>
+            </ol>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

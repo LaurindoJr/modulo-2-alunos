@@ -33,10 +33,38 @@ Cada etapa segue o roteiro **Conhecer → Executar → Entender → Pesquisar** 
 | `13-componentes-props-eventos` | 117–124 | `TarefaForm` e `TarefaItem` com props e eventos | Mesmo comportamento da etapa 12; árvore com props ↓ e eventos ↑ |
 | `14-v-model-slots` | 125–132 | `AlternarTema` e `TarefaFiltros` com `v-model`; `PainelCartao` com slots | Tema e filtros por `v-model`; prop × slot explicados |
 
+## Unidade 5 — roteamento (etapas de 40 min)
+
+| Etapa | Slides | O que a turma monta | Evidência de conclusão |
+|---|---|---|---|
+| `15-rotas-spa` | 133–140 | Segunda tela trocada à mão com um `ref` e `v-if` | As duas telas funcionam; o aluno lista três coisas que quebram sem roteador |
+| `16-vue-router` | 141–148 | `createRouter`, `RouterLink`, `RouterView` e estado num composable | Navegar muda o endereço com zero requisições de documento; F5 em `/resumo` funciona |
+| `17-rotas-dinamicas` | 149–156 | `/tarefa/:id` com `useRoute`, rota curinga e navegação programática | `/tarefa/2` abre a tarefa 2 depois do F5; id inexistente e endereço inexistente dão mensagens diferentes |
+
+## Unidade 6 — interação com APIs (etapas de 40 min)
+
+Estas três etapas precisam de **dois terminais**: `npm run api` e `npm run dev`.
+
+| Etapa | Slides | O que a turma monta | Evidência de conclusão |
+|---|---|---|---|
+| `18-api-primeiro-get` | 157–164 | json-server, Axios e a busca com `async`/`await` | Editar o `db.json` muda a tela; `GET /tarefas → 200` no Network |
+| `19-estados-carregando-erro` | 165–172 | Carregando, com dados, vazio e falhou | Com a API desligada, a mensagem certa e o botão “Tentar de novo” |
+| `20-crud-modularizacao` | 173–180 | `POST`, `PATCH`, `DELETE` e a camada `services/` | As três ações sobrevivem ao F5 |
+
+## Unidade 7 — gerenciamento de estado (etapas de 40 min)
+
+Também precisam de dois terminais.
+
+| Etapa | Slides | O que a turma monta | Evidência de conclusão |
+|---|---|---|---|
+| `21-pinia-primeira-store` | 181–188 | `defineStore`, `createPinia`, `storeToRefs` | Tudo funciona igual; a store aparece no DevTools |
+| `22-state-getters-actions` | 189–196 | Getters, `$patch` e `reiniciar()` | O `$patch` vira uma entrada na Timeline |
+| `23-varias-stores` | 197–204 | Três stores por assunto e `$subscribe` | Busca e tema sobrevivem ao F5 |
+
 ## Como usar uma etapa
 
 Etapas 01 a 03, 06 e 07 não têm dependências: abra o `index.html` (ou rode o script) direto da
-pasta. Nas etapas 04, 05 e 08 a 14, `node_modules/` não acompanha a pasta:
+pasta. Nas etapas 04, 05 e 08 a 23, `node_modules/` não acompanha a pasta:
 
 ```bash
 cd 08-projeto-sfc

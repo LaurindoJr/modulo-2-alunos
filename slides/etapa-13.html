@@ -78,6 +78,7 @@ const emit = defineEmits(['alternar', 'remover'])</code></pre>
   :key="tarefa.id" :tarefa="tarefa"
   @alternar="alternar" @remover="remover" /&gt;</code></pre>
               </div>
+              <p><a class="link-playground" href="https://play.vuejs.org/#eNqNk2FPnEAQhv/KhDY5iFe4q/0iItG0NDGpHlH7SZq4xw51K+yuy3LRXvjvnQXOXmPT9AuEmX1n3pl92HpnWoebDr0YvKQtjdAWWrSdTgspGq2MhS0YrKCHyqgGZnR29pL6qKRlXJkpF0a7QDgeK2QUwQrys3MousUCj0ABV9I9QLpIxRo0KoSsRuDYlghUF7RRGhA2qrZsCOAGpVVhIUslWwtWWVbDifPlL4JdlAtmhJrCt98C177qZGmFksBUjlyYa9Uw/7FjVC2AbSFhUoUbVncY6q699+8UVKK+V6BJ0cHB2+0o6I8BO3JZCi7IXasaFHeBqzH4GUvAwQmMxwvZFzKJxp2mzkxisdE1s5g6UXJ/mOZMgL9bCKfFBUlE4SGt092Y2+00cd8nkR5KUf5l9/GQPCm84V14cErWmKHA3tAUjnZK6rAik0iXoclAhT/j3227Ok1qAZt3lXIl/HoOIgAhp0VRnfgBnykjCi8lZ6OrWqRJRFI38d6U3hy8fST+RhkRkl+t8pjcOE8DBeGAS3kE16uL7PImgy/Z+c3XqzMigGMlJOZESOtPe4kJUfusMYbLrlmjmRMBj50wyGOwhmr20AcTjNnF+c2uVavW1Gk13fbAIx4qaDrOQDLO6L4Jyzz7lL2Qh42wdCOjiYw+Wv92Nqx75oD713VzsYHWPtdIu9OMcyG/x7Bc6KdjWCvD0dCXfiJTteDwpixL2q8TDih8HiwW3fvF8oOjsB1+nkPY4A8VvwZkUK07a4n807IW5QM1dd79yewclgHVd4QbOFgm0Xj4P6WLfe3iD3ES0ZyvMOh/AUPHeRo=" target="_blank" rel="noopener">Playground: props descem, eventos sobem</a></p>
             </div>
           </div>
         </section>
@@ -228,6 +229,7 @@ src/components/TarefaItem.vue
          vue/no-mutating-props</code></pre>
                 <figcaption>Lint real · <a href="capturas/terminal/m3-lint-e13-muta-prop.txt">arquivo</a></figcaption>
               </figure>
+              <p><a class="link-playground" href="https://play.vuejs.org/#eNp9U11v2zAM/Cuc95AECOwkHVDUdY0F6wYMGJJgHfrkF1lSWm2KpMlS0MLIfx8lx/lAs77YpkgeT8dzm8yNSbeeJzkkRUOtMA4a7rwpKyU2RlsHLVi+hh2srd7AAGsHh9Q3IZ/1PpFmMUq7gkpRrRoH+HSEaQt3AWU4GfUJRzAm++MWnHBe6hwGP8iWWCAgta/8ZMKvyWAcUKj0gpEc1kQ2HHaIU2Qd3zJMKxzfGEkcxwigeL4qV0QUGb5jbMoTIm17pLXbFZnpazpO6WEa1hZ1ieVvEqGtLrvW2Nwpkfe4d1XSf1YJ5F0/HnYfeJSV4QInpJMxJAcBL22jk81YbRrkxfhaKL4K0bANDPpxOe7LvRqew8Jvam7HKPBfLyxnOTjrUbpxKO+IHIuX9W9O3cXioHWlsgy+zB+WMA0ZTeOOAhkQynFhSQpLeMSO+eP3hzkoHQg1WvK0UmuvqBNa7RvngfVwBJF2vE96spybG5x4OnCWw8azME8+abj/uvj1cwlMg0bGTvdjF8Es9GoJZCsaApWfTaafgMdW0MAQPTQZIk4JReCVtvdcIbdzThfM8OFyJhJ+z41MbKFxr5KjAwxhTKinHKYT83ILtbaM49Km5gVQLsHgI6W0SmJjNGU0RW9SPKm9c0j9M5WC/gmWOoqKbVMIQtTXl5cEwyjPCM0bUf6Hea4Lws562G4V+POjA0MOho2QXFGhG30OW2R47Tcu3/0DlVaFaQ==" target="_blank" rel="noopener">Playground: trocar a prop × mudar por dentro</a></p>
             </div>
             <div class="pilha">
               <h3 class="pequeno">2 · Evento com nome errado</h3>
@@ -236,6 +238,7 @@ src/components/TarefaItem.vue
                 <pre><code>&lt;TarefaItem … @excluir="remover" /&gt;   &lt;!-- o filho emite 'remover' --&gt;</code></pre>
               </div>
               <p class="pequeno">Clique em Remover: nada acontece e o Console fica limpo. Na Timeline do Vue DevTools, o evento <code>remover</code> aparece — só que ninguém o ouvia.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#eNqFUV2L2zAQ/CtT34MTrrEDB3kIOpNr6XNLX+s+yLoNJypLOn2EtiH/vSvbCYUr9ElaZnd2duZcPXnfnDJVe1QiqqB9QqSUfddbPXoXEs4IdMQFx+BG1Nxb36APLkm3AE07Vc3c0FvlbEw40W+KeCwUq+26t6Kdl3SlRSQavZGJuALEy0P3RWrR8jvVvnPwUsPlk84QQ3c+L3yXi2iHrhQrimvR+omOR95tNviMozYvDjTqRKgDje5EoW4YKGwUVU4S9YF+KpP1BERYNzKv7fN2Sw8OA4saG2w2s5L5zuvEY19NMu7v+wrtdbVHTL8MMaiccWGPu91u11cTAfDR6NdMvAaDS8uWPax8lpDsVCJFIDgU15whPkFJmGJzsxAwQCHxUAquUF3VgJPAYbkS8jXziSOUHuU0OZsj2r+srt6jumX1r+Dn6Ip/nNwzHbWlT1zE1bebm9//k+WQU3IWB2W0+sGeFLLVbXrNvnyd/xzk1PpG5OUP9YfiOA==" target="_blank" rel="noopener">Playground: o evento que ninguém ouve</a></p>
               <details class="solucao"><summary>Mostrar explicação</summary><p>1: o Vue avisa quando se troca a prop inteira, mas não impede mudar uma propriedade <em>dentro</em> do objeto: o dado do pai muda sem passar pelo dono. O lint pega. 2: nome de evento é contrato entre filho (<code>defineEmits</code>) e pai (<code>@nome</code>); declarar os eventos ajuda a achar o erro.</p></details>
             </div>
           </div>

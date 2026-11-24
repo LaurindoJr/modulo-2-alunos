@@ -1,0 +1,25 @@
+# Etapa 20 — painel Network, filtro Fetch/XHR
+# Sequência medida: carregar, criar, concluir, recarregar a página, remover.
+
+GET    http://localhost:3000/tarefas              → 200   (carregamento)
+POST   http://localhost:3000/tarefas              → 201   (criar)
+PATCH  http://localhost:3000/tarefas/LJCdP9Rh4Eo  → 200   (concluir)
+GET    http://localhost:3000/tarefas              → 200   (depois do F5)
+DELETE http://localhost:3000/tarefas/LJCdP9Rh4Eo  → 200   (remover)
+
+# O id "LJCdP9Rh4Eo" foi gerado pelo SERVIDOR na resposta do POST. Não mandamos
+# id nenhum no corpo do pedido. Repare que não é um número em sequência: é texto.
+
+# Estado da tela em cada momento:
+#   4 tarefas → criar → 5 → concluir → "2 de 5 concluídas"
+#   F5        → 5 tarefas, "2 de 5 concluídas"   ← o servidor guardou
+#   remover   → 4 tarefas
+
+# --- Quando uma AÇÃO falha com a lista já carregada ---
+# (API derrubada depois do carregamento; tentativa de criar uma tarefa)
+POST   http://localhost:3000/tarefas  → (failed) net::ERR_CONNECTION_REFUSED
+
+Na tela:
+  - a lista continua com os mesmos 4 itens (nada foi acrescentado)
+  - aparece, acima dela, "Não foi possível falar com a API. Ela está no ar? Rode `npm run api`."
+  - o <ul> continua visível: a falha de uma ação não derruba o que já estava certo

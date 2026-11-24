@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 23 · Várias stores</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="23">
+    <div class="janela">
+      <main class="palco" aria-label="Unidade 7, etapa 23: várias stores e o que não vai para a store">
+        <!-- 197 -->
+        <section class="slide" data-n="197" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Uma store não é um depósito</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">A tentação, depois de aprender store, é pôr tudo nela. Hoje fazemos o contrário: a aplicação ganha <strong>três</strong> stores, cada uma com um assunto — e uma lista do que deve ficar <strong>fora</strong> de todas.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Três stores</td><td><code>tarefas</code>, <code>filtros</code> e <code>tema</code> no DevTools</td></tr>
+                  <tr><td>Uma usa a outra</td><td><code>filtros.visiveis</code> lê a store de tarefas</td></tr>
+                  <tr><td>Persistência</td><td>Busca e tema sobrevivem ao F5</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              Destes quatro, quais merecem ir para uma store? O texto sendo digitado no formulário ·
+              a busca · o tema · a posição da rolagem da lista.
+            </div>
+          </div>
+        </section>
+
+        <!-- 198 -->
+        <section class="slide" data-n="198" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Uma store por assunto, não por tela</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Store</th><th>Cuida de</th><th>Vive enquanto</th></tr></thead>
+                <tbody>
+                  <tr><td><code>tarefas</code></td><td>Dados do servidor</td><td>A sessão; vem da API</td></tr>
+                  <tr><td><code>filtros</code></td><td>O que a pessoa escolheu ver</td><td>Entre visitas (localStorage)</td></tr>
+                  <tr><td><code>tema</code></td><td>Aparência</td><td>Entre visitas (localStorage)</td></tr>
+                </tbody>
+              </table>
+              <p class="caixa caixa-destaque pequeno">Três assuntos, três ciclos de vida. Juntar tudo numa store só faz com que “limpar as tarefas” precise lembrar de não apagar o tema.</p>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Uma store usando outra</span></div>
+                <pre><code>// stores/filtros.js
+const visiveis = computed(() =&gt; {
+  const tarefasStore = useTarefasStore()   // é só chamar
+  return tarefasStore.tarefas.filter(…)
+})</code></pre>
+              </div>
+            </div>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>$subscribe: o watch da store inteira</span></div>
+                <pre><code>filtros.$subscribe((_mutacao, estado) =&gt; {
+  localStorage.setItem(CHAVE, JSON.stringify({
+    busca: estado.busca,
+    situacao: estado.situacao,
+  }))
+})</code></pre>
+              </div>
+              <p class="pequeno">Roda a cada mudança de qualquer campo. Serve para persistir, registrar, sincronizar com outra aba.</p>
+              <p class="caixa pequeno"><strong>Nunca confie no que estava gravado.</strong> Ao ler do <code>localStorage</code>, valide: outra versão da sua aplicação pode ter escrito ali, e a pessoa pode ter editado à mão.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#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" target="_blank" rel="noopener">Playground: três stores, uma lendo a outra</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 199 -->
+        <section class="slide" data-n="199" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Três stores, e o que sobrou do <code>App.vue</code></h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 23">
+                <button role="tab" id="s199-t1" aria-controls="s199-p1" aria-selected="true">1 · Resultado</button>
+                <button role="tab" id="s199-t2" aria-controls="s199-p2" aria-selected="false">2 · O App.vue</button>
+                <button role="tab" id="s199-t3" aria-controls="s199-p3" aria-selected="false">3 · Persistência</button>
+              </div>
+              <div role="tabpanel" id="s199-p1" aria-labelledby="s199-t1">
+                <img src="capturas/telas/u7-e23-tres-stores.png" alt="Etapa 23: a Todo List com filtro ativo e o botão de limpar filtros" class="recorte" />
+                <p class="legenda">Filtro aplicado pela store <code>filtros</code>, lista vinda da store <code>tarefas</code>.</p>
+              </div>
+              <div role="tabpanel" id="s199-p2" aria-labelledby="s199-t2" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>App.vue · o script inteiro</span></div>
+                  <pre><code>const { carregar } = useTarefasStore()
+onMounted(carregar)
+
+const { escuro } = storeToRefs(useTemaStore())</code></pre>
+                </div>
+                <p class="legenda">Oito linhas com os imports. Na etapa 14 este arquivo tinha mais de sessenta.</p>
+              </div>
+              <div role="tabpanel" id="s199-p3" aria-labelledby="s199-t3" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Medido: digitar na busca, trocar o tema, recarregar</span></div>
+                  <pre><code>Busca antes do F5     : "store"   (3 tarefas na tela)
+Busca depois do F5    : "store"   (3 tarefas na tela)
+Tema depois do F5     : escuro
+
+localStorage:
+  todo-list:tema     → "escuro"
+  todo-list:filtros  → {"busca":"store","situacao":"todas"}</code></pre>
+                </div>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa caixa-destaque pequeno">Olhem a aba 2. O <code>App.vue</code> não ficou pequeno porque escrevemos menos: ficou pequeno porque cada coisa achou o seu lugar. Isso é o resultado de três unidades, não de uma.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>O tema é aplicado na <strong>criação</strong> da store, não num <code>onMounted</code>. Por quê?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 200 -->
+        <section class="slide" data-n="200" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: a store de tema e a persistência</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Ponto de partida</dt><dd>A sua cópia da etapa 22. A pasta da etapa 23 já traz a solução.</dd>
+                  <dt>1</dt><dd><code>stores/tema.js</code>: o estado, o <code>watch</code> e a aplicação do tema, tirados do <code>App.vue</code>.</dd>
+                  <dt>2</dt><dd><code>stores/filtros.js</code>: mova <code>busca</code>, <code>situacao</code> e <code>visiveis</code> para lá.</dd>
+                  <dt>3</dt><dd><code>$subscribe</code> gravando os filtros no <code>localStorage</code>, com validação na leitura.</dd>
+                  <dt>Evidência</dt><dd>Busca e tema sobrevivem ao F5; o <code>App.vue</code> fica com menos de dez linhas de script.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica 1</summary><p>O <code>$subscribe</code> precisa de uma store já criada — chame-o no <code>main.js</code>, <strong>depois</strong> do <code>use(createPinia())</code>.</p></details>
+                <details class="dica"><summary>Dica 2</summary><p>Ao ler do <code>localStorage</code>, valide: <code>situacao</code> só pode ser uma das três. Dado gravado é dado externo.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>// stores/tema.js
+const escuro = ref((lerTemaSalvo() ?? temaDoSistema()) === 'escuro')
+aplicarTema(escuro.value ? 'escuro' : 'claro')   // antes da primeira pintura
+
+watch(escuro, (estaEscuro) =&gt; {
+  const tema = estaEscuro ? 'escuro' : 'claro'
+  aplicarTema(tema)
+  salvarTema(tema)
+})</code></pre>
+              <pre><code>// main.js
+app.use(createPinia()).use(router)
+guardarFiltros()      // $subscribe, depois do Pinia
+app.mount('#app')</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 201 -->
+        <section class="slide" data-n="201" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>O que <em>não</em> vai para a store</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Pergunta</th><th>Se sim</th><th>Se não</th></tr></thead>
+                <tbody>
+                  <tr><td>Mais de um componente precisa?</td><td>candidato a store</td><td>estado local</td></tr>
+                  <tr><td>Sobrevive à troca de tela?</td><td>store</td><td>local</td></tr>
+                  <tr><td>Faz sentido num link?</td><td><strong>endereço</strong></td><td>store ou local</td></tr>
+                  <tr><td>É dado do servidor?</td><td>store de dados</td><td>—</td></tr>
+                </tbody>
+              </table>
+              <p class="caixa caixa-destaque pequeno">A terceira linha é um aviso contra o exagero: nem tudo que é compartilhado vira store. A nossa <strong>busca</strong> provavelmente deveria estar no endereço — assim ela caberia num link, como a etapa 17 ensinou.</p>
+            </div>
+            <div class="pilha">
+              <p class="pequeno">Fica <strong>fora</strong> de qualquer store:</p>
+              <ul class="pequeno">
+                <li>O texto sendo digitado no <code>TarefaForm</code> — some quando a tarefa é criada</li>
+                <li>Um <code>&lt;details&gt;</code> aberto ou fechado</li>
+                <li>Posição da rolagem, foco, seleção de texto</li>
+                <li>Qualquer coisa que só um componente lê</li>
+              </ul>
+              <p class="caixa pequeno">Pôr tudo na store tem um custo real: o estado deixa de morrer junto com o componente. Um formulário cujo rascunho vive na store ainda está preenchido quando a pessoa volta à tela — e isso quase nunca é o que ela espera.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 202 -->
+        <section class="slide" data-n="202" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: o <code>$subscribe</code> só grava</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <ol class="passos pequeno">
+                <li>Digite algo na busca. Veja a chave <code>todo-list:filtros</code> mudar em Application › Local Storage.</li>
+                <li><strong>Apague</strong> a chave ali mesmo, sem recarregar.</li>
+                <li>Olhe a tela.</li>
+              </ol>
+              <p class="caixa pequeno"><strong>Sintoma:</strong> não acontece nada. A busca continua lá, a lista continua filtrada. Só no próximo F5 é que o filtro some.</p>
+            </div>
+            <div class="pilha">
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>Quantas vezes o nosso código <strong>lê</strong> o <code>localStorage</code>? E quantas vezes ele <strong>escreve</strong>?</p></details>
+                <details class="solucao"><summary>Mostrar a causa</summary>
+                  <p class="pequeno">O <code>$subscribe</code> é de mão única: ele grava. A leitura acontece <strong>uma vez</strong>, na criação da store — e a store é criada uma vez por carregamento da página.</p>
+                  <p class="pequeno">É a mesma assimetria da etapa 18: a aplicação pergunta uma vez. Sincronizar nos dois sentidos é outro problema, com solução pronta (<code>pinia-plugin-persistedstate</code>) ou com o evento <code>storage</code>, que avisa quando <strong>outra aba</strong> muda o valor.</p>
+                </details>
+              </div>
+              <p class="caixa caixa-destaque pequeno">Consequência prática: com a aplicação aberta em <strong>duas abas</strong>, a segunda não vê o filtro que você mudou na primeira — e, ao fechar, sobrescreve. “Persistido” não quer dizer “sincronizado”.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#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" target="_blank" rel="noopener">Playground: escritas × leituras, em números</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 203 -->
+        <section class="slide" data-n="203" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: organizar stores num projeto que cresce</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="prompt-ia">
+              <div class="prompt-ia-topo"><span>Prompt</span></div>
+              <pre><code>Tenho três stores Pinia: tarefas (dados da API), filtros
+(busca e situação, persistidos) e tema.
+
+Avalie essa divisão citando a documentação oficial:
+1. o que está bem dividido e NÃO deveria mudar;
+2. quando vale juntar duas stores;
+3. quais destes estados talvez devessem estar na URL
+   em vez de numa store, e por quê.
+
+Não sugira trocar o Pinia por outra biblioteca.</code></pre>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>A resposta deve dizer</th><th>Sinal de resposta ruim</th></tr></thead>
+                <tbody>
+                  <tr><td>Dividir por assunto está certo</td><td>Propõe uma store por tela</td></tr>
+                  <tr><td>Juntar só quando mudam sempre juntas</td><td>“Quanto menos stores, melhor”</td></tr>
+                  <tr><td>Busca e situação cabem na URL</td><td>Não percebe (é a etapa 17 voltando)</td></tr>
+                  <tr><td>Reconhece o que está bom</td><td>Reescreve tudo</td></tr>
+                </tbody>
+              </table>
+              <div class="caixa pequeno">
+                <h3>Onde conferir</h3>
+                <ul>
+                  <li><a href="https://pinia.vuejs.org/core-concepts/">Pinia — Core concepts</a></li>
+                  <li><a href="https://vuejs.org/guide/scaling-up/state-management.html">Vue — State Management</a></li>
+                </ul>
+                <p>A pergunta 3 é a mais interessante: ela cruza duas unidades. Se a IA não enxergar, vocês enxergam.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 204 -->
+        <section class="slide" data-n="204" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA · fecho da Unidade 7</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <ol class="passos">
+                <li>Por que três stores em vez de uma com tudo dentro?</li>
+                <li>Cite dois estados que <strong>não</strong> deveriam ir para uma store.</li>
+                <li>Por que apagar a chave do <code>localStorage</code> não muda nada na tela?</li>
+              </ol>
+            </div>
+            <div class="caixa pequeno">
+              <h3>O que a Unidade 7 deixou pronto</h3>
+              <ul>
+                <li>Estado compartilhado com nome, inspeção e histórico</li>
+                <li>State, getters e actions separados</li>
+                <li>Três stores por assunto, com persistência</li>
+              </ul>
+              <h3>O que vem a seguir</h3>
+              <p>A aplicação está inteira — e <strong>ninguém garante que ela continua funcionando</strong> depois da próxima mudança. Na <strong>Unidade 8</strong>, testes: da store, dos componentes e do fluxo completo.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

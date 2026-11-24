@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 16 · Vue Router</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="16">
+    <div class="janela">
+      <main class="palco" aria-label="Unidade 5, etapa 16: Vue Router, rotas, RouterLink e RouterView">
+        <!-- 141 -->
+        <section class="slide" data-n="141" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>O endereço entra no jogo</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">Os três problemas da etapa 15 — link, F5 e botão Voltar — têm uma causa só: o endereço não participava. O <strong>Vue Router</strong> põe o endereço no comando. Em troca, ele exige uma decisão de arquitetura que vai ser a ponte para o Pinia.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>O endereço muda</td><td><code>/</code> e <code>/resumo</code> na barra do navegador</td></tr>
+                  <tr><td>Sem recarregar</td><td>Network, filtro Doc: <strong>zero</strong> requisições ao navegar</td></tr>
+                  <tr><td>F5 e Voltar</td><td>F5 em <code>/resumo</code> abre o Resumo; Voltar volta uma tela</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              Ao clicar num link que troca de tela, quantas requisições aparecem no Network com o
+              filtro <strong>Doc</strong> ligado? E depois de apertar <kbd>F5</kbd> em
+              <code>/resumo</code>?
+            </div>
+          </div>
+        </section>
+
+        <!-- 142 -->
+        <section class="slide" data-n="142" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Quatro peças: tabela, instalação, link e buraco</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>src/router/index.js — a tabela</span></div>
+                <pre><code>export default createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    { path: '/',       name: 'lista',  component: ListaView },
+    { path: '/resumo', name: 'resumo', component: SobreView },
+  ],
+})</code></pre>
+              </div>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>src/main.js — a instalação</span></div>
+                <pre><code>createApp(App).use(router).mount('#app')</code></pre>
+              </div>
+            </div>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>App.vue — o link e o buraco</span></div>
+                <pre><code>&lt;RouterLink to="/"&gt;Lista&lt;/RouterLink&gt;
+&lt;RouterLink to="/resumo"&gt;Resumo&lt;/RouterLink&gt;
+
+&lt;RouterView /&gt;</code></pre>
+              </div>
+              <table class="tabela">
+                <thead><tr><th>Peça</th><th>O que faz</th></tr></thead>
+                <tbody>
+                  <tr><td><code>createWebHistory</code></td><td>Usa a History API: muda o endereço sem recarregar</td></tr>
+                  <tr><td><code>routes</code></td><td>Tabela endereço → componente</td></tr>
+                  <tr><td><code>.use(router)</code></td><td>Liga tudo: a partir daqui existem <code>RouterLink</code>, <code>RouterView</code>, <code>useRoute</code>, <code>useRouter</code></td></tr>
+                  <tr><td><code>RouterLink</code></td><td>Vira um <code>&lt;a href&gt;</code> de verdade, com o clique interceptado</td></tr>
+                  <tr><td><code>RouterView</code></td><td>O buraco onde a tela do endereço atual é desenhada</td></tr>
+                </tbody>
+              </table>
+              <p><a class="link-playground" href="https://play.vuejs.org/#eNp1VF1v2zoM/SucN6DpEFtd27WY6xrNigH3Au3tUGz35XoPis0kbm1Jk+QsnZH/finZ+VqahziixEORh0dsg7JWUtuw5ip6MlIEMQRtJgCy/sRktOV33N68QWdnwcxaZWLGVMVfItp9MpHUU0arSDfCljVGaOpwrOUvg5pCZ8FwK0ioZWNR78ZqhHqeRrms2cbj5jy6iD6yojR2a/dw7BtyYgXOrZSVCbkqD12x53hzQTeds6ocM4rOSlHgwsd2oZeZWAZDCEZKuWodS4nJdaksGLSNSjPR0QUtTNHeNlqjsH8LY7nIEZYw0bKGI4IebXnmGrnFR1/SsLfusZb65S+ql/6G0B3eleJ5tf63xF/bAXtKNnHvCMv784h5K9q5+BFNU8u1R2fuuoyemmITw1u9QyYYgxF8G33+cjeKAYkmjVlzcoKXErLm9MOnUyB+lRREAEbwAFpa5IXUILzbmYQCDYoZB8EpbCZySTxBVwZc77Ay8MqbdWzEr1E0OPa992gTw3+dEFpQ3M5iOGJHQ7qmRlpWjgky19nFPVXL4Z8g7SnZQNf2FrZncR/MHVsb7Mrcgnbsdsgf9F0eZ2JfNYPjiCt1K4nGhXXLqDE46GgiQMI6AaauJ4nFmp6ixdTFTASfp11ayZswpFQV10gJGcgrbgwa+NkgyE1rlGvN5COCkb9LMZMgJFQkOqA8LVYcuG14BWG4CrvRJVh5nQUsC1LPZsI2RwedOz4J0pH4GsblfU8Pkbsk+RBq4oHkAgorCf883H8BrGGOv6GQkPPaJ/1qerG/st1tBz3oIO3aMPARhazxeC+PhHVM+rVKd8V+Dck4bVt451sSTZqq+koSgOUyYeMUnNv40mf/p6tLpXdLmFrFdxU/wOfvj6PbB5B0Fexw76/9tHo7lHhfbbI1FljqdLGlBTKNfanckiqhgC3UXE9LEepyOiMpfjhRiytwCgsLzKXmtpQiJjoEXpGii6IU0xhO1QIunCPNQfYecMFzG9KvnCPVZrx4zpxmcm6oNmGl87Eygt7J8nrcFVBTB6ddUw1MymrGTQTvWZ9f1Mk7dNoLd65pYczz5ymdiyKGt8WE1HpxBWOpqSdUB2VoZFUW8PY0v1zth5oXZUNj4bxPnh5NT4eb5uvZ6Of5mrZkdpZ+I+L7+ZAwsrdYdcjNzDwEXSl7H7uepoeg3mEPufwfvo+YWQ==" target="_blank" rel="noopener">Playground: tabela, link ativo e rota pelo nome</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 143 -->
+        <section class="slide" data-n="143" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Zero requisições: a prova no Network</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 16">
+                <button role="tab" id="s143-t1" aria-controls="s143-p1" aria-selected="true">1 · Instalar</button>
+                <button role="tab" id="s143-t2" aria-controls="s143-p2" aria-selected="false">2 · Network</button>
+                <button role="tab" id="s143-t3" aria-controls="s143-p3" aria-selected="false">3 · Resultado</button>
+              </div>
+              <div role="tabpanel" id="s143-p1" aria-labelledby="s143-t1">
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Terminal</span></div>
+                  <pre><code>$ npm install vue-router
+
+added 2 packages in 1s</code></pre>
+                </div>
+                <p class="legenda">Duas dependências: <code>vue-router</code> e <code>@vue/devtools-api</code>. Confira no <code>package.json</code>.</p>
+              </div>
+              <div role="tabpanel" id="s143-p2" aria-labelledby="s143-t2" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Network · filtro Doc · quatro navegações</span></div>
+                  <pre><code># 1. Carregamento inicial
+GET http://localhost:5173/ → 200 OK · text/html
+
+# 2. Clique em "Resumo"   (endereço vai para /resumo)
+# 3. Clique em "Lista"    (endereço volta para /)
+# 4. Voltar e Avançar do navegador
+(nenhuma requisição de documento)
+
+Total nas quatro navegações: 0</code></pre>
+                </div>
+                <p class="legenda">Registro completo: <code>capturas/navegador/u5-e16-network-sem-recarga.txt</code>.</p>
+              </div>
+              <div role="tabpanel" id="s143-p3" aria-labelledby="s143-t3" hidden>
+                <img src="capturas/telas/u5-e16-resumo.png" alt="Etapa 16: tela Resumo com o link Resumo destacado no topo" class="recorte" />
+                <p class="legenda">Endereço: <code>http://localhost:5173/resumo</code>. O link ativo é marcado pelo próprio roteador.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa pequeno">No Elements, olhe o <code>&lt;a&gt;</code> do link ativo: o Vue Router pôs <code>class="router-link-active router-link-exact-active"</code> e <code>aria-current="page"</code> sozinho. O leitor de tela anuncia qual é a página atual sem você escrever nada.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>O <code>App.vue</code> encolheu de 100 para 20 linhas de script. Para onde foram as tarefas?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 144 -->
+        <section class="slide" data-n="144" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: instalar e ligar o roteador</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Ponto de partida</dt><dd>A sua cópia da etapa 15. A pasta da etapa 16 já traz a solução.</dd>
+                  <dt>1</dt><dd><code>npm install vue-router</code> e <code>src/router/index.js</code> com as duas rotas.</dd>
+                  <dt>2</dt><dd><code>.use(router)</code> no <code>main.js</code>, antes do <code>.mount()</code>.</dd>
+                  <dt>3</dt><dd>No <code>App.vue</code>: dois <code>RouterLink</code> e um <code>RouterView</code>. Apague o <code>ref</code> <code>tela</code> e os botões.</dd>
+                  <dt>4</dt><dd>Estilo do link ativo com <code>.aba.router-link-exact-active</code>.</dd>
+                  <dt>Evidência</dt><dd>Network com filtro Doc: zero requisições ao navegar. F5 em <code>/resumo</code> abre o Resumo.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica 1</summary><p>As views vão parar de receber props: o <code>RouterView</code> não passa nada. Antes de consertar isso, veja o slide 145 — é o assunto da aula.</p></details>
+                <details class="dica"><summary>Dica 2</summary><p>Não escreva a classe do link ativo à mão: ela já vem. Só falta o CSS.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>// src/router/index.js
+import { createRouter, createWebHistory } from 'vue-router'
+import ListaView from '../views/ListaView.vue'
+import SobreView from '../views/SobreView.vue'
+
+export default createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    { path: '/',       name: 'lista',  component: ListaView },
+    { path: '/resumo', name: 'resumo', component: SobreView },
+  ],
+})</code></pre>
+              <pre><code>/* App.vue */
+.aba.router-link-exact-active {
+  border-color: var(--cor-borda);
+  background: var(--cor-superficie);
+  font-weight: 600;
+}</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 145 -->
+        <section class="slide" data-n="145" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>O roteador quebrou as props — e isso é uma lição</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Antes (etapa 15): dá para passar props</span></div>
+                <pre><code>&lt;ListaView v-if="tela === 'lista'" :tarefas="tarefas" … /&gt;</code></pre>
+              </div>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Agora: quem escolhe o componente é o roteador</span></div>
+                <pre><code>&lt;RouterView /&gt;   &lt;!-- e as props? --&gt;</code></pre>
+              </div>
+              <p class="caixa caixa-destaque pequeno">Não há onde pendurar as props. O estado precisa sair da <strong>árvore de componentes</strong> e passar a morar num <strong>módulo</strong>.</p>
+            </div>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>composables/useTarefas.js</span></div>
+                <pre><code>// FORA da função: o módulo é carregado uma vez,
+// então todos recebem exatamente os mesmos refs.
+const tarefas = ref([…])
+const busca = ref('')
+
+export function useTarefas() {
+  return { tarefas, busca, /* … */ }
+}</code></pre>
+              </div>
+              <p class="pequeno">Nas views: <code>const { tarefas, visiveis } = useTarefas()</code>. Sem props, sem eventos — as duas telas leem e escrevem no mesmo estado.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#eNqVVU1v4zYQ/SsD9SAbkMlsk6aoqwgJghYtsMUCwaKXKAdaGtvaSKRKUt5kXf/3DklZljabtL3YEjnz5s3HG+2jqmmVtotGtOyTUTJaQrTPJUDe35icjvyJO9t16N7zaGtta5act7V4ZnT6yTClN5yemO6krRpkaJrFSqvPBjVB51EyAllo1VnUU6xOto8bVqiGnyyuL9gl+4GXlbGj09exr8mIl7izStVmIdrqtRAvDK8vKdIFr6sVJ3ReyRKfPLaDPuTyECUQ3bSty9ZVKTWFrloLBm3XZrkM5YI9bNDedlqjtL9LY4UsEA6w1qqBmFzjkWWhUVi88ykl/dsf2Cj9/BvlS38JhMv3lXw8Pv9Z4ecxYF+SE+578hX9PeP+jU0C36HpGjVYhNfeJJeFItYQQOFqwnHm52AbuC2/RXg2953w3mYJ96Ete2iF3S4h5jGlqYiFpOose6aH5Gsr7RlNbXvSwfiBfg/zXL4s9WzORNveKmnxybpH1hmchWzIIeWha5nLNLXY0PxazBxmKsUuC0zSU9XBqqs84nmUebIpP11l8Pdr5iEBcgqsJ14+Fj8GS1sw9rlG8ipUrfTyu8vLS3IMyHfYCo1LUOPey7w7O8NzBUQfFI0paCxwRd1qtWoNgxsDZScM3df02+JGkF0ARMqhVCAVNA5lfV52tQIq0UeKsxaGBp4Fgm2gt9XAw9OIgTtJ+ah6ThoTECeQYczpMLSSAMqvtJBLzuGDcTYG1lVBVH/9cHcDJU1wFzL9sc/XlWHM2h//BIWgAdi4rLpGwA6/JEDzMNRIlcL4IENB/uoQiq1oiGwzSn027+vYAD4JKxpCQVAGGloHKjBkR3nY4EP6oP/ZffyLsV0pNA2+Re+p4of5YKysqJ2U+hLMKNRVdsRgO1HT1qxRbux27ipCiRe2UhJEWRX0L/TMVpZSnodFPHEk3HvG2OQsgWD/QCpxgPjkOzHgTpL2kJqWmJbUqx4nCaSTEwW/AkOnh5Xy5hoknNf23in+YMH4ZH7iY+1GjEZUKOlxDkOhSfOq70kc/4vct+fZR5qHfgulnN79eVdnaV3BbrFWmlQ5swlUc6jkkUgewfIRn+mKvi3ZngjC4ZDSdyNLOfl6jEpSowmiUSXWZOmJkSOFL3Cr6hIdtFQ70aPSXS+zVWcttei6qKvikYxGM+BA5j8PWcYxxaf0hE558Hpzo9zqCr1EEHZeHe9o32rhdkv4AATNv9D16fPwZrv/X0+9Il628T/167hTjw1rs6PA0pXvRwCnnqwyWhLfn7278BoW4D5RJA4v6LBG1yRW/e3UD/8Af14knw==" target="_blank" rel="noopener">Playground: duas telas, um módulo só</a></p>
+              <p class="caixa pequeno">Isto é <strong>estado global</strong>, e tem um preço: qualquer arquivo pode alterar as tarefas. A Unidade 7 troca este módulo por uma <strong>store do Pinia</strong>.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 146 -->
+        <section class="slide" data-n="146" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: funciona no <code>dev</code>, 404 em produção</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <p class="pequeno">O F5 em <code>/resumo</code> funciona no <code>npm run dev</code>. Vamos publicar e tentar de novo — servindo a pasta <code>dist/</code> com o servidor do próprio curso, que só entrega arquivos.</p>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Terminal — saída real</span></div>
+                <pre><code>$ npm run build
+✓ built in 268ms
+
+$ cd dist &amp;&amp; node ../../ferramentas/servidor-local.mjs
+
+$ curl -o /dev/null -w "%{http_code}\n" http://localhost:8088/
+200
+
+$ curl -o /dev/null -w "%{http_code}\n" http://localhost:8088/resumo
+404
+
+$ curl http://localhost:8088/resumo
+Arquivo não encontrado: /resumo</code></pre>
+              </div>
+            </div>
+            <div class="pilha">
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>O servidor não conhece as suas rotas. Ele recebeu <code>/resumo</code> e foi procurar um <strong>arquivo</strong> com esse nome dentro de <code>dist/</code>.</p></details>
+                <details class="solucao"><summary>Mostrar as duas saídas</summary>
+                  <ol class="pequeno">
+                    <li><strong>Configurar o servidor</strong> para devolver <code>index.html</code> em qualquer caminho desconhecido. É uma linha em Nginx, Apache, Netlify ou Vercel — cada um com sua sintaxe.</li>
+                    <li><strong><code>createWebHashHistory</code></strong>: o endereço vira <code>/#/resumo</code>. O que vem depois do <code>#</code> nunca é enviado ao servidor, então ele sempre vê <code>/</code> e responde 200 (verificado). Em troca, endereços mais feios.</li>
+                  </ol>
+                </details>
+              </div>
+              <p class="caixa caixa-destaque pequeno">É o defeito de roteamento mais comum do mundo real: tudo funciona na máquina de quem programou e quebra no primeiro F5 depois de publicar. Registro em <code>capturas/terminal/u5-e16-404-servidor-estatico.txt</code>.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 147 -->
+        <section class="slide" data-n="147" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: a configuração do servidor para o seu caso</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="prompt-ia">
+              <div class="prompt-ia-topo"><span>Prompt</span></div>
+              <pre><code>Tenho uma SPA Vue 3 com Vue Router 4 usando createWebHistory.
+Em desenvolvimento tudo funciona; depois do build, abrir /resumo
+direto no servidor devolve 404.
+
+Explique a causa em duas frases e mostre a configuração para
+[Nginx | Apache | Netlify | GitHub Pages], citando a página da
+documentação oficial do Vue Router de onde tirou o exemplo.
+
+Diga também o que muda se eu usar createWebHashHistory.</code></pre>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>A resposta deve dizer</th><th>Sinal de resposta ruim</th></tr></thead>
+                <tbody>
+                  <tr><td>O servidor devolve <code>index.html</code> em caminhos desconhecidos</td><td>Manda “desligar o history mode” sem explicar o custo</td></tr>
+                  <tr><td>Cita a página “HTML5 History Mode”</td><td>Inventa um link que dá 404</td></tr>
+                  <tr><td>Avisa que o 404 de verdade passa a ser tratado pela aplicação</td><td>Não menciona isso (é a etapa 17)</td></tr>
+                  <tr><td>Hash: endereço com <code>#</code>, sem configurar servidor</td><td>Diz que hash e history são equivalentes</td></tr>
+                </tbody>
+              </table>
+              <div class="caixa pequeno">
+                <h3>Onde conferir</h3>
+                <ul>
+                  <li><a href="https://router.vuejs.org/guide/essentials/history-mode.html">Vue Router — HTML5 History Mode</a></li>
+                </ul>
+                <p>Esta é uma pergunta em que a IA ajuda muito: a resposta muda conforme o servidor, e a documentação traz um exemplo para cada um.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 148 -->
+        <section class="slide" data-n="148" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <ol class="passos">
+              <li>Quantas requisições de documento aparecem ao navegar entre duas rotas? Por quê?</li>
+              <li>Por que o estado das tarefas saiu do <code>App.vue</code> para um composable?</li>
+              <li><code>/resumo</code> funciona no <code>npm run dev</code> e dá 404 depois de publicado. O que está faltando?</li>
+            </ol>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 20 · CRUD e camada de serviço</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="20">
+    <div class="janela">
+      <main class="palco" aria-label="Unidade 6, etapa 20: escrever na API e separar a camada de serviço">
+        <!-- 173 -->
+        <section class="slide" data-n="173" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Agora a aplicação também escreve</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">Até aqui só <code>GET</code>. Concluir uma tarefa mudava a tela e <strong>sumia no F5</strong>, porque o servidor nunca ficou sabendo. Hoje entram <code>POST</code>, <code>PATCH</code> e <code>DELETE</code> — e, como o HTTP cresceu, ele sai do composable para uma camada só dele.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Escrita</td><td>Network: <code>POST</code>, <code>PATCH</code> e <code>DELETE</code></td></tr>
+                  <tr><td>Persistência</td><td>F5 mantém tudo; o <code>db.json</code> muda no disco</td></tr>
+                  <tr><td>Modularização</td><td>Nenhuma linha de HTTP fora de <code>services/</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              Ao criar uma tarefa, quem decide o <code>id</code>: o navegador ou o servidor? E o que
+              deve ir para a lista na tela — o objeto que eu montei ou o que a resposta trouxe?
+            </div>
+          </div>
+        </section>
+
+        <!-- 174 -->
+        <section class="slide" data-n="174" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Três verbos e um lugar só para o HTTP</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Ação</th><th>Verbo</th><th>Endereço</th><th>O que volta</th></tr></thead>
+                <tbody>
+                  <tr><td>Criar</td><td><code>POST</code></td><td><code>/tarefas</code></td><td>A tarefa criada, <strong>com o id</strong></td></tr>
+                  <tr><td>Alterar</td><td><code>PATCH</code></td><td><code>/tarefas/:id</code></td><td>A tarefa alterada</td></tr>
+                  <tr><td>Remover</td><td><code>DELETE</code></td><td><code>/tarefas/:id</code></td><td>Nada</td></tr>
+                </tbody>
+              </table>
+              <p class="caixa caixa-destaque pequeno"><strong><code>PATCH</code> × <code>PUT</code>:</strong> o <code>PATCH</code> manda só o que mudou; o <code>PUT</code> substitui o registro inteiro. Mandar <code>{ concluida: true }</code> com <code>PUT</code> apagaria o título.</p>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>services/tarefasApi.js</span></div>
+                <pre><code>const api = axios.create({ baseURL: API_URL, timeout: 8000 })
+
+export async function criarTarefa(titulo) {
+  const { data } = await api.post('/tarefas', { titulo, concluida: false })
+  return data
+}</code></pre>
+              </div>
+            </div>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>composables/useTarefas.js — sem HTTP</span></div>
+                <pre><code>async function adicionar(titulo) {
+  salvando.value = true
+  try {
+    const criada = await criarTarefa(titulo)  // volta COM o id
+    tarefas.value = [...tarefas.value, criada]
+  } catch (falha) {
+    erro.value = mensagemDeErro(falha, 'criar a tarefa')
+  } finally {
+    salvando.value = false
+  }
+}</code></pre>
+              </div>
+              <p class="caixa caixa-destaque pequeno"><code>services/</code> sabe de HTTP · <code>composables/</code> sabe das tarefas · <code>views/</code> sabe da tela. O componente não sabe que existe um servidor; o serviço não sabe que existe uma tela.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 175 -->
+        <section class="slide" data-n="175" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Os três verbos no Network — e o F5 que prova</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 20">
+                <button role="tab" id="s175-t1" aria-controls="s175-p1" aria-selected="true">1 · Network</button>
+                <button role="tab" id="s175-t2" aria-controls="s175-p2" aria-selected="false">2 · Tela</button>
+                <button role="tab" id="s175-t3" aria-controls="s175-p3" aria-selected="false">3 · Ação que falha</button>
+              </div>
+              <div role="tabpanel" id="s175-p1" aria-labelledby="s175-t1">
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Sequência real: carregar, criar, concluir, F5, remover</span></div>
+                  <pre><code>GET    /tarefas              → 200   (carregamento)
+POST   /tarefas              → 201   (criar)
+PATCH  /tarefas/LJCdP9Rh4Eo  → 200   (concluir)
+GET    /tarefas              → 200   (depois do F5)
+DELETE /tarefas/LJCdP9Rh4Eo  → 200   (remover)</code></pre>
+                </div>
+                <p class="legenda">O id <code>LJCdP9Rh4Eo</code> foi <strong>gerado pelo servidor</strong> na resposta do <code>POST</code>.</p>
+              </div>
+              <div role="tabpanel" id="s175-p2" aria-labelledby="s175-t2" hidden>
+                <img src="capturas/telas/u6-e20-lista.png" alt="Etapa 20: a lista de tarefas carregada da API" class="recorte" />
+                <p class="legenda">4 tarefas → criar → 5 → concluir → “2 de 5 concluídas” → <strong>F5</strong> → continua “2 de 5 concluídas”.</p>
+              </div>
+              <div role="tabpanel" id="s175-p3" aria-labelledby="s175-t3" hidden>
+                <img src="capturas/telas/u6-e20-acao-falhou.png" alt="Etapa 20: mensagem de erro acima da lista, que continua visível" class="recorte" />
+                <p class="legenda">API fora do ar ao criar: a lista <strong>continua intacta</strong> e a mensagem aparece acima dela.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa pequeno">Abra o <code>db.json</code> no editor durante a demonstração: ele muda no disco a cada ação. É a prova mais concreta de que “salvou” quer dizer alguma coisa.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>Por que a falha de uma <strong>ação</strong> não apaga a lista, mas a falha do <strong>carregamento</strong> mostra só a mensagem?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 176 -->
+        <section class="slide" data-n="176" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: a camada de serviço e as três ações</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Ponto de partida</dt><dd>A sua cópia da etapa 19. A pasta da etapa 20 já traz a solução.</dd>
+                  <dt>1</dt><dd><code>src/services/tarefasApi.js</code>: instância do axios e <code>listarTarefas</code>, <code>criarTarefa</code>, <code>alterarTarefa</code>, <code>apagarTarefa</code>.</dd>
+                  <dt>2</dt><dd>Mova <code>mensagemDeErro</code> para o serviço — é conhecimento sobre HTTP.</dd>
+                  <dt>3</dt><dd>No composable, as três ações viram <code>async</code>, com o mesmo desenho: pedir → esperar → atualizar com o que voltou.</dd>
+                  <dt>4</dt><dd>Prop <code>salvando</code> no <code>TarefaForm</code>, desabilitando o botão.</dd>
+                  <dt>Evidência</dt><dd>As três ações sobrevivem ao F5; nenhum <code>import axios</code> fora de <code>services/</code>.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica 1</summary><p>Não mande <code>id</code> no <code>POST</code>. Quem gera é o servidor — e é o objeto <strong>devolvido</strong> que vai para a lista.</p></details>
+                <details class="dica"><summary>Dica 2</summary><p><code>const { data } = await api.post(...)</code> já desembrulha a resposta.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>export async function alterarTarefa(id, mudancas) {
+  const { data } = await api.patch(`/tarefas/${id}`, mudancas)
+  return data
+}</code></pre>
+              <pre><code>async function alternar(id) {
+  const atual = tarefas.value.find((t) =&gt; String(t.id) === String(id))
+  if (!atual) return
+  const alterada = await alterarTarefa(id, { concluida: !atual.concluida })
+  tarefas.value = tarefas.value.map((t) =&gt;
+    String(t.id) === String(id) ? alterada : t)
+}</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 177 -->
+        <section class="slide" data-n="177" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Esperar a resposta × fingir que deu certo</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th></th><th>Esperar (o nosso)</th><th>Otimista</th></tr></thead>
+                <tbody>
+                  <tr><td>Quando a tela muda</td><td>Depois da resposta</td><td>Na hora do clique</td></tr>
+                  <tr><td>Sensação</td><td>Um instante de espera</td><td>Instantânea</td></tr>
+                  <tr><td>Se falhar</td><td>Nada mudou; só a mensagem</td><td>Precisa <strong>desfazer</strong> o que mostrou</td></tr>
+                  <tr><td>Código</td><td>Simples</td><td>Guarda o estado anterior para reverter</td></tr>
+                </tbody>
+              </table>
+              <p class="caixa caixa-destaque pequeno">A regra do curso: <strong>a tela nunca mostra o que o servidor não confirmou.</strong> É mais honesto, e é mais simples — duas razões que costumam andar juntas.</p>
+            </div>
+            <div class="pilha">
+              <p class="pequeno">Quando a atualização otimista compensa:</p>
+              <ul class="pequeno">
+                <li>A ação quase nunca falha (marcar uma caixa, curtir uma publicação).</li>
+                <li>A espera é percebida e incomoda — listas longas, uso no celular.</li>
+                <li>Dá para mostrar o estado intermediário com honestidade (“enviando…”, como num aplicativo de mensagens).</li>
+              </ul>
+              <p class="caixa pequeno">O que <strong>não</strong> se faz: mostrar como concluído e, se falhar, deixar assim mesmo. Aí a tela mente — e é o defeito que a Unidade 6 inteira combate.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#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" target="_blank" rel="noopener">Playground: esperar × otimista, lado a lado</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 178 -->
+        <section class="slide" data-n="178" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: o clique duplo</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <p class="pequeno">Tire a prop <code>salvando</code> do botão, ligue <strong>Slow 3G</strong> e clique duas vezes rápido em <strong>Adicionar</strong>.</p>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Network</span></div>
+                <pre><code>POST /tarefas → 201
+POST /tarefas → 201   ← a mesma tarefa, de novo</code></pre>
+              </div>
+              <p class="caixa pequeno">E a validação de título repetido <strong>não</strong> impede: no instante do segundo clique, a primeira tarefa ainda não voltou — ela não está na lista para ser comparada.</p>
+            </div>
+            <div class="pilha">
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>O problema não é a validação: é a janela de tempo em que a aplicação aceita um segundo pedido antes de o primeiro terminar.</p></details>
+                <details class="solucao"><summary>Mostrar a correção</summary>
+                  <pre><code>const salvando = ref(false)
+// no composable: salvando.value = true antes, false no finally
+// no template:
+&lt;button :disabled="salvando"&gt;
+  {{ salvando ? 'Salvando…' : 'Adicionar' }}
+&lt;/button&gt;</code></pre>
+                  <p class="pequeno">Desabilitar comunica <strong>e</strong> impede. O texto que muda explica por que o botão não responde.</p>
+                </details>
+              </div>
+              <p class="caixa caixa-destaque pequeno">É o mesmo defeito que gera duas compras quando alguém clica duas vezes em “Finalizar pedido”. Em sistemas sérios há uma segunda linha de defesa no servidor (chave de idempotência) — porque o frontend não protege nada, como vocês já sabem desde a etapa 11.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#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" target="_blank" rel="noopener">Playground: o clique duplo, com e sem o botão travado</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 179 -->
+        <section class="slide" data-n="179" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: revisar a camada de serviço</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="prompt-ia">
+              <div class="prompt-ia-topo"><span>Prompt</span></div>
+              <pre><code>Revise esta camada de serviço de uma aplicação Vue 3 + axios.
+[cole src/services/tarefasApi.js]
+
+Avalie, citando a documentação do axios quando aplicável:
+1. o que está bem resolvido e NÃO precisa mudar;
+2. o que eu ganharia com um interceptor;
+3. se faz sentido usar PUT em vez de PATCH aqui.
+
+Critério: depois de qualquer mudança, criar, concluir e remover
+precisam continuar sobrevivendo ao F5. Não troque de biblioteca.</code></pre>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>A resposta deve dizer</th><th>Sinal de resposta ruim</th></tr></thead>
+                <tbody>
+                  <tr><td>Reconhecer o que já está certo (instância, <code>async</code>/<code>await</code>, erro traduzido)</td><td>Reescreve tudo sem apontar um defeito</td></tr>
+                  <tr><td>Interceptor: lugar único para token e erro comum</td><td>Propõe interceptor “porque é boa prática”, sem dizer para quê</td></tr>
+                  <tr><td><code>PATCH</code> é o certo aqui; <code>PUT</code> apagaria campos</td><td>Diz que são equivalentes</td></tr>
+                  <tr><td>Citar páginas que existem</td><td>Links inventados</td></tr>
+                </tbody>
+              </table>
+              <div class="caixa pequeno">
+                <h3>Onde conferir</h3>
+                <ul>
+                  <li><a href="https://axios-http.com/docs/interceptors">Axios — Interceptors</a></li>
+                  <li><a href="https://axios-http.com/docs/instance">Axios — Instance</a></li>
+                </ul>
+                <p>Reparem no item 1: pedir o que <strong>não</strong> mudar é o teste de honestidade da etapa 11, agora aplicado a código.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 180 -->
+        <section class="slide" data-n="180" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA · fecho da Unidade 6</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <ol class="passos">
+                <li>Por que a tarefa criada só entra na lista <strong>depois</strong> da resposta?</li>
+                <li>Qual a diferença entre <code>PATCH</code> e <code>PUT</code> neste caso?</li>
+                <li>Por que nenhuma view importa o <code>axios</code>?</li>
+              </ol>
+            </div>
+            <div class="caixa pequeno">
+              <h3>O que a Unidade 6 deixou pronto</h3>
+              <ul>
+                <li>Dados vindos de uma API, com os quatro estados tratados</li>
+                <li>CRUD completo, persistido no servidor</li>
+                <li>HTTP isolado numa camada só dele</li>
+              </ul>
+              <h3>O que vem a seguir</h3>
+              <p>O estado continua num módulo solto, que qualquer arquivo pode importar e alterar. Na <strong>Unidade 7</strong> ele vira uma <strong>store do Pinia</strong>: o mesmo estado compartilhado, com um lugar só para mudá-lo e uma ferramenta que mostra o histórico das mudanças.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

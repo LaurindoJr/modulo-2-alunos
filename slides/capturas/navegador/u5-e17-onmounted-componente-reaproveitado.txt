@@ -1,0 +1,34 @@
+# Etapa 17 — investigação: o componente reaproveitado quando só o parâmetro muda
+# Defeito provocado numa cópia da etapa 17, em http://localhost:5173
+
+# --- Versão com defeito: o parâmetro é lido UMA vez, no onMounted ---
+#
+#   const tarefa = ref(null)
+#   onMounted(() => {
+#     tarefa.value = tarefas.value.find((item) => item.id === Number(route.params.id))
+#   })
+
+Endereço                       Título mostrado na tela
+/tarefa/1                      "Abrir uma tarefa pelo endereço /tarefa/1"
+/tarefa/2  (clique em Próxima) "Abrir uma tarefa pelo endereço /tarefa/1"   ← errado
+/tarefa/3  (clique em Próxima) "Abrir uma tarefa pelo endereço /tarefa/1"   ← errado
+
+Console: vazio. Nenhum erro, nenhum [Vue warn].
+Requisições de documento nas duas navegações: 0.
+
+# --- Versão correta: o parâmetro é lido num computed ---
+#
+#   const tarefa = computed(() =>
+#     tarefas.value.find((item) => item.id === Number(route.params.id)))
+
+Endereço                       Título mostrado na tela
+/tarefa/1                      "Abrir uma tarefa pelo endereço /tarefa/1"
+/tarefa/2  (clique em Próxima) "Ler o parâmetro com useRoute"
+/tarefa/3  (clique em Próxima) "Tratar um id que não existe"
+
+# Por que acontece: ir de /tarefa/1 para /tarefa/2 é a MESMA rota, então o Vue Router
+# reaproveita o componente que já está na tela em vez de criar outro. O onMounted não
+# roda de novo. O computed, sim: ele relê route.params.id, que é reativo.
+#
+# Mesma família do :key pela posição (etapa 10): o framework reaproveita um elemento e
+# o que não é reativo fica para trás.

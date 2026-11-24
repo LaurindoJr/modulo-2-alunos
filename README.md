@@ -24,9 +24,11 @@ Atalhos nos slides: <kbd>→</kbd>/<kbd>←</kbd> navegam,
 
 ```text
 modulo-2/
-  slides/        132 slides: Módulo 2 em 5 blocos (1–60) e Módulo 3 em 9 etapas (61–132)
+  slides/        204 slides: Módulo 2 em 5 blocos (1–60), Módulo 3 em 9 etapas (61–132) e
+                 as Unidades 5, 6 e 7 em 3 etapas cada (133–204)
     capturas/    telas, saídas de terminal, registros do navegador e diffs
-  etapas/        14 etapas numeradas: 01–05 (Módulo 2) e 06–14 (Módulo 3)
+  etapas/        23 etapas numeradas: 01–05 (Módulo 2), 06–14 (Módulo 3), 15–17 (rotas),
+                 18–20 (APIs) e 21–23 (estado)
   materiais/     instalação, registro de investigação com IA, exercícios revisados, rubricas
 ```
 
@@ -36,6 +38,9 @@ modulo-2/
 |---|---|---|---|
 | 2 | 1–60 | 5 blocos de 100 minutos | `01` a `05` |
 | 3 | 61–132 | 9 etapas de 40 minutos: conhecer, executar, entender, pesquisar | `06` a `14` |
+| Unidade 5 | 133–156 | 3 etapas de 40 minutos, mesmo formato | `15` a `17` |
+| Unidade 6 | 157–180 | 3 etapas de 40 minutos, mesmo formato | `18` a `20` |
+| Unidade 7 | 181–204 | 3 etapas de 40 minutos, mesmo formato | `21` a `23` |
 
 Os slides alternam demonstração, previsão, explicação, prática, consulta à IA e verificação sem
 IA; cada um indica o tipo de atividade e o tempo previsto.

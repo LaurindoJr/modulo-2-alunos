@@ -1,0 +1,8 @@
+{
+  "tarefas": [
+    { "id": 1, "titulo": "Criar uma segunda store para o tema", "concluida": true },
+    { "id": 2, "titulo": "Fazer uma store usar a outra", "concluida": false },
+    { "id": 3, "titulo": "Decidir o que NAO vai para a store", "concluida": false },
+    { "id": 4, "titulo": "Guardar a preferencia com $subscribe", "concluida": false }
+  ]
+}

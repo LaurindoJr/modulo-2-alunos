@@ -521,34 +521,33 @@ Encerre o outro servidor (Ctrl+C no terminal dele) ou escolha outra porta, por e
               <thead><tr><th>Parte</th><th>Finalidade na Todo List</th><th>Etapa</th></tr></thead>
               <tbody>
                 <tr><td>Módulo 3: do DOM aos componentes</td><td>Reatividade, diretivas, formulários, watchers, componentes</td><td>06–14</td></tr>
-                <tr><td>TypeScript + Pinia</td><td>Modelo de tarefa tipado; estado central compartilhado</td><td>15</td></tr>
-                <tr><td>API (json-server)</td><td>Persistir tarefas; lidar com carregamento e erro</td><td>16</td></tr>
-                <tr><td>Vue Router</td><td>Navegar entre lista e perfil sem recarregar</td><td>17</td></tr>
-                <tr><td>Vitest</td><td>Provar com testes que a store e a API funcionam</td><td>18</td></tr>
+                <tr><td>Vue Router</td><td>Dar endereço próprio a cada tela, sem recarregar a página</td><td>15–17</td></tr>
+                <tr><td>Axios e json-server</td><td>Buscar e gravar as tarefas num servidor; tratar demora e falha</td><td>18–20</td></tr>
+                <tr><td>Pinia</td><td>Estado compartilhado com nome, inspeção e histórico</td><td>21–23</td></tr>
               </tbody>
             </table>
             <figure class="sequencia">
               <div role="tablist" aria-label="Telas das etapas seguintes">
                 <button role="tab" id="s59-t1" aria-controls="s59-p1" aria-selected="true">13 · Componentes</button>
-                <button role="tab" id="s59-t2" aria-controls="s59-p2" aria-selected="false">15 · Pinia</button>
-                <button role="tab" id="s59-t3" aria-controls="s59-p3" aria-selected="false">16 · API desligada</button>
-                <button role="tab" id="s59-t4" aria-controls="s59-p4" aria-selected="false">17 · Perfil</button>
+                <button role="tab" id="s59-t2" aria-controls="s59-p2" aria-selected="false">17 · Rota com dado</button>
+                <button role="tab" id="s59-t3" aria-controls="s59-p3" aria-selected="false">19 · API desligada</button>
+                <button role="tab" id="s59-t4" aria-controls="s59-p4" aria-selected="false">23 · Três stores</button>
               </div>
               <div role="tabpanel" id="s59-p1" aria-labelledby="s59-t1">
                 <img src="capturas/telas/e13-componentes.png" alt="Etapa 13: lista com formulário, filtro de situação e itens com Excluir" class="recorte" />
                 <p class="legenda">Etapa 13 (Módulo 3): dados em memória com <code>ref</code> e componentes.</p>
               </div>
               <div role="tabpanel" id="s59-p2" aria-labelledby="s59-t2" hidden>
-                <img src="capturas/telas/e15-typescript-pinia.png" alt="Etapa 15: lista com resumo, categorias, busca e filtros" class="recorte" />
-                <p class="legenda">Etapa 15: store Pinia, categorias e busca.</p>
+                <img src="capturas/telas/u5-e17-tarefa.png" alt="Etapa 17: a tela de uma tarefa, aberta pelo endereço /tarefa/1" class="recorte" />
+                <p class="legenda">Etapa 17: o endereço carrega dado — <code>/tarefa/1</code> abre uma tarefa.</p>
               </div>
               <div role="tabpanel" id="s59-p3" aria-labelledby="s59-t3" hidden>
-                <img src="capturas/telas/ref-api-desligada.png" alt="Aviso: Não foi possível conectar à API, com botões Tentar novamente e Fechar aviso" class="recorte" />
-                <p class="legenda">Projeto completo com a API encerrada: mensagem para o usuário em vez de tela vazia.</p>
+                <img src="capturas/telas/u6-e19-erro.png" alt="Etapa 19: mensagem de erro em vermelho e botão Tentar de novo" class="recorte" />
+                <p class="legenda">Etapa 19: com a API fora do ar, a tela diz o que houve e oferece uma ação.</p>
               </div>
               <div role="tabpanel" id="s59-p4" aria-labelledby="s59-t4" hidden>
-                <img src="capturas/telas/ref-perfil.png" alt="Perfil com estatísticas e tabela por categoria" class="recorte" />
-                <p class="legenda">Projeto completo: rota <code>/perfil</code> com estatísticas da mesma store.</p>
+                <img src="capturas/telas/u7-e23-tres-stores.png" alt="Etapa 23: a lista com filtro ativo e o botão de limpar filtros" class="recorte" />
+                <p class="legenda">Etapa 23: três stores por assunto — tarefas, filtros e tema.</p>
               </div>
             </figure>
           </div>

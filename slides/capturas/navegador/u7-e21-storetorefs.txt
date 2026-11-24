@@ -1,0 +1,34 @@
+# Etapa 21 — investigação: desestruturar a store sem storeToRefs
+# Medido com a API no ar e 4 tarefas cadastradas, abrindo /resumo DIRETO.
+
+# --- SEM storeToRefs ---
+#
+#   const { tarefas, concluidas } = useTarefasStore()
+#
+Total mostrado no Resumo : 0
+Percentual               : 0% concluído
+Tarefas que a API tem    : 4
+Avisos no Console        : NENHUM
+
+# --- COM storeToRefs ---
+#
+#   const { tarefas, concluidas } = storeToRefs(useTarefasStore())
+#
+Total mostrado no Resumo : 4
+Percentual               : 25% concluído
+Tarefas que a API tem    : 4
+
+# Por que acontece: desestruturar um objeto copia o VALOR de cada campo naquele
+# instante. Quando a tela é criada, a requisição ainda não voltou: `tarefas` é []
+# e `concluidas` é 0 — e continuam assim para sempre, porque a cópia não tem
+# ligação nenhuma com a store.
+#
+# O storeToRefs devolve um ref para cada campo, em vez do valor. O ref continua
+# ligado à store.
+#
+# Detalhe cruel: se você sair da tela e voltar, o componente é recriado, a
+# desestruturação roda de novo e os números aparecem CERTOS. O defeito só se
+# manifesta quando a pessoa abre a tela direto pelo endereço — que é exatamente
+# o que acontece quando ela recebe um link.
+#
+# ACTIONS podem ser desestruturadas sem storeToRefs: funções não são reativas.

@@ -222,6 +222,93 @@
         </li>
       </ol>
 
+      <h2>Unidade 5 · Roteamento</h2>
+      <p>
+        Três etapas de 40 minutos, no mesmo formato. A Todo List ganha telas com endereço próprio:
+        primeiro à mão, para ver o limite; depois com o Vue Router.
+      </p>
+      <ol class="blocos">
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 15 · slides 133–140 · 40 min</span>
+          <h3>Telas sem roteador</h3>
+          <p>Segunda tela com <code>ref</code> e <code>v-if</code>; o endereço que não muda, o F5 que perde a tela, o Voltar que sai do app.</p>
+          <p class="pequeno suave">Pasta <code>etapas/15-rotas-spa</code></p>
+          <a class="abrir" href="etapa-15.html">Abrir etapa 15</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 16 · slides 141–148 · 40 min</span>
+          <h3>Vue Router: rotas, <code>RouterLink</code> e <code>RouterView</code></h3>
+          <p>Tabela de rotas, navegação com zero requisições, estado compartilhado num composable e o 404 em produção.</p>
+          <p class="pequeno suave">Pasta <code>etapas/16-vue-router</code></p>
+          <a class="abrir" href="etapa-16.html">Abrir etapa 16</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 17 · slides 149–156 · 40 min</span>
+          <h3>Rotas dinâmicas e parâmetros</h3>
+          <p><code>/tarefa/:id</code> com <code>useRoute</code>, rota curinga, navegação pelo código e o componente reaproveitado.</p>
+          <p class="pequeno suave">Pasta <code>etapas/17-rotas-dinamicas</code></p>
+          <a class="abrir" href="etapa-17.html">Abrir etapa 17</a>
+        </li>
+      </ol>
+
+      <h2>Unidade 6 · Interação com APIs</h2>
+      <p>
+        Três etapas de 40 minutos. As tarefas saem do código e passam a vir de um servidor: primeiro
+        a leitura, depois os quatro estados de uma requisição, depois a escrita e a camada de serviço.
+      </p>
+      <ol class="blocos">
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 18 · slides 157–164 · 40 min</span>
+          <h3>Dados de uma API</h3>
+          <p>json-server, Axios, <code>async</code>/<code>await</code> e o intervalo entre pedir e receber.</p>
+          <p class="pequeno suave">Pasta <code>etapas/18-api-primeiro-get</code></p>
+          <a class="abrir" href="etapa-18.html">Abrir etapa 18</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 19 · slides 165–172 · 40 min</span>
+          <h3>Carregando, vazio e erro</h3>
+          <p>Os quatro estados, <code>try</code>/<code>catch</code>/<code>finally</code> e mensagens que dizem o que fazer.</p>
+          <p class="pequeno suave">Pasta <code>etapas/19-estados-carregando-erro</code></p>
+          <a class="abrir" href="etapa-19.html">Abrir etapa 19</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 20 · slides 173–180 · 40 min</span>
+          <h3>CRUD e camada de serviço</h3>
+          <p><code>POST</code>, <code>PATCH</code> e <code>DELETE</code>; o HTTP isolado em <code>services/</code>.</p>
+          <p class="pequeno suave">Pasta <code>etapas/20-crud-modularizacao</code></p>
+          <a class="abrir" href="etapa-20.html">Abrir etapa 20</a>
+        </li>
+      </ol>
+
+      <h2>Unidade 7 · Gerenciamento de estado</h2>
+      <p>
+        Três etapas de 40 minutos. O estado sai de um módulo solto e vira store do Pinia: com nome,
+        inspeção no DevTools e um lugar por assunto — inclusive o critério do que não vai para store.
+      </p>
+      <ol class="blocos">
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 21 · slides 181–188 · 40 min</span>
+          <h3>A primeira store</h3>
+          <p><code>defineStore</code>, <code>createPinia</code>, <code>storeToRefs</code> e o painel do DevTools.</p>
+          <p class="pequeno suave">Pasta <code>etapas/21-pinia-primeira-store</code></p>
+          <a class="abrir" href="etapa-21.html">Abrir etapa 21</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 22 · slides 189–196 · 40 min</span>
+          <h3>State, getters e actions</h3>
+          <p>As duas sintaxes, <code>$patch</code>, o <code>$reset</code> que não existe e o cache medido.</p>
+          <p class="pequeno suave">Pasta <code>etapas/22-state-getters-actions</code></p>
+          <a class="abrir" href="etapa-22.html">Abrir etapa 22</a>
+        </li>
+        <li class="bloco-cartao">
+          <span class="bloco-num">Etapa 23 · slides 197–204 · 40 min</span>
+          <h3>Várias stores</h3>
+          <p>Uma store por assunto, <code>$subscribe</code> e o que deve ficar fora de qualquer store.</p>
+          <p class="pequeno suave">Pasta <code>etapas/23-varias-stores</code></p>
+          <a class="abrir" href="etapa-23.html">Abrir etapa 23</a>
+        </li>
+      </ol>
+
       <h2>Como usar</h2>
       <div class="grade-2" style="font-size: 1rem">
         <table class="tabela">
@@ -269,8 +356,7 @@
 
       <h2>Pacote</h2>
       <ul>
-        <li><strong>Projeto de referência</strong> — demonstrado em aula pelo professor (visão geral do produto final)</li>
-        <li><a href="../etapas/README.md">etapas/</a> — construção guiada em 14 etapas numeradas: 01–05 (Módulo 2) e 06–14 (Módulo 3)</li>
+        <li><a href="../etapas/README.md">etapas/</a> — construção guiada em 23 etapas numeradas: 01–05 (Módulo 2), 06–14 (Módulo 3), 15–17 (roteamento), 18–20 (APIs) e 21–23 (estado)</li>
         <li><a href="../materiais/">materiais/</a> — roteiro de instalação, registro de investigação com IA, exercícios revisados e rubrica</li>
         <li><a href="../README.md">README do pacote</a> — versões verificadas, decisões e pendências</li>
       </ul>

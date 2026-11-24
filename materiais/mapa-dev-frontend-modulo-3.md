@@ -72,6 +72,16 @@ Cada etapa tem 40 minutos e 8 slides: abertura (3) · conhecer (6) · demonstra�
 
 ## Depois do Módulo 3
 
-Os demais conceitos da lista da Aula 3 estão nas etapas complementares: gerenciamento de estado com
-Pinia (15), comunicação com API (16), roteamento (17) e testes (18). Build e deploy foram vistos no
-Módulo 2 (bloco 5).
+A lista de 13 recursos apresentada na Aula 3 é a espinha do curso inteiro: cada unidade seguinte
+desenvolve um ou dois itens dela. O que vem depois, na ordem das unidades:
+
+| Unidade | O que desenvolve da lista | Etapas |
+|---|---|---|
+| 5 | Roteamento (SPA, Vue Router, rotas dinâmicas e parâmetros) | 15 a 17 |
+| 6 | Comunicação com APIs (HTTP e CRUD, erros e estados de carregamento, modularização) | 18 a 20 |
+| 7 | Gerenciamento de estado (local × global, Pinia, getters e actions) | 21 a 23 |
+| 8 | Testes (unitários, de componente e end-to-end) | a construir |
+
+Reatividade, template syntax, instância, diretivas, componentes, props e eventos — tudo o que as
+etapas 08 a 14 constroem — são o conteúdo da Unidade 4. Performance e otimização não têm unidade
+própria; build e deploy foram vistos no Módulo 2 (bloco 5).

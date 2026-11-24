@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 19 · Carregando e erro</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="19">
+    <div class="janela">
+      <main class="palco" aria-label="Unidade 6, etapa 19: estados de carregamento e tratamento de erro">
+        <!-- 165 -->
+        <section class="slide" data-n="165" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Quatro finais possíveis, uma tela só</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">Toda busca de dados termina de uma destas quatro maneiras: <strong>ainda estou perguntando</strong>, <strong>deu certo e veio dado</strong>, <strong>deu certo e veio vazio</strong>, <strong>falhou</strong>. A tela da etapa 18 só dava conta da segunda — e disfarçava a quarta de terceira.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Carregando</td><td>Com Slow 3G no DevTools, “Carregando tarefas…” fica visível</td></tr>
+                  <tr><td>Falhou</td><td>API desligada: mensagem certa e botão de tentar de novo</td></tr>
+                  <tr><td>Vazio de verdade</td><td><code>db.json</code> com lista vazia: “Nenhuma tarefa cadastrada.”</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              Se a requisição falhar e eu esquecer de desligar o “carregando”, o que o usuário vê?
+              Por quanto tempo?
+            </div>
+          </div>
+        </section>
+
+        <!-- 166 -->
+        <section class="slide" data-n="166" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Os quatro estados, na ordem certa</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>#</th><th>Estado</th><th>A tela mostra</th><th>ARIA</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>Carregando</td><td>“Carregando tarefas…”</td><td><code>role="status"</code></td></tr>
+                  <tr><td>2</td><td>Falhou</td><td>Mensagem + “Tentar de novo”</td><td><code>role="alert"</code></td></tr>
+                  <tr><td>3</td><td>Vazio</td><td>“Nenhuma tarefa cadastrada.”</td><td>—</td></tr>
+                  <tr><td>4</td><td>Com dados</td><td>A lista</td><td>—</td></tr>
+                </tbody>
+              </table>
+              <p class="caixa caixa-destaque pequeno"><strong>A ordem não é arbitrária.</strong> Enquanto carrega, não se sabe se está vazio nem se falhou — por isso o <code>v-if="carregando"</code> vem primeiro.</p>
+              <p class="caixa pequeno"><code>role="status"</code> é anunciado quando o leitor de tela puder; <code>role="alert"</code> <strong>interrompe</strong>. Carregar é informação; falhar exige atenção.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#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" target="_blank" rel="noopener">Playground: os quatro estados e três defeitos</a></p>
+            </div>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>useTarefas.js</span></div>
+                <pre><code>const carregando = ref(false)
+const erro = ref('')
+
+async function carregar() {
+  carregando.value = true
+  erro.value = ''
+  try {
+    const resposta = await axios.get(`${API_URL}/tarefas`)
+    tarefas.value = resposta.data
+  } catch (falha) {
+    erro.value = mensagemDeErro(falha)
+    tarefas.value = []
+  } finally {
+    carregando.value = false   // nos DOIS caminhos
+  }
+}</code></pre>
+              </div>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>O axios separa os casos</span></div>
+                <pre><code>if (falha.response) // o servidor respondeu (404, 500…)
+if (falha.request)  // ninguém atendeu</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 167 -->
+        <section class="slide" data-n="167" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Ver o invisível: Slow 3G e API desligada</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 19">
+                <button role="tab" id="s167-t1" aria-controls="s167-p1" aria-selected="true">1 · Carregando</button>
+                <button role="tab" id="s167-t2" aria-controls="s167-p2" aria-selected="false">2 · Falhou</button>
+                <button role="tab" id="s167-t3" aria-controls="s167-p3" aria-selected="false">3 · Vazio</button>
+              </div>
+              <div role="tabpanel" id="s167-p1" aria-labelledby="s167-t1">
+                <img src="capturas/telas/u6-e19-carregando.png" alt="Etapa 19: a tela mostrando Carregando tarefas com um indicador girando" class="recorte" />
+                <p class="legenda">DevTools › Network › Throttling › <strong>Slow 3G</strong>, e recarregar.</p>
+              </div>
+              <div role="tabpanel" id="s167-p2" aria-labelledby="s167-t2" hidden>
+                <img src="capturas/telas/u6-e19-erro.png" alt="Etapa 19: mensagem de erro em vermelho e botão Tentar de novo" class="recorte" />
+                <p class="legenda">Com a API desligada. Compare com a etapa 18, que dizia “Nenhuma tarefa cadastrada.”</p>
+              </div>
+              <div role="tabpanel" id="s167-p3" aria-labelledby="s167-t3" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>db.json</span></div>
+                  <pre><code>{ "tarefas": [] }</code></pre>
+                </div>
+                <p class="legenda">Agora “Nenhuma tarefa cadastrada.” é <strong>verdade</strong> — e só aparece quando é.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa pequeno"><strong>Tentar de novo</strong> funciona sem F5: o clique chama a mesma função <code>carregar</code>. Medido: uma requisição no carregamento, outra a cada clique no botão.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>Por que o botão “Tentar de novo” existe, se a pessoa poderia simplesmente apertar F5?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 168 -->
+        <section class="slide" data-n="168" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: os quatro estados</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Ponto de partida</dt><dd>A sua cópia da etapa 18. A pasta da etapa 19 já traz a solução.</dd>
+                  <dt>1</dt><dd>No composable: <code>carregando</code> e <code>erro</code>; <code>carregar</code> com <code>try</code>/<code>catch</code>/<code>finally</code>.</dd>
+                  <dt>2</dt><dd><code>mensagemDeErro(falha)</code>, separando <code>falha.response</code> de <code>falha.request</code>.</dd>
+                  <dt>3</dt><dd>Na <code>ListaView</code>: os quatro estados, na ordem, com <code>role="status"</code> e <code>role="alert"</code>.</dd>
+                  <dt>4</dt><dd>Botão <strong>Tentar de novo</strong> chamando <code>carregar</code>.</dd>
+                  <dt>Evidência</dt><dd>Os quatro estados aparecem; o botão recupera sem F5.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica 1</summary><p>Para testar o estado de carregamento sem esperar: Slow 3G no DevTools.</p></details>
+                <details class="dica"><summary>Dica 2</summary><p>Limpe o <code>erro</code> no <strong>começo</strong> de cada tentativa. Senão a mensagem antiga fica na tela depois de dar certo.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>&lt;p v-if="carregando" role="status" aria-live="polite"&gt;Carregando tarefas…&lt;/p&gt;
+
+&lt;div v-else-if="erro" role="alert"&gt;
+  &lt;p&gt;{{ erro }}&lt;/p&gt;
+  &lt;button type="button" @click="carregar"&gt;Tentar de novo&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;template v-else&gt;
+  &lt;ul v-if="visiveis.length &gt; 0"&gt; … &lt;/ul&gt;
+  &lt;p v-else&gt;Nenhuma tarefa cadastrada.&lt;/p&gt;
+&lt;/template&gt;</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 169 -->
+        <section class="slide" data-n="169" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Erro não é exceção: é um estado da tela</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>O que aconteceu</th><th>O usuário precisa saber</th></tr></thead>
+                <tbody>
+                  <tr><td>Ninguém atendeu (<code>falha.request</code>)</td><td>A API pode estar fora; dá para tentar de novo</td></tr>
+                  <tr><td>Respondeu 404</td><td>O endereço pedido não existe — é defeito do programa</td></tr>
+                  <tr><td>Respondeu 500</td><td>O servidor quebrou; tentar de novo pode resolver</td></tr>
+                  <tr><td>Respondeu 401 / 403</td><td>Precisa entrar, ou não tem permissão</td></tr>
+                </tbody>
+              </table>
+              <p class="caixa caixa-destaque pequeno">Quatro causas, quatro frases. “Ocorreu um erro” serve para todas e não ajuda em nenhuma.</p>
+            </div>
+            <div class="pilha">
+              <p class="pequeno">Três regras para mensagens de erro:</p>
+              <ul class="pequeno">
+                <li><strong>Diga o que falhou</strong>, em palavras da pessoa — “não foi possível carregar as tarefas”, não “GET /tarefas failed”.</li>
+                <li><strong>Diga o que fazer</strong> — tentar de novo, conferir a conexão, entrar na conta.</li>
+                <li><strong>Não exponha o que é seu</strong> — pilha de erro, nome de arquivo, caminho interno. Ajuda quem ataca e não ajuda quem usa.</li>
+              </ul>
+              <p class="caixa pequeno">O detalhe técnico vai para o Console ou para o registro do servidor, onde quem programa encontra. A tela fica com a frase útil.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 170 -->
+        <section class="slide" data-n="170" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: o <code>catch</code> que nunca pega</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Forma comum — e o catch é código morto</span></div>
+                <pre><code>function carregar() {
+  try {
+    return axios.get(url).then((r) =&gt; (tarefas.value = r.data))
+  } catch (falha) {
+    erro.value = 'nunca chega aqui'
+  }
+}</code></pre>
+              </div>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Medido em Node, com a Promise rejeitando</span></div>
+                <pre><code>forma com try/catch: devolveu uma Promise (o catch NÃO rodou)
+  -&gt; e ela rejeita com: Network Error
+forma com await:     o catch pegou: Network Error</code></pre>
+              </div>
+            </div>
+            <div class="pilha">
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>O <code>try</code>/<code>catch</code> é <strong>síncrono</strong>. Quando a Promise falha, a função já terminou de executar. Não há mais nenhum <code>try</code> em volta.</p></details>
+                <details class="solucao"><summary>As duas saídas</summary>
+                  <ol class="pequeno">
+                    <li><code>await</code> <strong>dentro</strong> do <code>try</code>: a função fica parada ali até a Promise terminar, e a falha acontece dentro do bloco.</li>
+                    <li><code>.catch()</code> encadeado na própria Promise.</li>
+                  </ol>
+                  <p>O que não funciona é misturar: <code>try</code>/<code>catch</code> em volta de um <code>return</code> de Promise.</p>
+                </details>
+              </div>
+              <p class="caixa caixa-destaque pequeno">Este código aparece em muito material e em muita resposta de IA. Ele <strong>parece</strong> tratar o erro — e o sintoma é o pior possível: a falha vira um aviso solto no Console e a tela não reage.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#eNq1VmFv2zYQ/Ss3d4MkwJFle0g3R1YXrBkwYE2GtvtUBwsjURYTidQoyknm+r/vSIqyEzvI1qFfbJI6Ht+7O77jenBa1+GqpYMZDOImlaxW0FDV1smCs6oWUsEaJM1hA7kUFXho6y34go9GcArvzj68O4Xf8QNrKOSkLAjPxBCUJIpkBDKKw0UbRZQ0cEOZEk1otl5ALVlFmRRgPv8IAv5qKZCaSJpSoBVULZpDRRSVjJTQrxGE09SiUcb9r6ehRpO3PFVMcKhpxqQfwHrBAQ1VKzlweucw+v6fQ1zWUIgMYJ5YQ9CcPyIg0SrfN+vOyNe7z6QU0vfOqboT8tZOvSAYwjSKAu1gg78bDSQVvFFQMl4g47mOnP/pMnDrZMUa0bwV52RFlyQTct8koytRrmjbffG84BE/woUifi5kRTDM9F5htGu6FG1H2Z4crkiJ0ZzDpzAMd5eGmM0Dm2Fz2eG/Y5jAu5Bk2dmKcvUbaxTlFLm3XOe2pJkOjMHiDcGn2khsA7lHcIvExhnxPGMztAZXf/CUtMtCgc8wnTZtgQ35DL5d2xNDiRUleFjRpiFLurkyuzWJoCvOXy7eY2mOsbwm0fh7LMOHUUpUWugywgjb6mkrVyM46UpkJ9gmUmNXTejCVUu3qSu2UBWUd2Vj8zMegpdhDlMqlfD0fWhpYAsFLArfXJbAOey3XYnOwORFEzaGO0StM+Ory1nPduLYkjvCFLw9O//4/gIyoaEvOGkeeAqPyU0OkLObO2678CaHWL1IavI/SU0dqdD4QMAUKySjWDnACVaIFpB8inpCnkvh9IkgPOK2n73ps9kDB8Ix3d2DLMN/RdNpRQ9Sioz0ovX0Bl++cK/Md6sdSE9ILnC1r1wMI2d82VqVrTQ00mkt1RKKGMyn1+Z3Kpz+aKdOivqznH+GhxGeUpH32v8GvLbqE+DBDD4oiQf73R4TPldy/Xhqx3vi2xUQy8H/ZjceYSMq1PDSGJWh8QHz+RzGQV91O5fJc3V3rtml0wsdaVS7rqA45YUGbU5AQAxDgh0Qo4J9D2hJMfeYwYZ2ud+Y+hzCsRF9nMUj2zETnc1Y0aousV0l2iwupskFxKnIaGIwxCMzNpHnmHhiUhGP0E7vxh11El+3SmE9/JSWLL2dLwamMBaDxPwDdpRtNzXcm3hktyTxqHZ+FLkuKVwLmVGJPsaLAVZyWdao6ZgQXDnGlUY9lBTH1uwoFWVJ6obOwI1O4I5lqpjBOIq+Qwg2BLGSiQtzrAprg26m2gZIyZYcZyXNFW4xEOORKh5teWKEzbxFNc7EjiEO5fZAWLktStQ9Ev0pS2yAjXgdFGWd6clx4BSqSwL6z3bdwMyFY63560bjvbqOIg9Tvj0PTa+T9dpd0Bw75eFSfBOa3gqfP4NnSw0dbTBV2zO3AL6M6yONfomdI9dRexW9jv47rcnXpXUoa53WdrOvym76hexwoG9bf4VhdcRyBOOks0dyai8sPkj6B54F1k/tYU6bUJ5L4h6haFQL1gxRPPT7Gg7I9o0ZjPFVJyvGRRvaY89164FCSALcmRadaUVY02kg9LXlZMq9kkLLst5juN+RSsqXqtjRFpcRvEl9HC6MAOrO7V7AWnOpDgA2lp+xjQkUL59cS92m3BxfZysqM+z6GBjsdTmTJJhtoWlgktoTXsTXPfidAJL0dilFyzNEmud5lEcnsIP8BDrhnMEP9f0JppGro4b9jVI5ntT31p1O5P6BN4Jx31ssuBeY7CLERDeNnUYx2PwDgXlitw==" target="_blank" rel="noopener">Playground: as três formas, com a Promise falhando</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 171 -->
+        <section class="slide" data-n="171" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: tratar erros de rede sem enganar o usuário</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="prompt-ia">
+              <div class="prompt-ia-topo"><span>Prompt</span></div>
+              <pre><code>Vue 3, &lt;script setup&gt;, axios. Busco uma lista no onMounted.
+
+Quero tratar os casos: carregando, sucesso com dados, sucesso
+vazio e falha. Mostre o código com async/await e explique:
+
+1. por que o finally é necessário;
+2. como distinguir "o servidor respondeu com erro" de
+   "ninguém respondeu", citando a documentação do axios;
+3. que papel ARIA usar em cada estado e por quê.
+
+Não use try/catch em volta de um return de Promise.</code></pre>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>A resposta deve dizer</th><th>Sinal de resposta ruim</th></tr></thead>
+                <tbody>
+                  <tr><td><code>finally</code> roda nos dois caminhos</td><td>Põe <code>carregando = false</code> só no <code>try</code></td></tr>
+                  <tr><td><code>falha.response</code> × <code>falha.request</code></td><td>Trata toda falha como “sem internet”</td></tr>
+                  <tr><td><code>status</code> para carregando, <code>alert</code> para erro</td><td>Ignora acessibilidade, ou usa <code>alert</code> em tudo</td></tr>
+                  <tr><td>Limpar o erro antes de tentar de novo</td><td>Não menciona (a mensagem velha fica)</td></tr>
+                </tbody>
+              </table>
+              <div class="caixa pequeno">
+                <h3>Onde conferir</h3>
+                <ul>
+                  <li><a href="https://axios-http.com/docs/handling_errors">Axios — Handling Errors</a></li>
+                  <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions">MDN — ARIA live regions</a></li>
+                </ul>
+                <p>Repare que o prompt <strong>proíbe</strong> a forma errada do slide anterior. Dizer o que não fazer é parte do trabalho.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 172 -->
+        <section class="slide" data-n="172" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <ol class="passos">
+              <li>Por que o <code>carregando = false</code> vai no <code>finally</code> e não no fim do <code>try</code>?</li>
+              <li>Qual a diferença entre <code>role="status"</code> e <code>role="alert"</code>?</li>
+              <li>Por que o <code>try</code>/<code>catch</code> em volta de um <code>return axios.get(...)</code> não pega a falha?</li>
+            </ol>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

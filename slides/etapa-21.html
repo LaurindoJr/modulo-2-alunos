@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 21 · A primeira store</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="21">
+    <div class="janela">
+      <main class="palco" aria-label="Unidade 7, etapa 21: Pinia e a primeira store">
+        <!-- 181 -->
+        <section class="slide" data-n="181" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>O composable já era uma store</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">Abram o <code>useTarefas.js</code> da etapa 20. Estado compartilhado, valores derivados, funções que alteram o estado. <strong>É uma store</strong> — só que sem nome, sem ferramenta e sem ninguém olhando. Hoje ela ganha as três coisas.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Nada quebrou</td><td>A aplicação funciona exatamente como na etapa 20</td></tr>
+                  <tr><td>A store existe</td><td>Vue DevTools › Pinia mostra <code>tarefas</code> com estado e getters</td></tr>
+                  <tr><td>Reatividade preservada</td><td>Explicar por que o <code>storeToRefs</code> é necessário</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              Se eu escrever <code>const { tarefas } = useTarefasStore()</code> e a tela mostrar
+              <code>tarefas.length</code>, o que acontece quando a API responde e a lista muda?
+            </div>
+          </div>
+        </section>
+
+        <!-- 182 -->
+        <section class="slide" data-n="182" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2><code>defineStore</code>: três diferenças e nada mais</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Antes · composables/useTarefas.js</span></div>
+                <pre><code>const tarefas = ref([])          // FORA da função
+const concluidas = computed(…)
+
+export function useTarefas() {
+  return { tarefas, concluidas, carregar }
+}</code></pre>
+              </div>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Depois · stores/tarefas.js</span></div>
+                <pre><code>export const useTarefasStore = defineStore('tarefas', () =&gt; {
+  const tarefas = ref([])        // DENTRO da função
+  const concluidas = computed(…)
+  async function carregar() { … }
+  return { tarefas, concluidas, carregar }
+})</code></pre>
+              </div>
+              <p class="caixa caixa-destaque pequeno">Os refs voltaram para dentro da função porque agora é o <strong>Pinia</strong> que garante que ela roda uma vez. Era isso que a gente estava fazendo à mão.</p>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Parte</th><th>No código</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>state</strong></td><td><code>ref</code></td></tr>
+                  <tr><td><strong>getters</strong></td><td><code>computed</code></td></tr>
+                  <tr><td><strong>actions</strong></td><td>funções</td></tr>
+                </tbody>
+              </table>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>O uso na tela (e <code>app.use(createPinia())</code> no main.js)</span></div>
+                <pre><code>const store = useTarefasStore()
+const { tarefas, concluidas } = storeToRefs(store)  // ESTADO
+const { carregar, adicionar } = store               // ACTIONS</code></pre>
+              </div>
+              <p class="caixa pequeno">Esta forma, com uma função, é a <strong>setup store</strong>; a outra, com <code>{ state, getters, actions }</code>, é a do material.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#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" target="_blank" rel="noopener">Playground: três telas, a mesma coisa</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 183 -->
+        <section class="slide" data-n="183" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>O que se ganha: o painel do DevTools</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 21">
+                <button role="tab" id="s183-t1" aria-controls="s183-p1" aria-selected="true">1 · Instalar</button>
+                <button role="tab" id="s183-t2" aria-controls="s183-p2" aria-selected="false">2 · A store</button>
+                <button role="tab" id="s183-t3" aria-controls="s183-p3" aria-selected="false">3 · Resultado</button>
+              </div>
+              <div role="tabpanel" id="s183-p1" aria-labelledby="s183-t1">
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Terminal e main.js</span></div>
+                  <pre><code>$ npm install pinia
+
+// main.js
+import { createPinia } from 'pinia'
+createApp(App).use(createPinia()).use(router).mount('#app')</code></pre>
+                </div>
+                <p class="legenda">Sem o <code>createPinia()</code>, chamar a store dá erro: ela não tem onde morar.</p>
+              </div>
+              <div role="tabpanel" id="s183-p2" aria-labelledby="s183-t2" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Vue DevTools › aba Pinia</span></div>
+                  <pre><code>tarefas
+├─ state
+│  ├─ tarefas: Array(4)
+│  ├─ carregando: false
+│  ├─ erro: ""
+│  └─ busca: ""
+└─ getters
+   ├─ concluidas: 1
+   └─ visiveis: Array(4)</code></pre>
+                </div>
+                <p class="legenda">Os valores são editáveis ali mesmo: mude <code>busca</code> no painel e veja a lista filtrar.</p>
+              </div>
+              <div role="tabpanel" id="s183-p3" aria-labelledby="s183-t3" hidden>
+                <img src="capturas/telas/u7-e21-com-storetorefs.png" alt="Etapa 21: tela de Resumo mostrando 4 tarefas e 25% concluído" class="recorte" />
+                <p class="legenda">A aplicação funciona <strong>igual</strong> à etapa 20. Essa é a primeira evidência.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa caixa-destaque pequeno">O Pinia não acrescenta poder: acrescenta <strong>visibilidade</strong>. Nada aqui muda o que o programa faz; muda o que você consegue ver quando ele faz errado.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>Altere <code>busca</code> pelo painel do DevTools. A lista filtra. Por que isso funciona?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 184 -->
+        <section class="slide" data-n="184" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: converter o composable em store</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Ponto de partida</dt><dd>A sua cópia da etapa 20. A pasta da etapa 21 já traz a solução.</dd>
+                  <dt>1</dt><dd><code>npm install pinia</code> e <code>.use(createPinia())</code> no <code>main.js</code>.</dd>
+                  <dt>2</dt><dd>Mova <code>composables/useTarefas.js</code> para <code>stores/tarefas.js</code>; embrulhe em <code>defineStore('tarefas', () =&gt; { … })</code> com os refs dentro.</dd>
+                  <dt>3</dt><dd>Nas três views, <code>storeToRefs</code> para estado e getters; actions direto da store.</dd>
+                  <dt>Evidência</dt><dd>Tudo funciona igual, e a store aparece no DevTools.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica 1</summary><p>A função privada <code>combinaSituacao</code> não precisa ir no <code>return</code>. O que não é devolvido não entra na store — e some do DevTools, que é bom.</p></details>
+                <details class="dica"><summary>Dica 2</summary><p>Se a tela congelar com os valores iniciais, olhe a linha em que você desestruturou.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>export const useTarefasStore = defineStore('tarefas', () =&gt; {
+  const tarefas = ref([])
+  const concluidas = computed(() =&gt;
+    tarefas.value.filter((t) =&gt; t.concluida).length)
+
+  async function carregar() { … }
+
+  return { tarefas, concluidas, carregar }
+})</code></pre>
+              <pre><code>// na view
+const store = useTarefasStore()
+const { tarefas, concluidas } = storeToRefs(store)
+const { carregar } = store</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 185 -->
+        <section class="slide" data-n="185" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>Por que trocar algo que já funcionava</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th></th><th>Composable</th><th>Store</th></tr></thead>
+                <tbody>
+                  <tr><td>Estado compartilhado</td><td>sim</td><td>sim</td></tr>
+                  <tr><td>Aparece no DevTools</td><td>não</td><td><strong>sim</strong></td></tr>
+                  <tr><td>Histórico de alterações</td><td>não</td><td><strong>sim</strong></td></tr>
+                  <tr><td>Nome e identidade</td><td>não</td><td><strong>sim</strong></td></tr>
+                  <tr><td>Recriar nos testes</td><td>difícil</td><td><strong>fácil</strong></td></tr>
+                </tbody>
+              </table>
+              <p class="caixa caixa-destaque pequeno">Nada disso muda o que o programa <strong>faz</strong>. Muda o que você consegue <strong>ver</strong> quando ele faz errado — e o que o próximo a mexer no código vai entender.</p>
+            </div>
+            <div class="pilha">
+              <p class="pequeno">A tríade que o material original cita, e que vale para qualquer store:</p>
+              <ul class="pequeno">
+                <li><strong>O estado</strong> — a fonte da verdade que move a aplicação</li>
+                <li><strong>A visão</strong> — um mapeamento declarativo do estado</li>
+                <li><strong>As ações</strong> — as formas possíveis de o estado mudar</li>
+              </ul>
+              <p class="caixa pequeno">Reparem que vocês já faziam os três desde a etapa 09: <code>ref</code>, template e funções. O Pinia não inventou o modelo — deu nome a ele e pôs uma janela para olhar.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 186 -->
+        <section class="slide" data-n="186" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: a tela que congela em zero</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <img src="capturas/telas/u7-e21-sem-storetorefs.png" alt="Etapa 21 sem storeToRefs: o Resumo mostra zero tarefas" class="recorte" />
+              <p class="legenda">
+                <code>const { tarefas, concluidas } = useTarefasStore()</code> — sem
+                <code>storeToRefs</code>. Abrindo <code>/resumo</code> direto, com
+                <strong>4 tarefas</strong> na API.
+              </p>
+            </div>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Medido</span></div>
+                <pre><code>Total no Resumo   : 0        (com storeToRefs: 4)
+Percentual        : 0%       (com storeToRefs: 25%)
+Tarefas na API    : 4
+Avisos no Console : NENHUM</code></pre>
+              </div>
+              <details class="solucao">
+                <summary>Por que acontece — e por que é cruel</summary>
+                <p class="pequeno">Desestruturar copia o <strong>valor</strong> do momento. Na criação da tela, <code>tarefas</code> é <code>[]</code> — e a cópia fica assim para sempre. Pior: sair e voltar <strong>conserta</strong>, porque o componente é recriado. O defeito só aparece para quem abre a tela direto pelo endereço.</p>
+              </details>
+              <p class="caixa caixa-destaque pequeno"><code>storeToRefs</code> devolve um <strong>ref</strong> para cada campo, em vez do valor. Actions não precisam: funções não são reativas.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#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" target="_blank" rel="noopener">Playground: com e sem storeToRefs, lado a lado</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 187 -->
+        <section class="slide" data-n="187" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: setup store × options store</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="prompt-ia">
+              <div class="prompt-ia-topo"><span>Prompt</span></div>
+              <pre><code>Pinia tem duas formas de declarar store: a "options store"
+({ state, getters, actions }) e a "setup store" (uma função).
+
+Compare as duas, citando a documentação oficial:
+1. o que cada uma oferece que a outra não;
+2. por que `this` existe numa e não na outra;
+3. quando a documentação recomenda cada uma.
+
+Meu projeto usa Vue 3 com &lt;script setup&gt; em todo lugar.</code></pre>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>A resposta deve dizer</th><th>Sinal de resposta ruim</th></tr></thead>
+                <tbody>
+                  <tr><td>As duas produzem a mesma store</td><td>Diz que uma é “a certa”</td></tr>
+                  <tr><td>Setup store não tem <code>$reset</code> pronto</td><td>Não menciona (é a etapa 22)</td></tr>
+                  <tr><td>Setup store permite <code>watch</code> e composables dentro</td><td>Não cita nenhuma vantagem concreta</td></tr>
+                  <tr><td>A escolha é de consistência com o projeto</td><td>“Options é mais organizada”, sem critério</td></tr>
+                </tbody>
+              </table>
+              <div class="caixa pequeno">
+                <h3>Onde conferir</h3>
+                <ul>
+                  <li><a href="https://pinia.vuejs.org/core-concepts/#Setup-Stores">Pinia — Setup Stores</a></li>
+                </ul>
+                <p>O material da unidade usa a options store. Saber ler as duas é parte do trabalho — a internet está cheia das duas.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 188 -->
+        <section class="slide" data-n="188" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <ol class="passos">
+              <li>O que o Pinia acrescenta a um composable que já compartilhava estado?</li>
+              <li>Por que os <code>ref</code> voltaram para <strong>dentro</strong> da função?</li>
+              <li>Por que <code>storeToRefs</code> no estado e não nas actions?</li>
+            </ol>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

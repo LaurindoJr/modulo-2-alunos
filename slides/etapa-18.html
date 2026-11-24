@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 18 · Dados de uma API</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="18">
+    <div class="janela">
+      <main class="palco" aria-label="Unidade 6, etapa 18: as tarefas vêm de uma API">
+        <!-- 157 -->
+        <section class="slide" data-n="157" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>As tarefas saem do código e vão para um servidor</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">Desde a etapa 06 a lista está <strong>escrita no código</strong>. Hoje ela passa a vir de uma API, e entra o conceito que muda tudo: entre <strong>pedir</strong> e <strong>receber</strong> existe um intervalo — e a tela precisa existir durante ele.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>A lista vem da API</td><td>Editar o <code>db.json</code> muda a tela</td></tr>
+                  <tr><td>A requisição existe</td><td>Network, filtro Fetch/XHR: <code>GET /tarefas → 200</code></td></tr>
+                  <tr><td>O intervalo</td><td>Explicar o que a tela mostra antes da resposta chegar</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              A busca das tarefas é feita no <code>onMounted</code>. O que aparece na tela
+              <em>entre</em> o componente ser montado e a resposta chegar? E se a API estiver
+              desligada?
+            </div>
+          </div>
+        </section>
+
+        <!-- 158 -->
+        <section class="slide" data-n="158" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>API REST, CRUD e <code>async</code>/<code>await</code></h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Operação</th><th>Verbo HTTP</th><th>Endereço</th></tr></thead>
+                <tbody>
+                  <tr><td>Listar</td><td><code>GET</code></td><td><code>/tarefas</code></td></tr>
+                  <tr><td>Criar</td><td><code>POST</code></td><td><code>/tarefas</code></td></tr>
+                  <tr><td>Alterar</td><td><code>PATCH</code></td><td><code>/tarefas/3</code></td></tr>
+                  <tr><td>Remover</td><td><code>DELETE</code></td><td><code>/tarefas/3</code></td></tr>
+                </tbody>
+              </table>
+              <p class="caixa pequeno"><strong>Recurso</strong> é o substantivo (<code>/tarefas</code>); o <strong>verbo</strong> diz o que fazer com ele. Hoje só o <code>GET</code>; os outros três são a etapa 20.</p>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>db.json — o “banco” que o json-server serve</span></div>
+                <pre><code>{
+  "tarefas": [
+    { "id": 1, "titulo": "Subir a API", "concluida": true }
+  ]
+}</code></pre>
+              </div>
+            </div>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>composables/useTarefas.js</span></div>
+                <pre><code>import axios from 'axios'
+
+const tarefas = ref([])   // nasce VAZIA
+
+async function carregar() {
+  const resposta = await axios.get(`${API_URL}/tarefas`)
+  tarefas.value = resposta.data
+}</code></pre>
+              </div>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>App.vue — uma vez, para a aplicação inteira</span></div>
+                <pre><code>onMounted(carregar)</code></pre>
+              </div>
+              <p class="caixa caixa-destaque pequeno">Sem o <code>await</code>, <code>tarefas.value</code> receberia a <strong>Promise</strong> em vez da lista — e o <code>v-for</code> tentaria repetir sobre um objeto que não é um array.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#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" target="_blank" rel="noopener">Playground: com await, sem await, sem .data</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 159 -->
+        <section class="slide" data-n="159" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Dois terminais, uma requisição</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 18">
+                <button role="tab" id="s159-t1" aria-controls="s159-p1" aria-selected="true">1 · Subir a API</button>
+                <button role="tab" id="s159-t2" aria-controls="s159-p2" aria-selected="false">2 · Network</button>
+                <button role="tab" id="s159-t3" aria-controls="s159-p3" aria-selected="false">3 · Resultado</button>
+              </div>
+              <div role="tabpanel" id="s159-p1" aria-labelledby="s159-t1">
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Terminal 1</span></div>
+                  <pre><code>$ npm run api
+
+JSON Server started on PORT :3000
+Endpoints:
+http://localhost:3000/tarefas</code></pre>
+                </div>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Terminal 2</span></div>
+                  <pre><code>$ npm run dev</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s159-p2" aria-labelledby="s159-t2" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo-topo"><span>Network · filtro Fetch/XHR</span></div>
+                  <pre><code>GET http://localhost:3000/tarefas → 200 OK · application/json
+
+# Response
+[
+  { "id": "1", "titulo": "Subir a API…", "concluida": true },
+  { "id": "2", "titulo": "Buscar com axios.get", "concluida": false }
+]
+
+# Navegar para o Resumo e voltar: nenhuma requisição nova</code></pre>
+                </div>
+              </div>
+              <div role="tabpanel" id="s159-p3" aria-labelledby="s159-t3" hidden>
+                <img src="capturas/telas/u6-e18-lista-da-api.png" alt="Etapa 18: a Todo List com quatro tarefas vindas da API" class="recorte" />
+                <p class="legenda">A mesma tela de sempre — a diferença está em <strong>de onde</strong> vieram os dados.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <p class="caixa caixa-destaque pequeno">Olhem o <code>"id"</code> na resposta: vem <strong>entre aspas</strong>. O json-server devolve ids como <strong>texto</strong>. É a lição da etapa 17 de novo, agora com a API no lugar do endereço.</p>
+              <p class="pergunta pequeno"><strong>Observe</strong>Edite o <code>db.json</code>, salve e recarregue a página. Depois edite e <strong>não</strong> recarregue. O que explica a diferença?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 160 -->
+        <section class="slide" data-n="160" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: ligar a aplicação na API</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Ponto de partida</dt><dd>A sua cópia da etapa 17. A pasta da etapa 18 já traz a solução.</dd>
+                  <dt>1</dt><dd><code>npm install axios</code> e <code>npm install -D json-server</code>; script <code>"api": "json-server --watch db.json --port 3000"</code>.</dd>
+                  <dt>2</dt><dd><code>db.json</code> na raiz, com a chave <code>"tarefas"</code> e as quatro tarefas.</dd>
+                  <dt>3</dt><dd>No composable: <code>tarefas = ref([])</code> e a função <code>carregar</code> com <code>async</code>/<code>await</code>.</dd>
+                  <dt>4</dt><dd>No <code>App.vue</code>: <code>onMounted(carregar)</code>.</dd>
+                  <dt>Evidência</dt><dd>Editar o <code>db.json</code> e recarregar muda a lista; o Network mostra o <code>GET</code>.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica 1</summary><p>São <strong>dois</strong> terminais. Se a lista vier vazia, confira se o terminal da API está rodando.</p></details>
+                <details class="dica"><summary>Dica 2</summary><p>A tela da tarefa (<code>/tarefa/1</code>) vai parar de achar a tarefa. Olhe o <strong>tipo</strong> do id na resposta antes de mexer em qualquer outra coisa.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>const tarefas = ref([])
+
+async function carregar() {
+  const resposta = await axios.get(`${API_URL}/tarefas`)
+  tarefas.value = resposta.data
+}</code></pre>
+              <pre><code>// TarefaView.vue — o id agora vem como texto
+const mesmoId = (item) =&gt; String(item.id) === String(route.params.id)
+const tarefa = computed(() =&gt; tarefas.value.find(mesmoId))</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 161 -->
+        <section class="slide" data-n="161" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>O intervalo entre pedir e receber</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>A ordem real dos acontecimentos</span></div>
+                <pre><code>1. tarefas = []            // o ref nasce vazio
+2. o template desenha      // lista vazia na tela
+3. onMounted dispara o GET // o pedido sai
+   … intervalo …           // a tela JÁ ESTÁ na frente do usuário
+4. a resposta chega
+5. tarefas.value = dados   // a tela se atualiza</code></pre>
+              </div>
+              <p class="caixa caixa-destaque pequeno">O passo 3 não “pausa” a aplicação. JavaScript não espera parado: ele segue, e avisa depois. Por isso a tela precisa fazer sentido no passo 2 — quando ainda não há dado nenhum.</p>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Onde o intervalo é invisível</th><th>Onde ele dói</th></tr></thead>
+                <tbody>
+                  <tr><td><code>localhost</code>, 2&nbsp;ms</td><td>Celular em rede fraca, 3&nbsp;s</td></tr>
+                  <tr><td>Quatro tarefas</td><td>Quatro mil registros</td></tr>
+                  <tr><td>Servidor acordado</td><td>Servidor hibernando, 10&nbsp;s</td></tr>
+                </tbody>
+              </table>
+              <p class="caixa pequeno">Vocês vão programar em <code>localhost</code> e os usuários vão usar em 4G no ônibus. Toda a Unidade 6 é sobre não esquecer disso.</p>
+              <p class="pequeno">Para <strong>ver</strong> o intervalo: DevTools › Network › <strong>Throttling</strong> › Slow 3G. É a etapa 19.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#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" target="_blank" rel="noopener">Playground: os cinco passos, cronometrados</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 162 -->
+        <section class="slide" data-n="162" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: a tela que mente</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <img src="capturas/telas/u6-e18-api-fora-do-ar.png" alt="Etapa 18 com a API desligada: a tela mostra Nenhuma tarefa cadastrada" class="recorte" />
+              <p class="legenda">Tela real depois de desligar a API (Ctrl+C no terminal 1) e recarregar.</p>
+            </div>
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Console — saída real</span></div>
+                <pre><code>Failed to load resource: net::ERR_CONNECTION_REFUSED
+Uncaught (in promise) Network Error</code></pre>
+              </div>
+              <p class="caixa caixa-destaque pequeno">A tela diz <strong>“Nenhuma tarefa cadastrada.”</strong> É <strong>falso</strong>: as tarefas existem; nós é que não conseguimos perguntar.</p>
+              <details class="solucao">
+                <summary>O que está faltando</summary>
+                <p class="pequeno">Pegar a falha; um estado “falhou”, diferente de “vazio”; e um “ainda estou perguntando”. São os quatro estados da etapa 19.</p>
+              </details>
+              <p><a class="link-playground" href="https://play.vuejs.org/#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" target="_blank" rel="noopener">Playground: dois “vazios” idênticos, lado a lado</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 163 -->
+        <section class="slide" data-n="163" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: <code>async</code>/<code>await</code> e o que a API devolve</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="prompt-ia">
+              <div class="prompt-ia-topo"><span>Prompt</span></div>
+              <pre><code>Vue 3 com &lt;script setup&gt; e axios:
+
+const resposta = await axios.get('http://localhost:3000/tarefas')
+tarefas.value = resposta.data
+
+Explique, citando a documentação oficial:
+1. o que é `resposta` e por que `.data`;
+2. o que aconteceria sem o `await`;
+3. por que o id vem como "1" e não 1, e o que
+   isso quebra numa comparação.</code></pre>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>A resposta deve dizer</th><th>Sinal de resposta ruim</th></tr></thead>
+                <tbody>
+                  <tr><td><code>resposta</code> tem <code>data</code>, <code>status</code>, <code>headers</code></td><td>Trata <code>resposta</code> e <code>resposta.data</code> como a mesma coisa</td></tr>
+                  <tr><td>Sem <code>await</code>, <code>tarefas</code> vira uma Promise</td><td>“Funciona igual, só é mais feio”</td></tr>
+                  <tr><td>JSON distingue <code>"1"</code> de <code>1</code>; quem decide é quem gera</td><td>Diz que o axios converte sozinho</td></tr>
+                  <tr><td><code>"1" === 1</code> é <code>false</code> — comparar como texto</td><td>Sugere <code>==</code> (dois iguais) como solução</td></tr>
+                </tbody>
+              </table>
+              <div class="caixa pequeno">
+                <h3>Onde conferir</h3>
+                <ul>
+                  <li><a href="https://axios-http.com/docs/res_schema">Axios — Response Schema</a></li>
+                  <li><a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/async_function">MDN — async function</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 164 -->
+        <section class="slide" data-n="164" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <ol class="passos">
+              <li>O que a tela mostra entre o <code>onMounted</code> disparar e a resposta chegar?</li>
+              <li>Por que <code>resposta.data</code> e não <code>resposta</code>?</li>
+              <li>Com a API desligada, a tela diz “Nenhuma tarefa cadastrada.”. Qual é o problema dessa frase?</li>
+            </ol>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

@@ -30,7 +30,6 @@ após alguns segundos, o equivalente a Ctrl+C; o detalhe está no campo `nota` d
 | `navegador/b3-console-tarefas.txt` | 26 | tarefas.js executado no Console do Chrome |
 | `navegador/b3-console-titulo.txt` | 32 | titulo-da-pagina.js executado no Console do Chrome |
 | `navegador/b5-dist-direto-do-disco.txt` | 57 | Requisições ao abrir dist/index.html por file:// |
-| `navegador/ref-network.txt` | — | Requisições do projeto completo à API json-server |
 | `telas/b1-alterada.png` | 5 | Após editar título e uma tarefa, salvar e recarregar |
 | `telas/b1-caixa-marcada.png` | 5 | Após marcar a 2ª tarefa: o resumo muda sem recarregar |
 | `telas/b1-inicial.png` | 2, 5, 6, 26 | Etapa 01 aberta do disco (file://), antes da edição |
@@ -47,12 +46,53 @@ após alguns segundos, o equivalente a Ctrl+C; o detalhe está no campo `nota` d
 | `telas/b5-preview.png` | 57 | npm run preview: o build servido em http://localhost:4173 |
 | `telas/b5-projeto-gerado.png` | 52, 54 | Projeto recém-criado (opção sem código de exemplo) em npm run dev |
 | `telas/e13-componentes.png` | 59 | Etapa 13 (antiga 06): componentes e reatividade em memória |
-| `telas/e15-typescript-pinia.png` | 59 | Etapa 15 (antiga 07): TypeScript e Pinia com dados em memória |
-| `telas/ref-api-desligada.png` | 59 |  |
-| `telas/ref-busca.png` | — | Busca por "npm" |
-| `telas/ref-edicao.png` | — | Edição inline de uma tarefa |
-| `telas/ref-lista.png` | 1 | Projeto completo: lista com resumo, formulário, filtros e tarefas |
-| `telas/ref-perfil.png` | 10, 59 | Página de perfil com estatísticas por categoria |
+
+### Unidade 5 — roteamento (etapas 15 a 17), 23/11/2026
+
+| Arquivo | Slide | Conteúdo |
+|---|---|---|
+| `telas/u5-e15-lista.png` | 135 | Etapa 15: Lista com as abas trocadas à mão |
+| `telas/u5-e15-resumo.png` | 135 | Etapa 15: Resumo com números e barra de progresso |
+| `telas/u5-e16-resumo.png` | 143 | Etapa 16: Resumo com o link ativo marcado pelo roteador |
+| `telas/u5-e17-tarefa.png` | 151 | Etapa 17: tela de uma tarefa (`/tarefa/1`) |
+| `telas/u5-e17-id-inexistente.png` | 151 | Etapa 17: `/tarefa/999` — a rota casou, o dado não existe |
+| `telas/u5-e17-404.png` | 151 | Etapa 17: `/nao-existe` — nenhuma rota casou |
+| `navegador/u5-e16-network-sem-recarga.txt` | 143 | Network, filtro Doc: zero documentos em quatro navegações |
+| `terminal/u5-e16-404-servidor-estatico.txt` | 146 | `npm run build` e 404 num servidor estático |
+| `navegador/u5-e17-onmounted-componente-reaproveitado.txt` | 154 | As duas versões da `TarefaView` medidas lado a lado |
+
+Telas feitas com Chromium 1600×900 (janela de 920×760), Vue 3.5.44, Vue Router 4.6.5 e Vite 8.3.5.
+
+### Unidade 6 — interação com APIs (etapas 18 a 20), 23/11/2026
+
+| Arquivo | Slide | Conteúdo |
+|---|---|---|
+| `telas/u6-e18-lista-da-api.png` | 159 | Etapa 18: a lista com os dados vindos do json-server |
+| `telas/u6-e18-api-fora-do-ar.png` | 162 | Etapa 18: a tela que mente — “Nenhuma tarefa cadastrada.” com a API desligada |
+| `telas/u6-e19-carregando.png` | 167 | Etapa 19: estado de carregamento (resposta segurada por 3 s) |
+| `telas/u6-e19-erro.png` | 167 | Etapa 19: mensagem de erro e botão “Tentar de novo” |
+| `telas/u6-e20-lista.png` | 175 | Etapa 20: a lista carregada, antes das ações |
+| `telas/u6-e20-acao-falhou.png` | 175 | Etapa 20: erro de ação acima da lista, que continua visível |
+| `navegador/u6-e18-network-get-tarefas.txt` | 159, 162 | O `GET`, o tipo do id e a falha com a API desligada |
+| `terminal/u6-e19-catch-sem-await.txt` | 170 | O `try`/`catch` sem `await` que não pega a falha |
+| `navegador/u6-e20-crud-network.txt` | 175 | `POST`, `PATCH`, `DELETE`, o id do servidor e a ação que falha |
+
+### Unidade 7 — gerenciamento de estado (etapas 21 a 23), 23/11/2026
+
+| Arquivo | Slide | Conteúdo |
+|---|---|---|
+| `telas/u7-e21-com-storetorefs.png` | 183 | Etapa 21: o Resumo correto, com `storeToRefs` |
+| `telas/u7-e21-sem-storetorefs.png` | 186 | Etapa 21: o Resumo congelado em zero, sem `storeToRefs` |
+| `telas/u7-e23-tres-stores.png` | 199 | Etapa 23: filtro ativo, lista vinda de duas stores |
+| `navegador/u7-e21-storetorefs.txt` | 186 | As duas versões medidas lado a lado |
+| `navegador/u7-e22-getter-cache.txt` | 191 | Getter 0 × função 5, nas mesmas cinco teclas |
+| `navegador/u7-e22-reset-setup-store.txt` | 194 | A mensagem real do `$reset` numa setup store |
+
+Capturas com Pinia 3.0.4.
+
+Capturas com json-server 1.0.0-beta.15 e Axios 1.21.1. Os estados de carregamento e de erro foram
+provocados segurando ou abortando a requisição no navegador — o equivalente ao Slow 3G e ao Ctrl+C
+no terminal da API.
 | `terminal/b1-servidor-local.txt` | 8 | Saída real do servidor local |
 | `terminal/b2-porta-ocupada.txt` | 58 | `node ../ferramentas/servidor-local.mjs` (saída 1) |
 | `terminal/b2-servidor-local.txt` | 22 | Saída real do servidor local |
@@ -139,7 +179,6 @@ provocados em cópias das etapas, nunca nas pastas entregues.
 | `telas/e13-componentes.png` | 59, 119 | Etapa 13 com componentes (recapturada em 04/11/2026) |
 | `terminal/m3-lint-e13-muta-prop.txt` | 122 | `vue/no-mutating-props` |
 | `telas/m3-e14-final.png` | 127 | Estado final do Módulo 3 |
-| `telas/e15-typescript-pinia.png` | 59 | Etapa 15 (recapturada em 04/11/2026, já com o botão de tema) |
 
 Verificações feitas sem captura gravada (citadas nas notas): foco após marcar uma caixa pelo
 teclado (etapa 06: `BODY`; etapa 07: a própria caixa); ordem `setup → null → montado` no ciclo de

@@ -1,0 +1,19 @@
+# Etapa 22 — $reset numa setup store
+# Executado no Console, com a store já criada.
+
+> typeof store.$reset
+'function'                      ← o método EXISTE
+
+> store.$reset()
+Uncaught Error: 🍍: Store "tarefas" is built using the setup syntax and does not implement $reset().
+
+# O Pinia não tem como saber qual era o estado inicial de uma setup store: quem
+# criou os refs foi o nosso código, dentro de uma função que já rodou e terminou.
+#
+# Numa options store funciona, porque o state é uma função:
+#   state: () => ({ tarefas: [], busca: '' })
+# Para reiniciar, o Pinia só precisa chamá-la de novo.
+#
+# Saída adotada na etapa: escrever a nossa própria action `reiniciar()`.
+# Vantagem de escrever à mão: fica explícito o que "estado inicial" quer dizer —
+# e nem sempre é tudo (o tema, por exemplo, não deveria ser reiniciado junto).

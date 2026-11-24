@@ -442,6 +442,35 @@ mark {
   background: var(--primaria-suave);
 }
 
+/* Link para um exemplo pronto no Vue SFC Playground. Fica no corpo do slide (e não
+   nas notas) de propósito: assim ele também chega ao pacote dos alunos. */
+.link-playground {
+  display: inline-flex;
+  gap: 0.4em;
+  align-items: baseline;
+  padding: 0.25em 0.6em;
+  border: 1px solid var(--primaria);
+  border-radius: 999px;
+  background: var(--primaria-suave);
+  font-size: 0.8em;
+  text-decoration: none;
+}
+
+.link-playground::before {
+  content: "▶";
+  font-size: 0.85em;
+}
+
+.link-playground::after {
+  content: "↗";
+  opacity: 0.6;
+}
+
+.link-playground:hover,
+.link-playground:focus-visible {
+  text-decoration: underline;
+}
+
 .pergunta {
   padding: 0.6em 0.8em;
   border-radius: var(--raio);

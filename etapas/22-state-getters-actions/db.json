@@ -1,0 +1,25 @@
+{
+  "tarefas": [
+    {
+      "id": "1",
+      "titulo": "Separar state, getters e actions",
+      "concluida": false
+    },
+    {
+      "id": "2",
+      "titulo": "Ver as actions na linha do tempo do DevTools",
+      "concluida": false
+    },
+    {
+      "id": "3",
+      "titulo": "Descobrir que getter com parametro nao tem cache",
+      "concluida": false
+    },
+    {
+      "id": "4",
+      "titulo": "Usar $patch, $reset e $subscribe",
+      "concluida": false
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

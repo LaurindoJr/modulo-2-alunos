@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Etapa 17 · Rotas dinâmicas</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="assets/slides.css" />
+  </head>
+  <body data-bloco="17">
+    <div class="janela">
+      <main class="palco" aria-label="Unidade 5, etapa 17: rotas dinâmicas, parâmetros e endereço não encontrado">
+        <!-- 149 -->
+        <section class="slide" data-n="149" data-tipo="abertura" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Um endereço para cada tarefa</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <div class="pilha">
+              <p class="lead">As rotas da etapa 16 são um menu fixo: duas telas, duas linhas na tabela. Hoje o endereço passa a carregar <strong>dado</strong>: <code>/tarefa/1</code>, <code>/tarefa/2</code>, <code>/tarefa/417</code> — uma linha só na tabela, para todas as tarefas que existirem.</p>
+              <table class="tabela">
+                <thead><tr><th>Critério</th><th>Evidência</th></tr></thead>
+                <tbody>
+                  <tr><td>Parâmetro</td><td><code>/tarefa/2</code> abre a tarefa 2, inclusive depois do F5</td></tr>
+                  <tr><td>Dois “não existe”</td><td><code>/tarefa/999</code> e <code>/nao-existe</code> dão mensagens diferentes</td></tr>
+                  <tr><td>Componente reaproveitado</td><td>Explicar por que ir de <code>/tarefa/1</code> a <code>/tarefa/2</code> não remonta a tela</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pergunta">
+              <strong>Previsão (sem IA)</strong>
+              A rota é <code>/tarefa/:id</code> e existem 4 tarefas. O que acontece ao abrir
+              <code>/tarefa/999</code>? E <code>/receita-de-bolo</code>?
+            </div>
+          </div>
+        </section>
+
+        <!-- 150 -->
+        <section class="slide" data-n="150" data-tipo="explicacao" data-parte="conhecer" data-tempo="6 min">
+          <header class="slide-topo">
+            <h2>Parâmetro, <code>useRoute</code>, <code>useRouter</code> e curinga</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>router/index.js</span></div>
+                <pre><code>routes: [
+  { path: '/',       name: 'lista',  component: ListaView },
+  { path: '/resumo', name: 'resumo', component: SobreView },
+  // :id casa com qualquer coisa depois de /tarefa/
+  { path: '/tarefa/:id', name: 'tarefa', component: TarefaView },
+  // curinga: SEMPRE por último
+  { path: '/:caminho(.*)*', component: NaoEncontradaView },
+]</code></pre>
+              </div>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>TarefaView.vue</span></div>
+                <pre><code>const route = useRoute()    // onde estou
+const router = useRouter()  // com quem eu navego
+
+// params.id é SEMPRE texto: "2", nunca 2
+const tarefa = computed(() =&gt;
+  tarefas.value.find((t) =&gt; t.id === Number(route.params.id)))
+
+router.push('/')            // navegar pelo código</code></pre>
+              </div>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Peça</th><th>O que é</th></tr></thead>
+                <tbody>
+                  <tr><td><code>:id</code></td><td>Parâmetro: a parte variável do caminho</td></tr>
+                  <tr><td><code>route.params.id</code></td><td>O valor que veio no endereço — <strong>texto</strong></td></tr>
+                  <tr><td><code>useRoute()</code></td><td>O endereço atual (de onde estamos)</td></tr>
+                  <tr><td><code>useRouter()</code></td><td>O roteador (para onde vamos)</td></tr>
+                  <tr><td><code>router.push()</code></td><td>Navegar sem clique, a partir do código</td></tr>
+                  <tr><td><code>/:caminho(.*)*</code></td><td>Curinga: casa com o que sobrou</td></tr>
+                </tbody>
+              </table>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Link montado com o id</span></div>
+                <pre><code>&lt;RouterLink :to="{ name: 'tarefa', params: { id } }"&gt;</code></pre>
+              </div>
+              <p class="caixa caixa-destaque pequeno"><strong>Texto, sempre.</strong> <code>/tarefa/2</code> entrega <code>"2"</code>. Sem o <code>Number()</code>, <code>"2" === 2</code> é <code>false</code> — e nada no Console.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#eNqVVW1v2zYQ/isHb0DswqaSNOsQQTZipB4WIM0KN82XqR9o6RyzkUSNpNwEnv/7jqRsS3acbUDgUMe70708z6NVR+SlVGaQ85J917LohNBZxQVAXN/omEzOYm3LCu1z3FkYU+owCMqMvzCyftdMqseATkxVhRE5MtT5YKbkD42KUsedfiPJQMnKoGrnqory6ZElMg92HlcX7AP7JUiFNg3r8dxX5BSkuDRSZnrAS3HsFQeOVx/oTRdBJmYBZQ9EkeKzy21Tr+Ni3elDZ1yWtls7pUgnSpQGNJqqHMWFHxes4BHNdaUUFuam0IYXCcIa5krmcEKhJw3PRCE3OHUt9eunT5hL9fI79Uv/+uAvb0XxtDk/CPzRTFiPZJf3lmJ5fc8C98RaL77nCuc7D//YdrnjclIksjCKpzvPlrUOiK1BG/BVwLDVVNcBZ+GbCV/rsNtzq3PROoQ//R5XUHKzCOEkOKG5SKqpoHGGdWvrettBAKFIIa5OT/ESOMUog/Awnt5YU3L2MLll8DXnkIliwWlRaonWiYORKddAf8b1rtn+a709oPRUQMFzJKO3tQuqR9moKKmUKB55CF8mnz5PJ0DjdBXOeUaskHQ+Pz27sNUqIomgYhQ+0u9fFULCNYclEmL26wkTnlMTssve9d61S2ivylfyjX7Xvbg4hGK3x3hZXpM7Pht7ZJXGrl8eBUSBR/XILjYymBO/DY5szqjgy5GvK9qhkkY5jDtB3Bm53UTB7moEfx9zr8d7TmHb8/8Lvby8bATT038MV5igMHyQ4mAmM2lz7JlaiVzjwabzqBwhyYJCB7lfJaE9mo1WK/jZDZDNqyz7TBuD9ToKZqMoKH3YQkHgTw0KW0sUNEZs9WXLVqcw7fkv3m9mTKe6nOtMWOAUUluQPxGmE0GARwIVAR0Bc/j4dfyF8CI0wT0Vc7RoQO3wVsqUHAiZC66Yr/agop06vCl6FpDUWnpM6ghlrvfXlaslIjTVjXe3t7m5H08nv1EjQy8RKxBpCGd9MMJUmSSK3JL4SMtut5vzHI2StqptrpOaGz70vBFKbFiiMi4B6Ql380nR9URqoXzkN1smEdyacs12wlMT3RJK2m8NoZo0oyoSDudsU78Rpfwob1IrkPWout0eDEdgXkqUc9862ybfNu4RfhhWD4TN6UPV7RqfylY1HA7hrspnpL77OXv/wnDC1VSSwDbkrwm2vXQe/XGH8L9/s17HHcuAjdr5HsOaLdtZNGni3wHLgZgTT30BxM5xskCxDfRY9IvbJ5mNxUwjaPOSIeVIiMwqhJ9mp6eUyAvCGKZ/3I+t0MoKuhLadK4XunT/zzKRyl4fcuJN4Szvyf+ZGIibpVh4Oci8OgLmxeNVVh18Sd8k19vkOU6dt3d9ZFCT1kh2nW/KlU1I3GGxqEhwGlO1Q4kSUpbRdiotXXRXDK65qEi3Nt/LV+Vn/Q/Oq5f9" target="_blank" rel="noopener">Playground: parâmetro, id inexistente e curinga</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 151 -->
+        <section class="slide" data-n="151" data-tipo="demonstracao" data-parte="executar" data-tempo="7 min">
+          <header class="slide-topo">
+            <h2>Abrir, recarregar, navegar e errar o endereço</h2>
+          </header>
+          <div class="slide-corpo grade-2-1">
+            <figure class="sequencia">
+              <div role="tablist" aria-label="Estados da demonstração da etapa 17">
+                <button role="tab" id="s151-t1" aria-controls="s151-p1" aria-selected="true">1 · /tarefa/1</button>
+                <button role="tab" id="s151-t2" aria-controls="s151-p2" aria-selected="false">2 · id que não existe</button>
+                <button role="tab" id="s151-t3" aria-controls="s151-p3" aria-selected="false">3 · endereço que não existe</button>
+              </div>
+              <div role="tabpanel" id="s151-p1" aria-labelledby="s151-t1">
+                <img src="capturas/telas/u5-e17-tarefa.png" alt="Etapa 17: tela da tarefa 1 com título, situação e botões Reabrir, Remover e voltar, Voltar à lista e Próxima tarefa" class="recorte" />
+                <p class="legenda">Endereço: <code>/tarefa/1</code>. Repare que nem Lista nem Resumo estão marcados — nenhum dos dois é a rota atual.</p>
+              </div>
+              <div role="tabpanel" id="s151-p2" aria-labelledby="s151-t2" hidden>
+                <img src="capturas/telas/u5-e17-id-inexistente.png" alt="Etapa 17: tela da tarefa 999 com a mensagem Não existe tarefa com o id 999" class="recorte" />
+                <p class="legenda"><code>/tarefa/999</code> — a <strong>rota casou</strong>; o dado é que não existe.</p>
+              </div>
+              <div role="tabpanel" id="s151-p3" aria-labelledby="s151-t3" hidden>
+                <img src="capturas/telas/u5-e17-404.png" alt="Etapa 17: tela Endereço não encontrado mostrando o caminho /nao-existe" class="recorte" />
+                <p class="legenda"><code>/nao-existe</code> — <strong>nenhuma rota casou</strong>; entrou o curinga.</p>
+              </div>
+            </figure>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Ação</th><th>Resultado</th></tr></thead>
+                <tbody>
+                  <tr><td>Clicar em <strong>Abrir</strong></td><td>Endereço vira <code>/tarefa/1</code></td></tr>
+                  <tr><td><kbd>F5</kbd> ali</td><td>A mesma tarefa continua aberta</td></tr>
+                  <tr><td><strong>Próxima tarefa →</strong></td><td>Muda só o parâmetro; o conteúdo acompanha</td></tr>
+                  <tr><td><strong>Remover e voltar</strong></td><td><code>router.push('/')</code> leva à lista</td></tr>
+                </tbody>
+              </table>
+              <p class="pergunta pequeno"><strong>Observe</strong>Ao ir de <code>/tarefa/1</code> para <code>/tarefa/2</code>, o componente <code>TarefaView</code> é criado de novo ou reaproveitado?</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 152 -->
+        <section class="slide" data-n="152" data-tipo="pratica" data-parte="executar" data-tempo="10 min">
+          <header class="slide-topo">
+            <h2>Prática: a tela da tarefa e o curinga</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="atividade">
+                <dl>
+                  <dt>Ponto de partida</dt><dd>A sua cópia da etapa 16. A pasta da etapa 17 já traz a solução.</dd>
+                  <dt>1</dt><dd>Rota <code>/tarefa/:id</code> e <code>TarefaView.vue</code> com <code>useRoute</code>: título, situação e um botão para concluir.</dd>
+                  <dt>2</dt><dd>Em <code>TarefaItem.vue</code>, o link <strong>Abrir</strong> usando <code>:to</code> com <code>name</code> e <code>params</code>.</dd>
+                  <dt>3</dt><dd>Rota curinga e <code>NaoEncontradaView.vue</code>, mostrando <code>route.fullPath</code>.</dd>
+                  <dt>Evidência</dt><dd><code>/tarefa/2</code> sobrevive ao F5; <code>/tarefa/999</code> e <code>/nao-existe</code> dão mensagens diferentes.</dd>
+                </dl>
+              </div>
+              <div class="dicas">
+                <details class="dica"><summary>Dica 1</summary><p>A tarefa pode não existir. Trate o caso com <code>v-if</code>/<code>v-else</code> antes de ler <code>tarefa.titulo</code> — senão o Console mostra <code>Cannot read properties of undefined</code>.</p></details>
+                <details class="dica"><summary>Dica 2</summary><p>O curinga tem de ser a <strong>última</strong> rota do array. Se ficar antes, ele engole todas as outras.</p></details>
+              </div>
+            </div>
+            <details class="solucao">
+              <summary>Mostrar solução (após a tentativa)</summary>
+              <pre><code>// router/index.js — depois das outras rotas
+{ path: '/tarefa/:id', name: 'tarefa', component: TarefaView },
+{ path: '/:caminho(.*)*', name: 'nao-encontrada',
+  component: NaoEncontradaView },</code></pre>
+              <pre><code>// TarefaView.vue
+const route = useRoute()
+const { tarefas } = useTarefas()
+const tarefa = computed(() =&gt;
+  tarefas.value.find((t) =&gt; t.id === Number(route.params.id)))</code></pre>
+              <pre><code>&lt;template v-if="tarefa"&gt; … &lt;/template&gt;
+&lt;template v-else&gt;
+  &lt;p&gt;Não existe tarefa com o id {{ route.params.id }}.&lt;/p&gt;
+&lt;/template&gt;</code></pre>
+            </details>
+          </div>
+        </section>
+
+        <!-- 153 -->
+        <section class="slide" data-n="153" data-tipo="explicacao" data-parte="entender" data-tempo="5 min">
+          <header class="slide-topo">
+            <h2>O endereço existe; o dado é outra história</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>Endereço</th><th>A rota casou?</th><th>O dado existe?</th><th>O que mostrar</th></tr></thead>
+                <tbody>
+                  <tr><td><code>/tarefa/1</code></td><td>Sim</td><td>Sim</td><td>A tarefa</td></tr>
+                  <tr><td><code>/tarefa/999</code></td><td><strong>Sim</strong></td><td>Não</td><td>“Não existe tarefa com o id 999”</td></tr>
+                  <tr><td><code>/tarefa/abc</code></td><td><strong>Sim</strong></td><td>Não</td><td>A mesma mensagem</td></tr>
+                  <tr><td><code>/nao-existe</code></td><td>Não</td><td>—</td><td>Endereço não encontrado</td></tr>
+                </tbody>
+              </table>
+              <p class="caixa caixa-destaque pequeno">O roteador só sabe de <strong>formato</strong> de endereço. Ele não faz ideia de quais tarefas existem — e não deveria fazer: amanhã elas vêm de uma API, e aí a pergunta “existe?” só tem resposta depois de uma requisição.</p>
+            </div>
+            <div class="pilha">
+              <p class="pequeno">Numa aplicação com servidor, os mesmos quatro casos viram:</p>
+              <table class="tabela">
+                <thead><tr><th>Situação</th><th>Resposta HTTP</th></tr></thead>
+                <tbody>
+                  <tr><td>Endereço sem rota</td><td>404 do servidor</td></tr>
+                  <tr><td>Rota certa, registro inexistente</td><td>404 da API</td></tr>
+                  <tr><td>Rota certa, sem permissão</td><td>403</td></tr>
+                </tbody>
+              </table>
+              <p class="caixa pequeno">Por isso as mensagens são diferentes: quem lê precisa saber se errou o <em>endereço</em> ou se o <em>item acabou</em>. “Algo deu errado” não ajuda ninguém a decidir o que fazer em seguida.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 154 -->
+        <section class="slide" data-n="154" data-tipo="investigacao" data-parte="entender" data-tempo="4 min">
+          <header class="slide-topo">
+            <h2>Investigação: a tela que trava na primeira tarefa</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Alteração provocada: ler o parâmetro no onMounted</span></div>
+                <pre><code>const tarefa = ref(null)
+onMounted(() =&gt; {
+  tarefa.value = tarefas.value
+    .find((t) =&gt; t.id === Number(route.params.id))
+})</code></pre>
+              </div>
+              <div class="bloco-codigo">
+                <div class="bloco-codigo-topo"><span>Resultado real: clicar em “Próxima tarefa” duas vezes</span></div>
+                <pre><code>Endereço     Título na tela
+/tarefa/1    "Abrir uma tarefa pelo endereço /tarefa/1"
+/tarefa/2    "Abrir uma tarefa pelo endereço /tarefa/1"  ← errado
+/tarefa/3    "Abrir uma tarefa pelo endereço /tarefa/1"  ← errado
+
+Console: vazio. Nenhum erro, nenhum [Vue warn].</code></pre>
+              </div>
+            </div>
+            <div class="pilha">
+              <div class="dicas">
+                <details class="dica"><summary>Dica</summary><p>O endereço muda, mas a rota é a <strong>mesma</strong>: <code>/tarefa/:id</code>. O que o Vue Router faz com o componente que já está na tela?</p></details>
+                <details class="solucao"><summary>Mostrar a causa e as saídas</summary>
+                  <p>O componente é <strong>reaproveitado</strong>, não recriado — então <code>onMounted</code> não roda de novo. Três saídas:</p>
+                  <ol class="pequeno">
+                    <li><code>computed</code> em cima de <code>route.params</code> — o que a etapa faz.</li>
+                    <li><code>watch(() =&gt; route.params.id, …)</code> quando for preciso <strong>buscar dados</strong> a cada mudança.</li>
+                    <li><code>&lt;RouterView :key="$route.fullPath" /&gt;</code> para forçar a recriação — a marreta: perde o ganho de reaproveitar.</li>
+                  </ol>
+                </details>
+              </div>
+              <p class="caixa caixa-destaque pequeno">Mesma família do <code>:key</code> pela posição, da etapa 10: o framework reaproveita, e o que não é reativo fica para trás. Lá era o texto digitado; aqui é a leitura feita uma vez só.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#eNqVVFFv2kgQ/isjehJGAi8hOapDjhWUQ7pITRMR2pe6D4s9ATf27t7umjbH8d9v7LXBJKXRPTGMv5n5Zuab3XbSXEltBzlX/jcjRWcCnW0kAKL6i4nIVXlK36bA8n/UWVurzIQxlfFnn7zfjC/1ipHl60LYNEcfTT5YavndoKbUUaffSjLQsrCoj3MVQj2t/Fjm7IC4uvDH/u8sSY1teU/nviIQS3BjpczMgKv0VIlXwKsxVbpgWbpklJ2lIsEfVe4y9S4Su04fOlOlym7LKQUm1qmyYNAWKoyEGxdsYYX2utAahb0RxnIRI+zgUcscuhTabSFjjdzivGqpX/+7xVzq57+oX/rpg/v4IRVPjf05xe/thPVIDnkXXOMjrwE+c399VzoSsSRS4GLg8oiCV6157UpPfsbH61WDrqLNBL5sQXG7nkCX2aoKm6RJlzqRxETQACYNmd1XCtz1IvF6OF7P50pdS2Hxhy1NvzDoOYIUUC9cFWbt7cucdelLwNwGwrKtwGJOWrQYlgQDwTehk0RwmCBYeRl19jmiTri3A3aAhfDvG6GjVujo/4Wet0LPj0Ir3qwhHqgQSYEao2I4xPeSVhUsw+0WfqsG4j8WWXZPs4fdLmDLMGDKha01MGe11FJ6AtaaUCnlgy5+qWYCuYVStqQPUtxKum9MTmmalldV/rlEj/RHPTVor9d8WdwsPn24e6BvWzgjZd1rektSzcENjdQ1Iu8DrgqRtJzn5FygjtvQ8mojwRjM5vPpn3cTyNJEwqfbKWzwnz78XXBB/+VBrgiCmxj9hkuJ/yibhi/LWXjdUnr7KXheDy5D9z4eof0Nz4qyw7qfL25timueGz9NvrpzqOhdz+YLYqcxq5bNiRLhKnuUo9WStpIrjcQYATOEvEj4C5LX9YbKk67NmtspAm9ckOVLqrSUmkRI+qVrgRizTPEkScWKPGPyGPucIdkONohllnFlkN6O2iK11wdhdRjYdUg8JTzKtKJNmlxX3ruqtVwaq7lzMsIfIp1V2kl4UKBX5LxcZY/QSRuz50U0pJ7Au+VwSEzcAR0vtTmffYJfVG4GC95+VW+XHr5/WXq/qtO1ySjHX78EL3K+G4/H+7kutCxHl2AtehDSUB3xZIDHac59mNKxWQ4V3z+Aw+3sgS7Aa73YvT6Q+CvAOd2DS9w6ijp0Ppvez+8+z24WdEzkHA3PLgBJrIeNiCaJlnScRErIjfRdR+rVI7T7D7n+3TQ=" target="_blank" rel="noopener">Playground: onMounted × computed, lado a lado</a></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 155 -->
+        <section class="slide" data-n="155" data-tipo="ia" data-parte="pesquisar" data-tempo="3 min">
+          <header class="slide-topo">
+            <h2>Pesquisar: reagir à mudança de parâmetro</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="prompt-ia">
+              <div class="prompt-ia-topo"><span>Prompt</span></div>
+              <pre><code>Vue 3 com &lt;script setup&gt; e Vue Router 4. Tenho a rota
+/tarefa/:id e, na tela, leio o parâmetro no onMounted. Ao ir de
+/tarefa/1 para /tarefa/2 o conteúdo não muda, e o Console não
+mostra nada.
+
+Explique por que isso acontece e mostre as formas de corrigir,
+dizendo quando usar cada uma. Cite a seção da documentação
+oficial do Vue Router.
+
+Use Composition API. Não sugira recarregar a página.</code></pre>
+            </div>
+            <div class="pilha">
+              <table class="tabela">
+                <thead><tr><th>A resposta deve dizer</th><th>Sinal de resposta ruim</th></tr></thead>
+                <tbody>
+                  <tr><td>O componente é reaproveitado; <code>onMounted</code> não roda de novo</td><td>Diz que é “bug do Vue” ou manda limpar o cache</td></tr>
+                  <tr><td><code>computed</code> para derivar; <code>watch</code> para buscar dados</td><td>Só dá uma saída, sem dizer quando usar</td></tr>
+                  <tr><td>Cita “Reacting to Params Changes”</td><td>Link inventado, ou documentação do Vue Router 3</td></tr>
+                  <tr><td>Menciona o <code>:key</code> no <code>RouterView</code> como último recurso</td><td>Apresenta o <code>:key</code> como a solução padrão</td></tr>
+                </tbody>
+              </table>
+              <div class="caixa pequeno">
+                <h3>Onde conferir</h3>
+                <ul>
+                  <li><a href="https://router.vuejs.org/guide/essentials/dynamic-matching.html">Dynamic Route Matching › Reacting to Params Changes</a></li>
+                </ul>
+                <p>Vue Router 3 usava <code>beforeRouteUpdate</code> e <code>this.$route</code>. Se a resposta vier assim, é material velho.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 156 -->
+        <section class="slide" data-n="156" data-tipo="verificacao" data-tempo="2 min">
+          <header class="slide-topo">
+            <h2>Verificação sem IA · fecho da Unidade 5</h2>
+          </header>
+          <div class="slide-corpo grade-2">
+            <div class="pilha">
+              <ol class="passos">
+                <li>Por que <code>/tarefa/999</code> e <code>/nao-existe</code> mostram telas diferentes?</li>
+                <li>Por que <code>Number(route.params.id)</code> e não <code>route.params.id</code>?</li>
+                <li>Ir de <code>/tarefa/1</code> para <code>/tarefa/2</code> recria o componente? O que isso exige de quem escreve a tela?</li>
+              </ol>
+            </div>
+            <div class="caixa pequeno">
+              <h3>O que a Unidade 5 deixou pronto</h3>
+              <ul>
+                <li>Telas separadas em <code>views/</code>, cada uma com o seu endereço</li>
+                <li>Estado compartilhado fora da árvore de componentes</li>
+                <li>Endereço que sobrevive ao F5, volta no botão Voltar e cabe num link</li>
+              </ul>
+              <h3>O que vem a seguir</h3>
+              <p>As tarefas ainda nascem escritas no código. Na <strong>Unidade 6</strong> elas vêm de uma API — e a tela ganha o estado que falta: <em>carregando</em>.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/slides.js"></script>
+  </body>
+</html>

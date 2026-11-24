@@ -58,6 +58,7 @@
 // ler escuro.value  = ler a prop
 // escrever          = emitir o evento</code></pre>
               </div>
+              <p><a class="link-playground" href="https://play.vuejs.org/#eNqFUsFu2zAM/RXOOyQFEjtdhgAzHK8J0J229TLs5ItiM6kwWRJk2VgX+N9HSbaTpQV2ksRHPj6K7xzttI67FqMUoqwpDdcWGrStzgvJa62MhTMYPEIPR6NqmFHubIJ2wqKRzAxYnIyBOKQVslSysYBN2Rq1g62jmh+ZaPDuX2x/g2VJEJM7ksxirQWzSC+A7Hmdf1GmZkCFlmUJvX18UtMta1Wh2BbR0LiIIAk5Or9oyQ75+Txp6/ssOeRZon3L6zZCyRODov2wuv8I+JtZVqO0CAxqbJwMxZs3ZLgHQOqlLDsmWpwE7YsooA+trmium6Q5XZS5g20O88v3hGCovJlmfzPN/vU0Ghr7Ihx7qYgnfb/ZbIooDzKGD4PvRbtalesncCd+gtqf9ydesnSMMdBGafAFP51gqBlvQAF29CsKrifyeOz7eyVZcrXJaAHRtV/esmCSQIVHLvGb11dhKZhho4bHS9cKoaVVdPhnAUivTonOhZypYs/zFQ2lOytvQdA9cMTwSC2JxIAcUay55WbijkenCn5ilaKEK0nzM9gXjSnslRLI5MKBrBU2BW9l6P9j5kNrrZKQMsPZUhtsGqxoSaEX+fahFLz8NUWo+7sRG5aXNZpJ8PXPvKpQUrI1LVICGWIo+wwzMvBmjTNIw3W1mnmXuOqB6QfSFwYHjXa/kXUh7PvgRLKZn+DVdvu/jPp3Lg==" target="_blank" rel="noopener">Playground: as duas formas, lado a lado</a></p>
               <p class="pequeno">Com nome: <code>v-model:busca</code> ↔ <code>defineModel('busca')</code>.</p>
             </div>
             <div class="pilha">
@@ -131,6 +132,7 @@ const escuro = defineModel({ type: Boolean, required: true })
             </figure>
             <div class="pilha">
               <p class="caixa pequeno">Vue DevTools: selecione <code>AlternarTema</code>, veja a prop <code>modelValue</code>; clique e veja <code>update:modelValue</code> na Timeline.</p>
+              <p><a class="link-playground" href="https://play.vuejs.org/#eNp9VE1z2jAQ/Stb55B2JmAINGkd1zNM4ZYEJuTIRdgLqGNLiiQzaTv9711JtvlI04EDK+3bffv0lt/RRKn+vsYogSg1uebKgkFbq2wleKWktrBgXGAJGy0ruOzHIXSYy5VI44ChbAosVqpkFikCSHejbAirejBY38J3wlpZSAP0NaW0BpRGFPmO02EaU67HhOL+N0VtPbiw3NalzB642DEDlmncMIKdNDwBaFkwhVlqKlaW2Ri4RUGAEL4FqmxmCKaYdoRxuNVsIwGF1bIGhaX0pGExmT65hHw076exOkIDOrxl1doX+FrR5NeD4RgapGJFKD2SwHLklsFLzYSVkEth0V1tWCFhL3Of5q65Qd21SeNOm1bd61bdJVZtn4JI+AKFEywBRiNhjnDeh/I0Uv09e098lS199ugN9niWguZmsMdf7xJVYOzPEr+tolyWUicXNzc3q6jpsniaL6ieMQymk+n8Dpb38+fmYDGbTrzYt3OYzuB5dj/pw0SxbY1Qk53at2Y5rxggkfjB+oGBY3LyyNEVRAfj/svscQyPKHY1lVJaqj54Q+SSdkCQDxBEO7LTc42e7zJpoyOyy47t//fDYG65FJ08a6kL1AkM1SsYWfICLvI8v4Nw3tOs4LVJ4It6vXNPUHCxpeRrF1ZMb7nwdzDoxE134654mzGgD2V1OZT1odcL3nmcP8xoqCs39bt28UtBorst3Bro9Q6FfBHBKtcvLCy1eT648cQ4H5t6n0giwrWU4924Mc4xs6O9S8DWROildp5WjIPyJD+j08ytEx0x2p0Ds8ArPpTdSGlRn0nTs1I14gafwolRz8YLfy90a2j1fBDW/myY0KlZi+a931jzz1874MyC" target="_blank" rel="noopener">Playground: slots, isolados</a></p>
               <p class="pergunta pequeno"><strong>Observe</strong>Remova o <code>&lt;template #titulo&gt;</code>. O que aparece no lugar?</p>
             </div>
           </div>
@@ -203,6 +205,7 @@ function toggle() {
                 <pre><code>const ligado = defineModel({ type: Boolean, default: false })
 // &lt;button :aria-pressed="ligado" @click="ligado = !ligado"&gt;</code></pre>
               </div>
+              <p><a class="link-playground" href="https://play.vuejs.org/#eNqVVFtv0zAU/itn4aGptCW7oCFFaUUpPEwaWoUQL4QHJ3FbC8c2tlNpRPnvHDuXrqVs48ny8bl93/mOm2ChVLSraZBAkJpCM2XBUFureSZYpaS20ICma2hhrWUFE/SdjE9f5WbD6YNmGyYI7z2i+NAcnQhZSu1eS3kUM9r7oEwUUhgLBGaui3BNuKHTwZofWdO4QzB3gamlleLEUrwBpNub+RVk9eVl/g6WspJAjXVXegVCQoV+miEE2TedxhjgA48w7i4qWVI+ywKSBRB3PmouQREGpNgS+FVT2BFOE0jzedNg722bxvk8jVXnndfWSgHvC86Kny4RwrC6plmAaVaLO+BsQ8DI30xsJYTD8xST+Mi+Jhj7yCnGF5JLnby5vb3FDF+oIhprS8hlB/BGguOZcUwmBgspZKWI2JKoa2vg6HrP0TAh9ISSrpmgnx3yY2b2jntq8ldSk79ETf48NfkJatL4yeCDcwj+VuN/ij0TcQwfacGJJsAEsyiUb4Qjlqy+vrx6i+oxMMJ3ZDvAFRElAW/yztGgWqWlMth4x+nK3cLmIG+CbdhHhecHKTkl4tw5k5rbBLzWscF23AJaMTum+4QXE36f1KpEBpJ9+cmPaY9k6SZc3qzuFnD/sFzcJyCIKajrG2cjtWulcLtAQdSiQAyEIT6O81OOAQ9vRMPMorBsR/tV9OCip2B82TUmsgwna/0wwik0bt5DcLTzdM7g7NDifBy88ASe86NorNM+/wUci6vrBaXV7UY47P4U+W/2wLxEX1DXwb91Sl4dWU69SPPs6T6FL856+ipYCcEP7EJpagwtEV1XCxdxxDtWPxvefALo/4awGEB0BPTubeur/IuC9g+tMykL" target="_blank" rel="noopener">Playground: o original e o corrigido, lado a lado</a></p>
             </div>
           </div>
         </section>
@@ -255,7 +258,7 @@ function toggle() {
             <div class="pilha">
               <div class="caixa pequeno">
                 <h3>Próximos passos</h3>
-                <p>15 TypeScript + Pinia · 16 API · 17 rotas · 18 testes — o projeto completo (<code>projeto/</code>).</p>
+                <p>15–17 rotas · 18–20 comunicação com APIs · 21–23 gerenciamento de estado.</p>
               </div>
               <div class="caixa pequeno">
                 <h3>Para pesquisar sozinho</h3>

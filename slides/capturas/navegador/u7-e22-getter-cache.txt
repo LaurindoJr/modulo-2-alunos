@@ -1,0 +1,24 @@
+# Etapa 22 — getter (computed) × função, na mesma store
+# Medido com console.log dentro de cada um, na tela da Lista.
+#
+#   const concluidas = computed(() => { ... })   ← GETTER
+#   function contarPor(situacao) { ... }          ← FUNÇÃO
+#
+# As duas aparecem lado a lado no subtítulo:
+#   {{ concluidas }} / {{ store.contarPor('concluidas') }}
+
+                          Ao carregar   5 letras na busca   Concluir 1 tarefa
+GETTER   concluidas            1               0                   1
+FUNÇÃO   contarPor()           1               5                   2
+
+# Digitar na busca redesenha a tela cinco vezes. A função roda nas cinco, porque
+# é chamada pelo template. O getter roda ZERO, porque nada do que ele lê mudou —
+# ele só lê `tarefas`, e a busca não é tarefa.
+#
+# É a mesma medição da etapa 11 (computed × método), agora dentro de uma store.
+# Muda a embalagem; a regra é a mesma.
+#
+# Consequência prática: um "getter com parâmetro" não existe. O que existe é um
+# getter que devolve uma função — e o resultado dessa função NÃO é guardado.
+# Quando o cálculo é caro e o parâmetro é sempre o mesmo, vale derivar um getter
+# de verdade em vez de aceitar o parâmetro.

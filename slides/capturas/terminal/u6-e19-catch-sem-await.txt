@@ -1,0 +1,29 @@
+# Etapa 19 — por que o try/catch em volta de um return de Promise não pega a falha
+# Reproduzido em Node, com Promise.reject no lugar da chamada HTTP.
+
+$ cat deadcatch.mjs
+function comoNoMaterial() {
+  try {
+    return Promise.reject(new Error('Network Error')).then((r) => r.data)
+  } catch (error) {
+    return 'o catch pegou: ' + error.message
+  }
+}
+
+async function comAwait() {
+  try {
+    const r = await Promise.reject(new Error('Network Error'))
+    return r.data
+  } catch (error) {
+    return 'o catch pegou: ' + error.message
+  }
+}
+
+$ node deadcatch.mjs
+forma do material devolveu: uma Promise (o catch NAO rodou)
+  -> e ela rejeita com: Network Error
+forma com await devolveu: o catch pegou: Network Error
+
+# O try/catch é síncrono. Quando a Promise falha, a função já retornou — não há
+# mais nenhum try em volta. Com await, a função fica "parada" dentro do try até
+# a Promise terminar, e a falha acontece lá dentro.

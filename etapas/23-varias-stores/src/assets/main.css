@@ -1,0 +1,184 @@
+/* Tokens de design e estilos globais da Todo List.
+   Cores: light-dark(claro, escuro) escolhe o valor conforme o color-scheme em vigor. */
+
+:root {
+  color-scheme: light dark;
+
+  --fonte-texto: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --fonte-titulo: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --fonte-codigo: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --cor-fundo: light-dark(#f4f6f3, #101713);
+  --cor-superficie: light-dark(#ffffff, #17211b);
+  --cor-superficie-2: light-dark(#e9eee8, #213029);
+  --cor-borda: light-dark(#cfd8cd, #33453b);
+  --cor-texto: light-dark(#17221c, #e6eee8);
+  --cor-texto-suave: light-dark(#4d5c53, #a9b9ae);
+  --cor-primaria: light-dark(#1d6b4f, #5cc396);
+  --cor-primaria-forte: light-dark(#124a36, #9be0c0);
+  --cor-primaria-suave: light-dark(#d6ebe1, #1f3d31);
+  --cor-sobre-primaria: light-dark(#ffffff, #0b1a12);
+  --cor-erro: light-dark(#b3261e, #ff8a80);
+  --cor-erro-fundo: light-dark(#fbe9e7, #3a1714);
+  --cor-estudo: light-dark(#3d4fb8, #a9b4ff);
+  --cor-trabalho: light-dark(#0f6d78, #7fd6e0);
+  --cor-pessoal: light-dark(#a3326a, #f2a0c8);
+
+  --espaco-1: 0.25rem;
+  --espaco-2: 0.5rem;
+  --espaco-3: 0.75rem;
+  --espaco-4: 1.25rem;
+  --espaco-5: 2rem;
+  --raio: 0.6rem;
+  --largura-maxima: 56rem;
+}
+
+/* Sem escolha salva, vale a preferência do sistema (color-scheme: light dark).
+   Quando o usuário escolhe, o JavaScript marca :root com data-tema e o color-scheme fica fixo. */
+:root[data-tema='claro'] {
+  color-scheme: light;
+}
+
+:root[data-tema='escuro'] {
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: var(--fonte-texto);
+  line-height: 1.5;
+}
+
+h1,
+h2 {
+  font-family: var(--fonte-titulo);
+  line-height: 1.2;
+}
+
+code {
+  font-family: var(--fonte-codigo);
+}
+
+a {
+  color: var(--cor-primaria-forte);
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input[type='text'],
+input[type='search'],
+select {
+  min-height: 2.5rem;
+  padding: var(--espaco-2) var(--espaco-3);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+}
+
+input[aria-invalid='true'] {
+  border-color: var(--cor-erro);
+}
+
+:focus-visible {
+  outline: 3px solid var(--cor-primaria);
+  outline-offset: 2px;
+}
+
+.painel {
+  display: grid;
+  gap: var(--espaco-4);
+}
+
+.painel-cabecalho h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 1.4rem + 1.5vw, 2.4rem);
+}
+
+.subtitulo {
+  margin: var(--espaco-1) 0 0;
+  color: var(--cor-texto-suave);
+}
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: var(--espaco-2) var(--espaco-3);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.botao:hover:not(:disabled) {
+  background: var(--cor-superficie-2);
+}
+
+.botao:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.botao:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.botao-principal {
+  border-color: var(--cor-primaria);
+  background: var(--cor-primaria);
+  color: var(--cor-sobre-primaria);
+  font-weight: 600;
+}
+
+.botao-principal:hover:not(:disabled) {
+  background: var(--cor-primaria-forte);
+}
+
+.botao-perigo {
+  color: var(--cor-erro);
+}
+
+.etiqueta {
+  padding: 0.1rem 0.6rem;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.etiqueta[data-categoria='estudo'] {
+  color: var(--cor-estudo);
+}
+
+.etiqueta[data-categoria='trabalho'] {
+  color: var(--cor-trabalho);
+}
+
+.etiqueta[data-categoria='pessoal'] {
+  color: var(--cor-pessoal);
+}
+
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
